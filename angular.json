@@ -35,6 +35,7 @@
           },
           "configurations": {
             "production": {
+              "baseHref": "/cyber-portfolio/",
               "budgets": [
                 {
                   "type": "initial",

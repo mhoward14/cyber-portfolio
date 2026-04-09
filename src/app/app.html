@@ -9,23 +9,18 @@
 
     <!-- LinkedIn -->
     <a href="https://www.linkedin.com/in/mhowardcybersecurity" target="_blank" class="nav-button linkedin-btn" aria-label="LinkedIn Profile">
-      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-original.svg"
-           alt="LinkedIn" class="logo-icon linkedin-logo">
+      <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M4.98 3.5c0 1.381-1.11 2.5-2.48 2.5s-2.48-1.119-2.48-2.5c0-1.38 1.11-2.5 2.48-2.5s2.48 1.12 2.48 2.5zM5 8H0v16h5V8zm7.982 0H8.014v16h4.969v-8.399c0-4.67 6.029-5.052 6.029 0V24H24v-10.131c0-7.88-8.922-7.593-11.018-3.714V8z"/>
+      </svg>
     </a>
 
-    <!-- Email — copies address to clipboard; icon swaps to checkmark on success -->
-    <button class="nav-button email-btn" [class.copied]="copied()" (click)="copyEmail()" aria-label="Copy email address">
-      @if (copied()) {
-        <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-          <path fill-rule="evenodd" d="M19.916 4.626a.75.75 0 01.208 1.04l-9 13.5a.75.75 0 01-1.154.114l-6-6a.75.75 0 011.06-1.06l5.353 5.353 8.493-12.739a.75.75 0 011.04-.208z" clip-rule="evenodd" />
-        </svg>
-      } @else {
-        <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a1.75 1.75 0 01-1.855 0L1.5 8.67z" />
-          <path d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a.25.25 0 00.286 0L22.5 6.908z" />
-        </svg>
-      }
-    </button>
+    <!-- Email — opens new email message -->
+    <a href="mailto:mhoward14@icloud.com" class="nav-button email-btn" aria-label="Send email">
+      <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a1.75 1.75 0 01-1.855 0L1.5 8.67z" />
+        <path d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a.25.25 0 00.286 0L22.5 6.908z" />
+      </svg>
+    </a>
   </nav>
 
   <header class="centered-header">

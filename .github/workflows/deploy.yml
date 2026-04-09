@@ -1,0 +1,75 @@
+# ============================================================
+# GitHub Pages Deployment
+# Builds the Angular app and publishes it to GitHub Pages
+# whenever a commit is pushed to the main branch.
+#
+# Live URL: https://mhoward14.github.io/cyber-portfolio/
+#
+# FIRST-TIME SETUP (one-time manual step):
+#   GitHub repo → Settings → Pages
+#   → Source: "GitHub Actions"  ← select this, then save.
+#   After that, every push to main auto-deploys.
+# ============================================================
+
+name: Deploy to GitHub Pages
+
+on:
+  # Runs automatically on every push to main
+  push:
+    branches: [main]
+  # Allows you to trigger a deploy manually from the Actions tab
+  workflow_dispatch:
+
+# Required permissions for the GitHub Pages deploy action
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Only allow one deployment at a time; don't cancel in-progress runs
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  # ── Job 1: Build ────────────────────────────────────────────
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      # baseHref is already set to /cyber-portfolio/ in angular.json
+      # under configurations.production, so no extra flag needed here.
+      - name: Build (production)
+        run: npm run build
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      # Angular static output lands in dist/portfolio-ui/browser/
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist/portfolio-ui/browser
+
+  # ── Job 2: Deploy ───────────────────────────────────────────
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

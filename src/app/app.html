@@ -1,15 +1,24 @@
 <div class="container">
   <nav class="top-nav">
-    <a href="mailto:mhoward14@icloud.com" class="nav-button email-btn">
-      <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a1.75 1.75 0 01-1.855 0L1.5 8.67z" />
-        <path d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a.25.25 0 00.286 0L22.5 6.908z" />
-      </svg>
-      <span>Email Me</span>
-    </a>
-    
+    <button class="nav-button email-btn" [class.copied]="copied()" (click)="copyEmail()">
+      @if (copied()) {
+        <!-- Checkmark icon -->
+        <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+          <path fill-rule="evenodd" d="M19.916 4.626a.75.75 0 01.208 1.04l-9 13.5a.75.75 0 01-1.154.114l-6-6a.75.75 0 011.06-1.06l5.353 5.353 8.493-12.739a.75.75 0 011.04-.208z" clip-rule="evenodd" />
+        </svg>
+        <span>Copied!</span>
+      } @else {
+        <!-- Email icon -->
+        <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a1.75 1.75 0 01-1.855 0L1.5 8.67z" />
+          <path d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a.25.25 0 00.286 0L22.5 6.908z" />
+        </svg>
+        <span>Email Me</span>
+      }
+    </button>
+
     <a href="https://www.linkedin.com/in/mhowardcybersecurity" target="_blank" class="nav-button linkedin-btn">
-      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-original.svg" 
+      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-original.svg"
            alt="LinkedIn" class="logo-icon linkedin-logo">
       <span>LinkedIn</span>
     </a>
@@ -17,7 +26,7 @@
 
   <header class="centered-header">
     <h1>MATTHEW HOWARD</h1>
-    <p class="subtitle">MS in Cybersecurity & Information Assurance</p>
+    <p class="subtitle">MS in Cybersecurity &amp; Information Assurance</p>
     <div class="cert-badges">
       <span class="badge">CompTIA PenTest+ | CySA+ | Security+ | (ISC)² CC</span>
     </div>
@@ -25,23 +34,23 @@
 
   <section class="search-section">
     <div class="search-box">
-      <input type="text" placeholder="Search knowledge base..." 
+      <input type="text" placeholder="Search knowledge base..."
              [ngModel]="searchTerm()" (ngModelChange)="searchTerm.set($event)">
     </div>
   </section>
 
   <main class="project-grid">
-    @for (project of filteredProjects(); track $index) {
+    @for (project of filteredProjects(); track project.title) {
       <div class="project-tile" (click)="openModal(project)">
         <h3>{{ project.title }}</h3>
         <p class="role-preview">{{ project.role }}</p>
-        <span class="view-label">View Project Details →</span>
+        <span class="view-label">View Details →</span>
       </div>
     }
   </main>
 
   @if (selectedProject(); as project) {
-    <div class="modal-overlay" (click)="closeModal()">
+    <div class="modal-overlay" [class.is-closing]="isClosing()" (click)="closeModal()">
       <div class="modal-window" (click)="$event.stopPropagation()">
         <button class="close-btn" (click)="closeModal()">✕</button>
         <div class="modal-header">
@@ -52,7 +61,7 @@
           @if (project.scope) {
             <p class="scope-text"><strong>Context:</strong> {{ project.scope }}</p>
           }
-          <h4>Key Accomplishments:</h4>
+          <h4>Key Accomplishments</h4>
           <ul>
             @for (bullet of project.bullets; track bullet) {
               <li>{{ bullet }}</li>

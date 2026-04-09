@@ -166,7 +166,8 @@
 }
 
 .subtitle {
-  font-size: 1rem;
+  font-size: 1.2rem;
+  font-weight: 700;
   color: var(--color-text-muted);
   letter-spacing: 0.05em;
   margin: 0 0 1.25rem;
@@ -175,6 +176,7 @@
 
 .cert-badges {
   margin-top: 0.25rem;
+  margin-bottom: 2rem;
   animation: hero-enter 0.8s var(--ease-spring) 0.35s both;
 }
 

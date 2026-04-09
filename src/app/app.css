@@ -84,36 +84,35 @@
 
 /* ============================================================
    2. TOP NAVIGATION
-   Email (copy-to-clipboard) and LinkedIn buttons.
+   Icon-only buttons: GitHub, LinkedIn, Email (copy-to-clipboard).
    Positioned absolute top-right on desktop;
    stacks centered on mobile (see responsive section).
    ============================================================ */
 
 .top-nav {
   position: absolute;
-  top: 2rem;
-  right: 2rem;
+  top: 1rem;
+  right: 1rem;
   display: flex;
-  gap: 0.875rem;
+  gap: 0.5rem;
   z-index: 100;
   /* Fades in last, after hero content */
   animation: hero-enter 0.6s var(--ease-spring) 0.6s both;
 }
 
-/* Shared base for both nav buttons */
+/* Shared base — square icon button, no text */
 .nav-button {
   text-decoration: none;
   display: flex;
   align-items: center;
-  gap: 9px;
-  padding: 9px 18px;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  padding: 0;
   border-radius: var(--radius-md);
-  font-weight: 700;
-  font-size: 0.875rem;
-  letter-spacing: 0.02em;
   transition: all 0.25s var(--ease-out);
   position: relative;
-  overflow: hidden; /* needed to contain the ripple ::after */
+  overflow: hidden;
 }
 
 /* Ripple flash on click */
@@ -121,12 +120,25 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: rgba(255, 255, 255, 0.07);
+  background: rgba(255, 255, 255, 0.08);
   opacity: 0;
   transition: opacity 0.15s;
 }
 .nav-button:active::after {
   opacity: 1;
+}
+
+/* GitHub button */
+.github-btn {
+  background-color: var(--color-surface);
+  color: white !important;
+  border: 1px solid var(--color-border);
+}
+.github-btn:hover {
+  background-color: #333;
+  border-color: #555;
+  transform: translateY(-3px);
+  box-shadow: 0 12px 24px -6px rgba(0, 0, 0, 0.5);
 }
 
 /* LinkedIn button — branded blue */
@@ -164,14 +176,14 @@
   box-shadow: 0 12px 24px -6px rgba(16, 185, 129, 0.4);
 }
 
-/* Icon sizing — used by both email SVG and LinkedIn img */
+/* Icon sizing — used by all three buttons */
 .logo-icon {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   display: block;
   flex-shrink: 0;
 }
-/* Makes the LinkedIn blue logo white */
+/* Makes the LinkedIn blue logo white to match the other icons */
 .linkedin-logo {
   filter: brightness(0) invert(1);
 }
@@ -677,13 +689,5 @@
     font-size: 0.65rem;
     padding: 0.45rem 1rem;
     letter-spacing: 0.06em;
-  }
-
-  /* Hide button labels — show icons only */
-  .nav-button span {
-    display: none;
-  }
-  .nav-button {
-    padding: 9px 13px;
   }
 }

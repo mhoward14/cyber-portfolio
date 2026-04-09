@@ -1,13 +1,36 @@
-/* ========================================
-   KEYFRAME ANIMATIONS
-   ======================================== */
+/* ============================================================
+   APP.CSS — CYBER PORTFOLIO COMPONENT STYLES
+   ============================================================
+   Sections (in order):
+   1. Keyframe Animations
+   2. Top Navigation  (Email + LinkedIn buttons, top-right)
+   3. Hero Header     (Name, subtitle, cert badges)
+   4. Search Section  (Terminal-style filter input)
+   5. Project Grid    (Tile cards)
+   6. Modal           (Overlay + detail window)
+   7. Responsive      (Mobile breakpoints)
 
+   CSS variables (colors, fonts, radii, easings) are defined
+   in src/styles.css under :root — edit them there to retheme
+   the whole site at once.
+   ============================================================ */
+
+
+/* ============================================================
+   1. KEYFRAME ANIMATIONS
+   All @keyframes used across the component live here so they
+   are easy to find and tweak in one place.
+   ============================================================ */
+
+/* Used by: nav buttons, header, search section, tiles */
 @keyframes hero-enter {
   from { opacity: 0; transform: translateY(18px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* Periodic glitch on the name */
+/* Used by: .centered-header h1 — fires every 12s after a 2.5s delay.
+   Creates a brief chromatic-aberration flicker on the name.
+   To disable: remove the "glitch 12s..." line from h1's animation property. */
 @keyframes glitch {
   0%, 84%, 100% {
     text-shadow: none;
@@ -34,29 +57,38 @@
   }
 }
 
+/* Used by: each .project-tile — staggered via nth-child delays below */
 @keyframes tile-enter {
   from { opacity: 0; transform: translateY(22px) scale(0.97); }
   to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
+/* Used by: .badge — slow pulsing blue glow on the cert badge */
 @keyframes badge-glow {
   0%, 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
   50%       { box-shadow: 0 0 18px 5px rgba(59, 130, 246, 0.1); }
 }
 
+/* Used by: .modal-window — scale+fade-in when modal opens */
 @keyframes modal-enter {
   from { opacity: 0; transform: scale(0.95) translateY(14px); }
   to   { opacity: 1; transform: scale(1) translateY(0); }
 }
 
+/* Used by: .modal-overlay — backdrop fades in/out */
 @keyframes overlay-enter {
   from { opacity: 0; }
   to   { opacity: 1; }
 }
 
-/* ========================================
-   TOP NAVIGATION
-   ======================================== */
+
+/* ============================================================
+   2. TOP NAVIGATION
+   Email (copy-to-clipboard) and LinkedIn buttons.
+   Positioned absolute top-right on desktop;
+   stacks centered on mobile (see responsive section).
+   ============================================================ */
+
 .top-nav {
   position: absolute;
   top: 2rem;
@@ -64,9 +96,11 @@
   display: flex;
   gap: 0.875rem;
   z-index: 100;
+  /* Fades in last, after hero content */
   animation: hero-enter 0.6s var(--ease-spring) 0.6s both;
 }
 
+/* Shared base for both nav buttons */
 .nav-button {
   text-decoration: none;
   display: flex;
@@ -79,10 +113,10 @@
   letter-spacing: 0.02em;
   transition: all 0.25s var(--ease-out);
   position: relative;
-  overflow: hidden;
+  overflow: hidden; /* needed to contain the ripple ::after */
 }
 
-/* Ripple press effect */
+/* Ripple flash on click */
 .nav-button::after {
   content: '';
   position: absolute;
@@ -91,23 +125,24 @@
   opacity: 0;
   transition: opacity 0.15s;
 }
-
 .nav-button:active::after {
   opacity: 1;
 }
 
+/* LinkedIn button — branded blue */
 .linkedin-btn {
   background-color: var(--color-linkedin);
   color: white !important;
   border: 1px solid var(--color-linkedin);
 }
-
 .linkedin-btn:hover {
   background-color: #005f93;
   transform: translateY(-3px);
   box-shadow: 0 12px 24px -6px rgba(0, 119, 181, 0.45);
 }
 
+/* Email button — slate default, turns accent blue on hover,
+   turns green when email is copied (via .copied class from app.ts) */
 .email-btn {
   background-color: var(--color-surface);
   color: white !important;
@@ -115,47 +150,53 @@
   cursor: pointer;
   font-family: var(--font-sans);
 }
-
 .email-btn:hover {
   background-color: var(--color-accent);
   border-color: var(--color-accent);
   transform: translateY(-3px);
   box-shadow: 0 12px 24px -6px var(--color-accent-glow);
 }
-
 .email-btn.copied {
+  /* Applied by Angular when clipboard write succeeds — lasts 2 seconds */
   background-color: var(--color-success);
   border-color: var(--color-success);
   transform: translateY(-3px);
   box-shadow: 0 12px 24px -6px rgba(16, 185, 129, 0.4);
 }
 
+/* Icon sizing — used by both email SVG and LinkedIn img */
 .logo-icon {
   width: 18px;
   height: 18px;
   display: block;
   flex-shrink: 0;
 }
-
+/* Makes the LinkedIn blue logo white */
 .linkedin-logo {
   filter: brightness(0) invert(1);
 }
 
-/* ========================================
-   HERO HEADER
-   ======================================== */
+
+/* ============================================================
+   3. HERO HEADER
+   Full-width centered section at the top of the page
+   containing: name (h1), subtitle (p.subtitle), cert badges.
+   ============================================================ */
+
 .centered-header {
   text-align: center;
   margin-top: 3.5rem;
   margin-bottom: 3.5rem;
 }
 
+/* "MATTHEW HOWARD" — gradient text with periodic glitch animation.
+   clamp() scales font size between 2rem (mobile) and 3.75rem (desktop).
+   To change the gradient colors, edit the linear-gradient values below. */
 .centered-header h1 {
   font-size: clamp(2rem, 6vw, 3.75rem);
   font-weight: 900;
   letter-spacing: 0.15em;
   margin: 0 0 0.5rem;
-  /* Gradient text */
   background: linear-gradient(135deg, #f8fafc 0%, #cbd5e1 45%, #3b82f6 100%);
   -webkit-background-clip: text;
   background-clip: text;
@@ -165,6 +206,7 @@
     glitch 12s ease-in-out 2.5s infinite;
 }
 
+/* "MS in Cybersecurity & Information Assurance" */
 .subtitle {
   font-size: 1.2rem;
   font-weight: 700;
@@ -174,12 +216,16 @@
   animation: hero-enter 0.8s var(--ease-spring) 0.2s both;
 }
 
+/* Wrapper around the .badge pill.
+   margin-bottom controls spacing between the badge and the search box. */
 .cert-badges {
   margin-top: 0.25rem;
   margin-bottom: 2rem;
   animation: hero-enter 0.8s var(--ease-spring) 0.35s both;
 }
 
+/* "CompTIA PenTest+ | CySA+ | Security+ | (ISC)² CC" pill badge.
+   Slowly pulses a blue glow via badge-glow keyframe. */
 .badge {
   display: inline-block;
   background: var(--color-accent-dim);
@@ -194,21 +240,26 @@
   animation: badge-glow 5s ease-in-out infinite;
 }
 
-/* ========================================
-   SEARCH SECTION
-   ======================================== */
+
+/* ============================================================
+   4. SEARCH SECTION
+   Centered terminal-style input that filters project tiles
+   in real time via Angular's computed signal in app.ts.
+   ============================================================ */
+
 .search-section {
   margin-bottom: 2.5rem;
   animation: hero-enter 0.8s var(--ease-spring) 0.48s both;
 }
 
+/* Constrains input width and positions the ">_" decoration */
 .search-box {
   position: relative;
   max-width: 500px;
   margin: 0 auto;
 }
 
-/* Terminal prompt decoration */
+/* ">_" terminal prompt rendered via CSS — not in the HTML */
 .search-box::before {
   content: '>_';
   position: absolute;
@@ -229,7 +280,7 @@
   background: rgba(30, 41, 59, 0.65);
   border: 1px solid var(--color-border);
   color: var(--color-text);
-  padding: 0.85rem 1.25rem 0.85rem 3.2rem;
+  padding: 0.85rem 1.25rem 0.85rem 3.2rem; /* left padding leaves room for ">_" */
   border-radius: var(--radius-md);
   font-family: var(--font-mono);
   font-size: 0.85rem;
@@ -237,12 +288,11 @@
   transition: all 0.25s var(--ease-out);
   letter-spacing: 0.02em;
 }
-
 .search-box input::placeholder {
   color: var(--color-text-dim);
   font-style: italic;
 }
-
+/* Blue border glow when input is active */
 .search-box input:focus {
   border-color: var(--color-accent);
   background: rgba(30, 41, 59, 0.95);
@@ -251,11 +301,17 @@
     0 0 28px rgba(59, 130, 246, 0.07);
 }
 
-/* ========================================
-   PROJECT GRID & TILES
-   ======================================== */
+
+/* ============================================================
+   5. PROJECT GRID & TILES
+   Responsive auto-fill grid of clickable project cards.
+   Each tile fades and slides up on page load (staggered).
+   Hover: shimmer sweep, top accent bar, lift + shadow.
+   ============================================================ */
+
 .project-grid {
   display: grid;
+  /* Auto-fill columns: minimum 300px wide, maximum 1fr */
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1.25rem;
 }
@@ -271,12 +327,13 @@
     transform 0.3s var(--ease-spring),
     box-shadow 0.3s var(--ease-out);
   position: relative;
-  overflow: hidden;
-  /* Entrance animation — fill: both keeps opacity:0 before delay */
+  overflow: hidden; /* clips the shimmer ::before sweep */
+  /* animation-fill-mode: both keeps tile invisible (opacity:0) until its delay fires */
   animation: tile-enter 0.5s var(--ease-spring) both;
 }
 
-/* Staggered entrance delays */
+/* Staggered entrance — each tile appears ~90ms after the previous one.
+   To add more tiles, extend the pattern below. */
 .project-tile:nth-child(1) { animation-delay: 0.58s; }
 .project-tile:nth-child(2) { animation-delay: 0.67s; }
 .project-tile:nth-child(3) { animation-delay: 0.76s; }
@@ -286,7 +343,7 @@
 .project-tile:nth-child(7) { animation-delay: 1.12s; }
 .project-tile:nth-child(8) { animation-delay: 1.21s; }
 
-/* Shimmer sweep on hover */
+/* Shimmer: a diagonal highlight sweeps left-to-right across the tile on hover */
 .project-tile::before {
   content: '';
   position: absolute;
@@ -302,12 +359,11 @@
   border-radius: inherit;
   pointer-events: none;
 }
-
 .project-tile:hover::before {
   transform: translateX(120%);
 }
 
-/* Top accent bar on hover */
+/* Top accent bar: a thin blue gradient line that expands to full width on hover */
 .project-tile::after {
   content: '';
   position: absolute;
@@ -319,13 +375,13 @@
   opacity: 0;
   transition: opacity 0.3s var(--ease-out), left 0.3s var(--ease-out), right 0.3s var(--ease-out);
 }
-
 .project-tile:hover::after {
   opacity: 1;
   left: 0;
   right: 0;
 }
 
+/* Lift + blue border + deep shadow on hover */
 .project-tile:hover {
   border-color: rgba(59, 130, 246, 0.45);
   transform: translateY(-6px);
@@ -334,6 +390,7 @@
     0 0 0 1px rgba(59, 130, 246, 0.08);
 }
 
+/* Project title inside each tile */
 .project-tile h3 {
   font-size: 0.975rem;
   font-weight: 700;
@@ -343,6 +400,7 @@
   line-height: 1.4;
 }
 
+/* Role/award label shown below the title */
 .role-preview {
   color: var(--color-text-dim);
   font-size: 0.72rem;
@@ -352,6 +410,8 @@
   letter-spacing: 0.08em;
 }
 
+/* "VIEW DETAILS →" link at the bottom of each tile.
+   Dim by default; fully opaque + arrow shifts right on hover. */
 .view-label {
   display: inline-flex;
   align-items: center;
@@ -364,15 +424,24 @@
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
-
 .project-tile:hover .view-label {
   opacity: 1;
   gap: 0.55rem;
 }
 
-/* ========================================
-   MODAL — OVERLAY & WINDOW
-   ======================================== */
+
+/* ============================================================
+   6. MODAL — OVERLAY & WINDOW
+   Shown when a project tile is clicked. Controlled by
+   selectedProject() signal in app.ts.
+
+   Opening:  overlay fades in, window scales up from 95%
+   Closing:  .is-closing class reverses both animations,
+             then Angular removes the element after 240ms
+             (see closeModal() timeout in app.ts).
+   ============================================================ */
+
+/* Full-screen frosted-glass backdrop */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -386,16 +455,17 @@
   padding: 1.5rem;
   animation: overlay-enter 0.25s var(--ease-out) both;
 }
-
+/* Reverse animation plays when modal is closing */
 .modal-overlay.is-closing {
   animation: overlay-enter 0.22s var(--ease-out) reverse both;
 }
 
+/* The white card that contains the project detail */
 .modal-window {
   background: var(--color-surface);
   width: 100%;
-  max-width: 720px;
-  max-height: 85vh;
+  max-width: 720px;       /* cap width on large screens */
+  max-height: 85vh;       /* scrollable if content is long */
   border-radius: var(--radius-xl);
   border: 1px solid rgba(59, 130, 246, 0.3);
   position: relative;
@@ -406,31 +476,34 @@
     0 0 0 1px rgba(59, 130, 246, 0.08),
     0 0 64px -24px rgba(59, 130, 246, 0.18);
 }
-
 .modal-overlay.is-closing .modal-window {
   animation: modal-enter 0.2s var(--ease-out) reverse both;
 }
 
-/* Sticky header with title + role badge */
+/* ---- Modal Header ----
+   Sticks to the top while scrolling long content.
+   Contains: project title (h2) + role pill (.modal-role). */
 .modal-header {
   padding: 2.25rem 2.5rem 1.5rem;
   border-bottom: 1px solid var(--color-border);
   position: sticky;
   top: 0;
-  background: var(--color-surface);
+  background: var(--color-surface); /* must match window bg to cover scroll content */
   z-index: 10;
   border-radius: var(--radius-xl) var(--radius-xl) 0 0;
 }
 
+/* Project title */
 .modal-header h2 {
   font-size: 1.35rem;
   font-weight: 800;
-  margin: 0 2.75rem 0.625rem 0;
+  margin: 0 2.75rem 0.625rem 0; /* right margin leaves room for the close button */
   color: var(--color-text);
   letter-spacing: 0.01em;
   line-height: 1.3;
 }
 
+/* Role/title shown as a blue pill badge below the project title */
 .modal-role {
   display: inline-block;
   color: var(--color-accent);
@@ -445,11 +518,13 @@
   margin: 0;
 }
 
-/* Modal body */
+/* ---- Modal Body ----
+   Contains: scope/context paragraph + accomplishments list. */
 .modal-body {
   padding: 1.75rem 2.5rem 2.5rem;
 }
 
+/* Context/scope paragraph — left-bordered blue accent strip */
 .scope-text {
   color: var(--color-text-muted);
   line-height: 1.75;
@@ -458,12 +533,12 @@
   padding: 0.125rem 0 0.125rem 1rem;
   margin: 0 0 2rem;
 }
-
 .scope-text strong {
   color: var(--color-text);
   font-weight: 600;
 }
 
+/* "KEY ACCOMPLISHMENTS" section label */
 .modal-body h4 {
   color: var(--color-accent);
   font-size: 0.65rem;
@@ -473,6 +548,7 @@
   margin: 0 0 0.875rem;
 }
 
+/* Accomplishment bullet list */
 .modal-body ul {
   list-style: none;
   padding: 0;
@@ -482,6 +558,7 @@
   gap: 0.375rem;
 }
 
+/* Each bullet item — card style, highlights on hover */
 .modal-body li {
   padding: 0.875rem 1rem 0.875rem 2rem;
   background: rgba(15, 23, 42, 0.45);
@@ -493,13 +570,12 @@
   font-size: 0.875rem;
   transition: background 0.2s, border-color 0.2s, color 0.2s;
 }
-
 .modal-body li:hover {
   background: rgba(59, 130, 246, 0.05);
   border-color: rgba(59, 130, 246, 0.2);
   color: var(--color-text);
 }
-
+/* Blue "▸" bullet marker */
 .modal-body li::before {
   content: '▸';
   color: var(--color-accent);
@@ -510,7 +586,9 @@
   line-height: 1.65;
 }
 
-/* Close button */
+/* ---- Close Button ----
+   Circular "✕" button fixed to the top-right of .modal-header.
+   Rotates 90° and turns red on hover. */
 .close-btn {
   position: absolute;
   top: 1.375rem;
@@ -531,7 +609,6 @@
   z-index: 11;
   line-height: 1;
 }
-
 .close-btn:hover {
   background: var(--color-danger);
   border-color: var(--color-danger);
@@ -539,10 +616,17 @@
   transform: rotate(90deg) scale(1.1);
 }
 
-/* ========================================
-   RESPONSIVE
-   ======================================== */
+
+/* ============================================================
+   7. RESPONSIVE
+   Adjustments for smaller screens.
+   640px: tablet/large phone — stack nav, single-column grid,
+          modal slides up from bottom edge.
+   420px: small phone — hide button text labels, shrink badge.
+   ============================================================ */
+
 @media (max-width: 640px) {
+  /* Move nav out of absolute positioning, center it at the top */
   .top-nav {
     position: static;
     justify-content: center;
@@ -554,30 +638,32 @@
     padding: 20px 16px;
   }
 
+  /* Tighten vertical space on the hero */
   .centered-header {
     margin-top: 1rem;
     margin-bottom: 2.5rem;
   }
-
   .centered-header h1 {
     letter-spacing: 0.08em;
   }
 
+  /* Single column grid on mobile */
   .project-grid {
     grid-template-columns: 1fr;
     gap: 0.875rem;
   }
 
+  /* Modal slides up from the bottom on mobile (sheet style) */
   .modal-overlay {
     padding: 0.75rem;
     align-items: flex-end;
   }
-
   .modal-window {
     max-height: 90vh;
     border-radius: var(--radius-xl) var(--radius-xl) var(--radius-md) var(--radius-md);
   }
 
+  /* Tighter side padding inside modal */
   .modal-header,
   .modal-body {
     padding-left: 1.375rem;
@@ -586,16 +672,17 @@
 }
 
 @media (max-width: 420px) {
+  /* Shrink cert badge text */
   .badge {
     font-size: 0.65rem;
     padding: 0.45rem 1rem;
     letter-spacing: 0.06em;
   }
 
+  /* Hide button labels — show icons only */
   .nav-button span {
     display: none;
   }
-
   .nav-button {
     padding: 9px 13px;
   }

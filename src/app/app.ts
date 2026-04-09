@@ -12,6 +12,8 @@ import { FormsModule } from '@angular/forms';
 export class App {
   searchTerm = signal('');
   selectedProject = signal<any | null>(null);
+  isClosing = signal(false);
+  copied = signal(false);
 
   // 2. Portfolio Data (Cleaned up for Grid/Modal)
   projects = signal([
@@ -115,19 +117,42 @@ export class App {
   // 3. Filtering Logic
   filteredProjects = computed(() => {
     const term = this.searchTerm().toLowerCase();
-    return this.projects().filter((p: any) => 
-      p.title.toLowerCase().includes(term) || 
+    return this.projects().filter((p: any) =>
+      p.title.toLowerCase().includes(term) ||
       p.role.toLowerCase().includes(term)
     );
   });
 
   openModal(project: any) {
     this.selectedProject.set(project);
+    this.isClosing.set(false);
     document.body.style.overflow = 'hidden';
   }
 
   closeModal() {
-    this.selectedProject.set(null);
-    document.body.style.overflow = 'auto';
+    if (this.isClosing()) return;
+    this.isClosing.set(true);
+    setTimeout(() => {
+      this.selectedProject.set(null);
+      this.isClosing.set(false);
+      document.body.style.overflow = 'auto';
+    }, 240);
+  }
+
+  copyEmail() {
+    if (this.copied()) return;
+    const email = 'mhoward14@icloud.com';
+    if (typeof navigator !== 'undefined' && navigator.clipboard) {
+      navigator.clipboard.writeText(email)
+        .then(() => {
+          this.copied.set(true);
+          setTimeout(() => this.copied.set(false), 2000);
+        })
+        .catch(() => {
+          if (typeof window !== 'undefined') window.location.href = `mailto:${email}`;
+        });
+    } else if (typeof window !== 'undefined') {
+      window.location.href = `mailto:${email}`;
+    }
   }
 }

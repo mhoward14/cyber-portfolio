@@ -953,9 +953,21 @@ body.light-mode .centered-header h1 {
   -webkit-text-fill-color: transparent;
 }
 
-/* About section: solid white card instead of dark glass */
+/* About section: soft off-white card with visible bio text */
 body.light-mode .about-section {
-  background: #ffffff;
+  background: #f8fafc;
+}
+body.light-mode .about-bio-lead,
+body.light-mode .about-bio-inner p {
+  color: #334155;
+  border-left-color: rgba(37, 99, 235, 0.35);
+}
+body.light-mode .about-toggle {
+  border-top-color: #e2e8f0;
+  color: #64748b;
+}
+body.light-mode .about-stats {
+  border-top-color: #e2e8f0;
 }
 
 /* Search input: white fill */

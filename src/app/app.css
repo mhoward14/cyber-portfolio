@@ -240,32 +240,61 @@
 
 /* ============================================================
    4. ABOUT / BIO SECTION
-   Professional summary card with stats bar.
-   Sits between the hero header and the search section.
+   Compact card with centered title, collapsible bio, and
+   stats bar. Click the chevron to expand/collapse the bio.
    ============================================================ */
 
 .about-section {
   background: rgba(30, 41, 59, 0.5);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
-  padding: 1.75rem 2rem;
+  padding: 1.5rem 2rem 0.75rem;
   margin-bottom: 2.5rem;
   animation: hero-enter 0.8s var(--ease-spring) 0.42s both;
 }
 
-/* Professional summary paragraph */
-.about-bio {
+/* Centered title line with pipe separators */
+.about-title {
+  text-align: center;
+  font-size: 0.85rem;
+  font-weight: 700;
   color: var(--color-text-muted);
-  font-size: 0.975rem;
+  letter-spacing: 0.04em;
+  margin: 0 0 1.25rem;
+  line-height: 1.6;
+}
+
+/* Collapsible bio wrapper — animates height via max-height */
+.about-bio-wrapper {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.45s var(--ease-spring);
+}
+.about-bio-wrapper.is-expanded {
+  max-height: 600px;
+}
+
+/* Inner padding so text doesn't clip during animation */
+.about-bio-inner {
+  padding-bottom: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.about-bio-inner p {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
   line-height: 1.8;
-  margin: 0 0 1.5rem;
-  max-width: 780px;
+  margin: 0;
+  border-left: 2px solid var(--color-border);
+  padding-left: 0.875rem;
 }
 
 /* Row of stat boxes separated by vertical dividers */
 .about-stats {
   display: flex;
   align-items: center;
+  padding-bottom: 0.5rem;
 }
 
 .stat-item {
@@ -303,6 +332,35 @@
   height: 32px;
   background: var(--color-border);
   flex-shrink: 0;
+}
+
+/* Expand/collapse chevron button — centered at the bottom of the card */
+.about-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-top: 1px solid var(--color-border);
+  padding: 0.5rem 0;
+  cursor: pointer;
+  color: var(--color-text-dim);
+  transition: color 0.2s;
+  margin-top: 0.25rem;
+}
+.about-toggle:hover {
+  color: var(--color-accent);
+}
+
+/* Chevron SVG — rotates 180° when expanded */
+.toggle-chevron {
+  width: 18px;
+  height: 18px;
+  transition: transform 0.35s var(--ease-spring);
+}
+.toggle-chevron.is-expanded {
+  transform: rotate(180deg);
 }
 
 
@@ -860,10 +918,7 @@
   }
 
   .about-section {
-    padding: 1.375rem 1.25rem;
-  }
-  .about-bio {
-    font-size: 0.9rem;
+    padding: 1.25rem 1.25rem 0.5rem;
   }
   .stat-item {
     padding: 0 1.25rem;
@@ -903,7 +958,7 @@
   }
 
   .about-section {
-    padding: 1.25rem 1rem;
+    padding: 1rem 1rem 0.5rem;
   }
   .stat-item {
     padding: 0 1rem;

@@ -945,9 +945,9 @@ body.light-mode .github-btn:hover {
   border-color: #1e293b;
 }
 
-/* Hero h1: swap white gradient for dark gradient */
+/* Hero h1: dark navy fading into accent blue — high contrast on light bg */
 body.light-mode .centered-header h1 {
-  background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #2563eb 100%);
+  background: linear-gradient(135deg, #0f172a 0%, #0f172a 45%, #2563eb 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;

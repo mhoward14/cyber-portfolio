@@ -13,12 +13,14 @@ export class App {
   searchTerm = signal('');
   selectedProject = signal<any | null>(null);
   isClosing = signal(false);
+  isFiltering = signal(false);
 
-  // 2. Portfolio Data (Cleaned up for Grid/Modal)
   projects = signal([
     {
       title: 'GRC Performance Assessment',
       role: 'ISSO | Dean\'s Excellence Award',
+      color: '#3b82f6',
+      tags: ['GRC', 'NIST 800-53', 'FISMA', 'PCI DSS', 'POA&M', 'Risk Assessment'],
       scope: 'Conducted comprehensive security system evaluation and gap analysis for a simulated healthcare technology organization (Fielder Medical Center), identifying critical deficiencies in access control, continuous monitoring, and security documentation.',
       bullets: [
         'Security Control Mapping: Mapped five (5) critical security controls to NIST SP 800-53 Rev. 5, FISMA, and PCI DSS requirements, ensuring alignment with federal and industry compliance standards.',
@@ -31,6 +33,8 @@ export class App {
     {
       title: 'Penetration Testing Engagement Plan',
       role: 'Security Analyst | Dean\'s Excellence Award',
+      color: '#ef4444',
+      tags: ['Penetration Testing', 'HIPAA', 'PCI DSS', 'Social Engineering', 'Reconnaissance'],
       scope: 'Designed comprehensive penetration testing engagement plan for healthcare organization (Pruhart Tech) protecting electronic Protected Health Information (ePHI) and payment data, with focus on evaluating security controls and identifying exploitation vulnerabilities.',
       bullets: [
         'Engagement Planning: Developed detailed penetration testing methodology covering reconnaissance, vulnerability assessment, exploitation, and post-exploitation phases aligned with industry best practices.',
@@ -43,6 +47,8 @@ export class App {
     {
       title: 'Cloud Security Implementation Plan',
       role: 'Azure Cloud Security Engineer',
+      color: '#06b6d4',
+      tags: ['Azure', 'PaaS', 'RBAC', 'Key Vault', 'NIST 800-53', 'FISMA'],
       scope: 'Designed and implemented secure hybrid Microsoft Azure Platform-as-a-Service (PaaS) environment integrated with legacy on-premises applications, ensuring compliance with federal and industry security standards.',
       bullets: [
         'Secure Architecture Design: Built secure hybrid Azure PaaS environment integrating cloud services with legacy systems while maintaining security boundaries and data protection.',
@@ -55,6 +61,8 @@ export class App {
     {
       title: 'Security Operations Incident Response',
       role: 'SOC Analyst',
+      color: '#f97316',
+      tags: ['SOC', 'Incident Response', 'Digital Forensics', 'NIST IR', 'Threat Intelligence'],
       scope: 'Investigated simulated enterprise-level cybersecurity incident involving malicious network traffic and unauthorized access, performing comprehensive forensic analysis and developing remediation strategy.',
       bullets: [
         'Forensic Investigation: Performed comprehensive log analysis, network forensic review, and packet capture analysis to determine attack vectors and identify root cause of security incident.',
@@ -67,6 +75,8 @@ export class App {
     {
       title: 'Secure Network Merger',
       role: 'Secure Network Design Engineer',
+      color: '#8b5cf6',
+      tags: ['Network Security', 'Zero Trust', 'HIPAA', 'PCI DSS', 'CVSS', 'VLAN'],
       scope: 'Designed secure merged network architecture post-acquisition, integrating cloud and on-premises systems while ensuring HIPAA and PCI DSS compliance within budgetary constraints.',
       bullets: [
         'Secure Architecture Design: Designed comprehensive merged network architecture integrating cloud services and on-premises infrastructure following post-acquisition requirements.',
@@ -79,6 +89,8 @@ export class App {
     {
       title: 'Cybersecurity Architecture & Engineering',
       role: 'Architecture & Engineering Specialist',
+      color: '#10b981',
+      tags: ['SecurityX', 'Enterprise Architecture', 'Cloud Security', 'Threat Modeling', 'DLP'],
       scope: 'Advanced cybersecurity architecture and engineering competencies aligned with CompTIA SecurityX certification framework, focusing on enterprise-wide security solution design, cloud architecture security, threat analysis, and incident response strategy.',
       bullets: [
         'Enterprise Security Architecture: Evaluated and designed secure enterprise architecture solutions integrating security controls across distributed environments, ensuring alignment with organizational policies and compliance frameworks.',
@@ -92,6 +104,8 @@ export class App {
     {
       title: 'Secure Software Design',
       role: 'Academic Focus',
+      color: '#6366f1',
+      tags: ['DevSecOps', 'SDLC', 'Agile', 'Defense in Depth'],
       bullets: [
         'Applied Defense in Depth principles across the entire SDLC.',
         'Adapted security activities to Agile and DevSecOps practices.'
@@ -100,6 +114,8 @@ export class App {
     {
       title: 'Cybersecurity Management',
       role: 'Chief Information Security Officer (CISO)',
+      color: '#f59e0b',
+      tags: ['CISO', 'GDPR', 'PCI DSS', 'NICE Framework', 'BCP/BIA', 'IRP'],
       scope: 'Led the strategic response to an independent security assessment for a retail bookseller (SAGE Books). Developed a comprehensive cybersecurity roadmap to remediate critical gaps in e-commerce security, governance, and regulatory compliance.',
       bullets: [
         'Regulatory Compliance & Mitigation: Developed enterprise-wide mitigation strategies to address framework gaps, ensuring strict alignment with PCI DSS and GDPR requirements for secure e-commerce and data privacy.',
@@ -113,14 +129,23 @@ export class App {
     }
   ]);
 
-  // 3. Filtering Logic
   filteredProjects = computed(() => {
     const term = this.searchTerm().toLowerCase();
     return this.projects().filter((p: any) =>
       p.title.toLowerCase().includes(term) ||
-      p.role.toLowerCase().includes(term)
+      p.role.toLowerCase().includes(term) ||
+      (p.tags && p.tags.some((t: string) => t.toLowerCase().includes(term)))
     );
   });
+
+  totalProjects = computed(() => this.projects().length);
+  isSearchActive = computed(() => this.searchTerm().trim().length > 0);
+
+  onSearch(value: string) {
+    this.isFiltering.set(true);
+    this.searchTerm.set(value);
+    setTimeout(() => this.isFiltering.set(false), 300);
+  }
 
   openModal(project: any) {
     this.selectedProject.set(project);
@@ -137,5 +162,4 @@ export class App {
       document.body.style.overflow = 'auto';
     }, 240);
   }
-
 }

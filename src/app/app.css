@@ -934,15 +934,25 @@
     box-shadow 0.3s ease;
 }
 
-/* Nav: github + email buttons need a dark bg so white icons stay visible */
+/* Nav: github + email — dark icon on light surface, white icon only on hover */
 body.light-mode .github-btn,
 body.light-mode .email-btn {
-  background-color: #334155;
-  border-color: #475569;
+  background-color: var(--color-surface);
+  border-color: var(--color-border);
+  color: #1e293b !important;
 }
 body.light-mode .github-btn:hover {
   background-color: #1e293b;
   border-color: #1e293b;
+  color: white !important;
+}
+body.light-mode .email-btn:hover {
+  color: white !important;
+}
+body.light-mode .theme-btn {
+  background-color: var(--color-surface);
+  border-color: var(--color-border);
+  color: #1e293b !important;
 }
 
 /* Hero h1: dark navy fading into accent blue — high contrast on light bg */

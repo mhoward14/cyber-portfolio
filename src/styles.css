@@ -90,24 +90,24 @@ body::after {
    adjusts background effects.
    ======================================== */
 body.light-mode {
-  --color-bg:           #f1f5f9;
-  --color-surface:      #ffffff;
-  --color-border:       #e2e8f0;
-  --color-border-2:     #cbd5e1;
+  --color-bg:           #d4dff0;
+  --color-surface:      #f0f5ff;
+  --color-border:       #b8cce0;
+  --color-border-2:     #a0b8d4;
   --color-accent:       #2563eb;
-  --color-accent-dim:   rgba(37, 99, 235, 0.08);
-  --color-accent-glow:  rgba(37, 99, 235, 0.2);
+  --color-accent-dim:   rgba(37, 99, 235, 0.1);
+  --color-accent-glow:  rgba(37, 99, 235, 0.25);
   --color-text:         #0f172a;
-  --color-text-muted:   #475569;
-  --color-text-dim:     #94a3b8;
+  --color-text-muted:   #334155;
+  --color-text-dim:     #64748b;
 
-  background-color: #f1f5f9;
+  background-color: #d4dff0;
   color: #0f172a;
 }
 
-/* Softer dot grid on light background */
+/* Dot grid: slightly stronger on the deeper blue-gray background */
 body.light-mode::before {
-  background-image: radial-gradient(circle, rgba(37, 99, 235, 0.08) 1px, transparent 1px);
+  background-image: radial-gradient(circle, rgba(37, 99, 235, 0.12) 1px, transparent 1px);
 }
 
 /* Hide CRT scan lines on light background — they look out of place */
@@ -131,9 +131,9 @@ body.light-mode .centered-header h1 {
   -webkit-text-fill-color: transparent !important;
 }
 
-/* About card: replace semi-transparent dark surface with solid white */
+/* About card: off-white surface to match card palette */
 body.light-mode .about-section {
-  background: #ffffff !important;
+  background: #f0f5ff !important;
 }
 
 /* Bio text: force near-black so it reads on white card */
@@ -150,10 +150,29 @@ body.light-mode .theme-btn {
   color: #1e293b !important;
 }
 
-/* Dark mode only: subtle resting shadow so near-black cards lift off the
-   near-black background without relying solely on the border */
+/* Dark mode: subtle resting shadow so near-black cards lift off the background */
 body:not(.light-mode) .project-tile {
   box-shadow: 0 2px 16px rgba(0, 0, 0, 0.7);
+}
+
+/* Light mode: stronger elevation so cards clearly sit above the blue-gray bg */
+body.light-mode .project-tile {
+  box-shadow:
+    0 2px 12px rgba(0, 0, 0, 0.12),
+    0 0 0 1px rgba(37, 99, 235, 0.07) !important;
+}
+body.light-mode .project-tile:hover {
+  box-shadow:
+    0 16px 40px -8px rgba(0, 0, 0, 0.2),
+    0 0 0 1px rgba(37, 99, 235, 0.18) !important;
+}
+
+/* Search box: match the card surface so it sits in the palette */
+body.light-mode .search-box input {
+  background: #f0f5ff !important;
+}
+body.light-mode .search-box input:focus {
+  background: #ffffff !important;
 }
 
 @keyframes grid-drift {

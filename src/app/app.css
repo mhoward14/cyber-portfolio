@@ -749,7 +749,7 @@
   border: 1px solid rgba(59, 130, 246, 0.22);
   padding: 0.22rem 0.8rem;
   border-radius: 2rem;
-  margin: 0;
+  margin: 0 2.75rem 0 0; /* matches h2 right margin to clear the close button */
 }
 
 /* ---- Modal Body ---- */

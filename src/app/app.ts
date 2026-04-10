@@ -14,6 +14,11 @@ export class App {
   selectedProject = signal<any | null>(null);
   isClosing = signal(false);
   isFiltering = signal(false);
+  aboutExpanded = signal(false);
+
+  toggleAbout() {
+    this.aboutExpanded.set(!this.aboutExpanded());
+  }
 
   projects = signal([
     {

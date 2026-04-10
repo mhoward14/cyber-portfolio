@@ -1,4 +1,4 @@
-import { Component, signal, computed, OnInit } from '@angular/core';
+import { Component, signal, computed, OnInit, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -9,7 +9,7 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
-export class App implements OnInit {
+export class App implements OnInit, AfterViewInit {
   searchTerm = signal('');
   selectedProject = signal<any | null>(null);
   isClosing = signal(false);
@@ -23,6 +23,13 @@ export class App implements OnInit {
       this.isDarkMode.set(false);
       document.body.classList.add('light-mode');
     }
+  }
+
+  ngAfterViewInit() {
+    const script = document.createElement('script');
+    script.src = 'https://cdn.credly.com/assets/utilities/embed.js';
+    script.async = true;
+    document.body.appendChild(script);
   }
 
   toggleTheme() {

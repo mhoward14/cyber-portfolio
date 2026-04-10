@@ -258,6 +258,18 @@
   animation: badge-glow 5s ease-in-out infinite;
 }
 
+/* Linked cert badge — subtle lift on hover to signal interactivity */
+.badge-link {
+  text-decoration: none;
+  cursor: pointer;
+}
+.badge-link:hover {
+  background: rgba(59, 130, 246, 0.2);
+  border-color: rgba(59, 130, 246, 0.6);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+}
+
 
 /* ============================================================
    4. ABOUT / BIO SECTION
@@ -932,7 +944,7 @@
 
 /* Smooth background/color transitions on key elements */
 .nav-button, .project-tile, .about-section, .search-box input,
-.modal-window, .modal-header, .modal-body li, .badge, .tag,
+.modal-window, .modal-header, .modal-body li, .badge, .badge-link, .tag,
 .site-footer, .section-label-text {
   transition:
     background-color 0.3s ease,

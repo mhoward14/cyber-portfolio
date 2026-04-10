@@ -941,47 +941,64 @@
     box-shadow 0.3s ease;
 }
 
-/* Nav: github + email — dark icon on light surface, white icon only on hover */
+/* Nav: target SVG fills directly so icons are always visible on light bg */
 body.light-mode .github-btn,
-body.light-mode .email-btn {
+body.light-mode .email-btn,
+body.light-mode .theme-btn {
   background-color: var(--color-surface);
   border-color: var(--color-border);
-  color: #1e293b !important;
+}
+body.light-mode .github-btn svg,
+body.light-mode .github-btn path,
+body.light-mode .email-btn svg,
+body.light-mode .email-btn path,
+body.light-mode .theme-btn svg,
+body.light-mode .theme-btn path,
+body.light-mode .theme-btn polyline,
+body.light-mode .theme-btn circle {
+  stroke: #1e293b;
+  fill: #1e293b;
+  color: #1e293b;
+}
+/* Theme (moon/sun) and email icons are stroke-based, not fill */
+body.light-mode .email-btn path {
+  fill: #1e293b;
+  stroke: none;
+}
+body.light-mode .github-btn:hover path {
+  fill: white;
+}
+body.light-mode .email-btn:hover path {
+  fill: white;
 }
 body.light-mode .github-btn:hover {
   background-color: #1e293b;
   border-color: #1e293b;
-  color: white !important;
 }
 body.light-mode .email-btn:hover {
-  color: white !important;
-}
-body.light-mode .theme-btn {
-  background-color: var(--color-surface);
-  border-color: var(--color-border);
-  color: #1e293b !important;
+  border-color: var(--color-accent);
 }
 
-/* Hero h1: deep blue gradient + slide-only animation (no opacity fade) so
-   dark text stays readable against the light background throughout */
+/* Hero h1: saturated blue gradient — stays visibly blue even at low opacity
+   during the hero-enter fade-in (near-black would go gray on light bg) */
 body.light-mode .centered-header h1 {
-  background: linear-gradient(135deg, #1e3a8a 0%, #1e3a8a 40%, #3b82f6 100%);
+  background: linear-gradient(135deg, #1d4ed8 0%, #1d4ed8 40%, #60a5fa 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   animation:
-    hero-enter-slide 0.8s var(--ease-spring) 0.05s both,
+    hero-enter 0.8s var(--ease-spring) 0.05s both,
     glitch 12s ease-in-out 2.5s infinite;
 }
 
-/* About section: white card with dark text — clear contrast */
+/* About section: force white card + near-black text for clear contrast */
 body.light-mode .about-section {
-  background: #ffffff;
+  background-color: #ffffff !important;
 }
 body.light-mode .about-bio-lead,
 body.light-mode .about-bio-inner p {
-  color: #1e293b;
-  border-left-color: rgba(37, 99, 235, 0.35);
+  color: #0f172a !important;
+  border-left-color: rgba(37, 99, 235, 0.4);
 }
 body.light-mode .about-toggle {
   border-top-color: #e2e8f0;

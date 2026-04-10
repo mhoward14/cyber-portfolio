@@ -115,6 +115,41 @@ body.light-mode::after {
   opacity: 0;
 }
 
+/* ========================================
+   LIGHT MODE — COMPONENT OVERRIDES
+   Component CSS is bundled into the JS file (CDN-cached). These rules
+   live in styles.css (separate file) and use !important to override
+   Angular's [_ngcontent] scoped specificity.
+   ======================================== */
+
+/* Name: base gradient is near-white → invisible on light bg.
+   Replace with dark navy-to-blue so the opacity fade-in looks correct. */
+body.light-mode .centered-header h1 {
+  background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 55%, #3b82f6 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+/* About card: replace semi-transparent dark surface with solid white */
+body.light-mode .about-section {
+  background: #ffffff !important;
+}
+
+/* Bio text: force near-black so it reads on white card */
+body.light-mode .about-bio-lead,
+body.light-mode .about-bio-inner p {
+  color: #0f172a !important;
+}
+
+/* Nav icons: base buttons have color: white !important; override with dark
+   so SVG fill="currentColor" renders dark instead of invisible white */
+body.light-mode .github-btn,
+body.light-mode .email-btn,
+body.light-mode .theme-btn {
+  color: #1e293b !important;
+}
+
 @keyframes grid-drift {
   0%   { background-position: 0 0; }
   100% { background-position: 30px 30px; }

@@ -169,7 +169,21 @@
   box-shadow: 0 12px 24px -6px var(--color-accent-glow);
 }
 
-/* Icon sizing — used by all three buttons */
+/* Theme toggle button — sun/moon icon, same size as other nav buttons */
+.theme-btn {
+  background-color: var(--color-surface);
+  color: var(--color-text-muted) !important;
+  border: 1px solid var(--color-border);
+  transition: all 0.25s var(--ease-out);
+}
+.theme-btn:hover {
+  color: var(--color-accent) !important;
+  border-color: var(--color-accent);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 24px -6px var(--color-accent-glow);
+}
+
+/* Icon sizing — used by all nav buttons */
 .logo-icon {
   width: 20px;
   height: 20px;
@@ -904,7 +918,97 @@
 
 
 /* ============================================================
-   10. RESPONSIVE
+   10. LIGHT MODE COMPONENT OVERRIDES
+   Handles hardcoded rgba() colors and gradients that can't
+   be covered by CSS variable swaps alone.
+   ============================================================ */
+
+/* Smooth background/color transitions on key elements */
+.nav-button, .project-tile, .about-section, .search-box input,
+.modal-window, .modal-header, .modal-body li, .badge, .tag,
+.site-footer, .section-label-text {
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+/* Nav: github + email buttons need a dark bg so white icons stay visible */
+body.light-mode .github-btn,
+body.light-mode .email-btn {
+  background-color: #334155;
+  border-color: #475569;
+}
+body.light-mode .github-btn:hover {
+  background-color: #1e293b;
+  border-color: #1e293b;
+}
+
+/* Hero h1: swap white gradient for dark gradient */
+body.light-mode .centered-header h1 {
+  background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #2563eb 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* About section: solid white card instead of dark glass */
+body.light-mode .about-section {
+  background: #ffffff;
+}
+
+/* Search input: white fill */
+body.light-mode .search-box input {
+  background: rgba(255, 255, 255, 0.9);
+}
+body.light-mode .search-box input:focus {
+  background: #ffffff;
+}
+
+/* Project tiles: subtle shadow instead of flat */
+body.light-mode .project-tile {
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+body.light-mode .project-tile:hover {
+  box-shadow:
+    0 16px 40px -8px rgba(0, 0, 0, 0.12),
+    0 0 0 1px rgba(37, 99, 235, 0.1);
+}
+body.light-mode .project-tile::before {
+  background: linear-gradient(
+    105deg,
+    transparent 35%,
+    rgba(37, 99, 235, 0.05) 50%,
+    transparent 65%
+  );
+}
+
+/* Section label: keep terminal green, it works on both modes */
+
+/* Modal overlay: slightly less opaque on light pages */
+body.light-mode .modal-overlay {
+  background: rgba(15, 23, 42, 0.55);
+}
+
+/* Modal bullet items: light surface background */
+body.light-mode .modal-body li {
+  background: rgba(241, 245, 249, 0.8);
+}
+body.light-mode .modal-body li:hover {
+  background: rgba(37, 99, 235, 0.05);
+}
+
+/* Modal window: softer shadow on light bg */
+body.light-mode .modal-window {
+  box-shadow:
+    0 24px 64px -12px rgba(0, 0, 0, 0.15),
+    0 0 0 1px rgba(37, 99, 235, 0.08);
+}
+
+
+/* ============================================================
+   12. RESPONSIVE
    Adjustments for smaller screens.
    640px: tablet/large phone — single-column grid,
           modal slides up from bottom edge.

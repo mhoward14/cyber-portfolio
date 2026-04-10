@@ -50,6 +50,7 @@ body {
   min-height: 100vh;
   position: relative;
   overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Animated dot-grid background */
@@ -62,6 +63,7 @@ body::before {
   pointer-events: none;
   z-index: 0;
   animation: grid-drift 24s linear infinite;
+  transition: background-image 0.3s ease;
 }
 
 /* Subtle CRT scan-line overlay */
@@ -78,6 +80,39 @@ body::after {
   );
   pointer-events: none;
   z-index: 1;
+  transition: opacity 0.3s ease;
+}
+
+/* ========================================
+   LIGHT MODE
+   Activated by adding .light-mode to <body>.
+   Overrides dark-mode CSS variables and
+   adjusts background effects.
+   ======================================== */
+body.light-mode {
+  --color-bg:           #f1f5f9;
+  --color-surface:      #ffffff;
+  --color-border:       #e2e8f0;
+  --color-border-2:     #cbd5e1;
+  --color-accent:       #2563eb;
+  --color-accent-dim:   rgba(37, 99, 235, 0.08);
+  --color-accent-glow:  rgba(37, 99, 235, 0.2);
+  --color-text:         #0f172a;
+  --color-text-muted:   #475569;
+  --color-text-dim:     #94a3b8;
+
+  background-color: #f1f5f9;
+  color: #0f172a;
+}
+
+/* Softer dot grid on light background */
+body.light-mode::before {
+  background-image: radial-gradient(circle, rgba(37, 99, 235, 0.08) 1px, transparent 1px);
+}
+
+/* Hide CRT scan lines on light background — they look out of place */
+body.light-mode::after {
+  opacity: 0;
 }
 
 @keyframes grid-drift {

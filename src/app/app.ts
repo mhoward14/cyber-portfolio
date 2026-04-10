@@ -1,4 +1,4 @@
-import { Component, signal, computed } from '@angular/core';
+import { Component, signal, computed, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -9,12 +9,33 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
-export class App {
+export class App implements OnInit {
   searchTerm = signal('');
   selectedProject = signal<any | null>(null);
   isClosing = signal(false);
   isFiltering = signal(false);
   aboutExpanded = signal(false);
+  isDarkMode = signal(true);
+
+  ngOnInit() {
+    const saved = localStorage.getItem('theme');
+    if (saved === 'light') {
+      this.isDarkMode.set(false);
+      document.body.classList.add('light-mode');
+    }
+  }
+
+  toggleTheme() {
+    const goingLight = this.isDarkMode();
+    this.isDarkMode.set(!goingLight);
+    if (goingLight) {
+      document.body.classList.add('light-mode');
+      localStorage.setItem('theme', 'light');
+    } else {
+      document.body.classList.remove('light-mode');
+      localStorage.setItem('theme', 'dark');
+    }
+  }
 
   toggleAbout() {
     this.aboutExpanded.set(!this.aboutExpanded());
@@ -22,7 +43,7 @@ export class App {
 
   projects = signal([
     {
-      title: 'GRC Performance Assessment',
+      title: 'Governance, Risk, & Compliance',
       role: 'ISSO | Dean\'s Excellence Award',
       color: '#3b82f6',
       tags: ['GRC', 'NIST 800-53', 'FISMA', 'PCI DSS', 'POA&M', 'Risk Assessment'],
@@ -36,7 +57,7 @@ export class App {
       ]
     },
     {
-      title: 'Penetration Testing Engagement Plan',
+      title: 'Penetration Testing',
       role: 'Security Analyst | Dean\'s Excellence Award',
       color: '#ef4444',
       tags: ['Penetration Testing', 'HIPAA', 'PCI DSS', 'Social Engineering', 'Reconnaissance'],
@@ -50,7 +71,7 @@ export class App {
       ]
     },
     {
-      title: 'Cloud Security Implementation Plan',
+      title: 'Cloud Security',
       role: 'Azure Cloud Security Engineer',
       color: '#06b6d4',
       tags: ['Azure', 'PaaS', 'RBAC', 'Key Vault', 'NIST 800-53', 'FISMA'],
@@ -64,7 +85,7 @@ export class App {
       ]
     },
     {
-      title: 'Security Operations Incident Response',
+      title: 'Security Operations',
       role: 'SOC Analyst',
       color: '#f97316',
       tags: ['SOC', 'Incident Response', 'Digital Forensics', 'NIST IR', 'Threat Intelligence'],
@@ -78,7 +99,7 @@ export class App {
       ]
     },
     {
-      title: 'Secure Network Merger',
+      title: 'Secure Network Design',
       role: 'Secure Network Design Engineer',
       color: '#8b5cf6',
       tags: ['Network Security', 'Zero Trust', 'HIPAA', 'PCI DSS', 'CVSS', 'VLAN'],

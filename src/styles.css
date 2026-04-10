@@ -3,8 +3,8 @@
    ======================================== */
 :root {
   --color-bg:           #050912;
-  --color-surface:      #070a14;
-  --color-border:       #1f2d4a;
+  --color-surface:      #000000;
+  --color-border:       #263352;
   --color-border-2:     #2a3d60;
   --color-accent:       #3b82f6;
   --color-accent-dim:   rgba(59, 130, 246, 0.12);

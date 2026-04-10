@@ -35,11 +35,20 @@
   <section class="about-section">
     <p class="about-title">Cybersecurity Professional&nbsp;&nbsp;|&nbsp;&nbsp;GRC &amp; RMF Specialist&nbsp;&nbsp;|&nbsp;&nbsp;U.S. Air Force Veteran</p>
 
+    <p class="about-bio-lead">I'm a retired Air Force veteran with 21 years of service, specializing in governance, risk, and compliance. My career began in network, system, and client administration — working across IAM, Active Directory, and endpoint management — before evolving through information management and ultimately into physical and information security roles.</p>
+
+    <button class="about-toggle" (click)="toggleAbout()" [attr.aria-label]="aboutExpanded() ? 'Collapse bio' : 'Expand bio'">
+      <svg class="toggle-chevron" [class.is-expanded]="aboutExpanded()"
+           xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="6 9 12 15 18 9"></polyline>
+      </svg>
+    </button>
+
     <div class="about-bio-wrapper" [class.is-expanded]="aboutExpanded()">
       <div class="about-bio-inner">
-        <p>I'm a retired Air Force veteran with 21 years of service, specializing in governance, risk, and compliance. My career began in network, system, and client administration — working across IAM, Active Directory, and endpoint management — before evolving through information management and ultimately into physical and information security roles.</p>
         <p>I hold active CompTIA Security+, CySA+, and PenTest+ certifications alongside the (ISC)&sup2; CC credential, with SecurityX and ISACA CISM currently in progress. I'm also completing my M.S. in Cybersecurity &amp; Information Assurance at Western Governors University (May 2026). My TS/SCI clearance is eligible for reinstatement.</p>
-        <p>My deepest expertise is in the governance and compliance side of the NIST RMF lifecycle — security control assessment, ATO package development, POA&amp;M management, and eMASS administration — supporting environments across NATO, NORAD/USNORTHCOM, and AETC.</p>
+        <p>My deepest expertise is in the governance and compliance side of the NIST RMF lifecycle — security control assessment, ATO package development, POA&amp;M management, and SSP development — supporting environments across NATO, NORAD/USNORTHCOM, and the U.S. Air Force.</p>
       </div>
     </div>
 
@@ -59,14 +68,6 @@
         <span class="stat-label">Degree</span>
       </div>
     </div>
-
-    <button class="about-toggle" (click)="toggleAbout()" [attr.aria-label]="aboutExpanded() ? 'Collapse bio' : 'Expand bio'">
-      <svg class="toggle-chevron" [class.is-expanded]="aboutExpanded()"
-           xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-           stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-        <polyline points="6 9 12 15 18 9"></polyline>
-      </svg>
-    </button>
   </section>
 
   <section class="search-section">

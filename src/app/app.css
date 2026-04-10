@@ -941,12 +941,14 @@
     box-shadow 0.3s ease;
 }
 
-/* Nav: target SVG fills directly so icons are always visible on light bg */
+/* Nav: counter the color: white !important on dark-mode buttons so SVG
+   fill="currentColor" picks up a dark color in light mode */
 body.light-mode .github-btn,
 body.light-mode .email-btn,
 body.light-mode .theme-btn {
   background-color: var(--color-surface);
   border-color: var(--color-border);
+  color: #1e293b !important;
 }
 body.light-mode .github-btn svg,
 body.light-mode .github-btn path,
@@ -979,21 +981,22 @@ body.light-mode .email-btn:hover {
   border-color: var(--color-accent);
 }
 
-/* Hero h1: saturated blue gradient — stays visibly blue even at low opacity
-   during the hero-enter fade-in (near-black would go gray on light bg) */
+/* Hero h1: use hero-enter-slide (no opacity fade) so the dark blue gradient
+   text is fully visible throughout the animation on the light background.
+   hero-enter starts at opacity:0 which makes gradient text look washed out. */
 body.light-mode .centered-header h1 {
   background: linear-gradient(135deg, #1d4ed8 0%, #1d4ed8 40%, #60a5fa 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   animation:
-    hero-enter 0.8s var(--ease-spring) 0.05s both,
+    hero-enter-slide 0.8s var(--ease-spring) 0.05s both,
     glitch 12s ease-in-out 2.5s infinite;
 }
 
 /* About section: force white card + near-black text for clear contrast */
 body.light-mode .about-section {
-  background-color: #ffffff !important;
+  background: #ffffff !important;
 }
 body.light-mode .about-bio-lead,
 body.light-mode .about-bio-inner p {

@@ -31,6 +31,13 @@
   to   { opacity: 1; transform: translateY(0); }
 }
 
+/* Light mode only: slide in without fading so dark text stays readable
+   against the light background throughout the animation */
+@keyframes hero-enter-slide {
+  from { transform: translateY(18px); }
+  to   { transform: translateY(0); }
+}
+
 /* Used by: .centered-header h1 — fires every 12s after a 2.5s delay.
    Creates a brief chromatic-aberration flicker on the name.
    To disable: remove the "glitch 12s..." line from h1's animation property. */
@@ -955,21 +962,25 @@ body.light-mode .theme-btn {
   color: #1e293b !important;
 }
 
-/* Hero h1: dark navy fading into accent blue — high contrast on light bg */
+/* Hero h1: deep blue gradient + slide-only animation (no opacity fade) so
+   dark text stays readable against the light background throughout */
 body.light-mode .centered-header h1 {
-  background: linear-gradient(135deg, #0f172a 0%, #0f172a 45%, #2563eb 100%);
+  background: linear-gradient(135deg, #1e3a8a 0%, #1e3a8a 40%, #3b82f6 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+  animation:
+    hero-enter-slide 0.8s var(--ease-spring) 0.05s both,
+    glitch 12s ease-in-out 2.5s infinite;
 }
 
-/* About section: soft off-white card with visible bio text */
+/* About section: white card with dark text — clear contrast */
 body.light-mode .about-section {
-  background: #f8fafc;
+  background: #ffffff;
 }
 body.light-mode .about-bio-lead,
 body.light-mode .about-bio-inner p {
-  color: #334155;
+  color: #1e293b;
   border-left-color: rgba(37, 99, 235, 0.35);
 }
 body.light-mode .about-toggle {

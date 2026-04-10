@@ -2,13 +2,16 @@
    APP.CSS — CYBER PORTFOLIO COMPONENT STYLES
    ============================================================
    Sections (in order):
-   1. Keyframe Animations
-   2. Top Navigation  (Email + LinkedIn buttons, top-right)
-   3. Hero Header     (Name, subtitle, cert badges)
-   4. Search Section  (Terminal-style filter input)
-   5. Project Grid    (Tile cards)
-   6. Modal           (Overlay + detail window)
-   7. Responsive      (Mobile breakpoints)
+   1.  Keyframe Animations
+   2.  Top Navigation    (GitHub + LinkedIn + Email icon buttons)
+   3.  Hero Header       (Name, subtitle, cert badges)
+   4.  About / Bio       (Professional summary + stats bar)
+   5.  Search Section    (Terminal-style filter + result count)
+   6.  Section Label     (// PROJECTS heading)
+   7.  Project Grid      (Tile cards with color bars + tags)
+   8.  Modal             (Overlay + detail window)
+   9.  Footer            (Name, links, copyright)
+   10. Responsive        (Mobile breakpoints)
 
    CSS variables (colors, fonts, radii, easings) are defined
    in src/styles.css under :root — edit them there to retheme
@@ -84,9 +87,8 @@
 
 /* ============================================================
    2. TOP NAVIGATION
-   Icon-only buttons: GitHub, LinkedIn, Email (copy-to-clipboard).
-   Positioned absolute top-right on desktop;
-   stacks centered on mobile (see responsive section).
+   Icon-only buttons: GitHub, LinkedIn, Email.
+   Fixed top-right on desktop; tucked tighter on mobile.
    ============================================================ */
 
 .top-nav {
@@ -96,7 +98,6 @@
   display: flex;
   gap: 0.5rem;
   z-index: 100;
-  /* Fades in last, after hero content */
   animation: hero-enter 0.6s var(--ease-spring) 0.6s both;
 }
 
@@ -153,8 +154,7 @@
   box-shadow: 0 12px 24px -6px rgba(0, 119, 181, 0.45);
 }
 
-/* Email button — slate default, turns accent blue on hover,
-   turns green when email is copied (via .copied class from app.ts) */
+/* Email button */
 .email-btn {
   background-color: var(--color-surface);
   color: white !important;
@@ -167,13 +167,6 @@
   border-color: var(--color-accent);
   transform: translateY(-3px);
   box-shadow: 0 12px 24px -6px var(--color-accent-glow);
-}
-.email-btn.copied {
-  /* Applied by Angular when clipboard write succeeds — lasts 2 seconds */
-  background-color: var(--color-success);
-  border-color: var(--color-success);
-  transform: translateY(-3px);
-  box-shadow: 0 12px 24px -6px rgba(16, 185, 129, 0.4);
 }
 
 /* Icon sizing — used by all three buttons */
@@ -197,9 +190,7 @@
   margin-bottom: 3.5rem;
 }
 
-/* "MATTHEW HOWARD" — gradient text with periodic glitch animation.
-   clamp() scales font size between 2rem (mobile) and 3.75rem (desktop).
-   To change the gradient colors, edit the linear-gradient values below. */
+/* "MATTHEW HOWARD" — gradient text with periodic glitch animation */
 .centered-header h1 {
   font-size: clamp(2rem, 6vw, 3.75rem);
   font-weight: 900;
@@ -224,16 +215,14 @@
   animation: hero-enter 0.8s var(--ease-spring) 0.2s both;
 }
 
-/* Wrapper around the .badge pill.
-   margin-bottom controls spacing between the badge and the search box. */
+/* Wrapper around the .badge pill */
 .cert-badges {
   margin-top: 0.25rem;
   margin-bottom: 2rem;
   animation: hero-enter 0.8s var(--ease-spring) 0.35s both;
 }
 
-/* "CompTIA PenTest+ | CySA+ | Security+ | (ISC)² CC" pill badge.
-   Slowly pulses a blue glow via badge-glow keyframe. */
+/* Cert badge pill with slow pulsing blue glow */
 .badge {
   display: inline-block;
   background: var(--color-accent-dim);
@@ -250,13 +239,81 @@
 
 
 /* ============================================================
-   4. SEARCH SECTION
+   4. ABOUT / BIO SECTION
+   Professional summary card with stats bar.
+   Sits between the hero header and the search section.
+   ============================================================ */
+
+.about-section {
+  background: rgba(30, 41, 59, 0.5);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 1.75rem 2rem;
+  margin-bottom: 2.5rem;
+  animation: hero-enter 0.8s var(--ease-spring) 0.42s both;
+}
+
+/* Professional summary paragraph */
+.about-bio {
+  color: var(--color-text-muted);
+  font-size: 0.975rem;
+  line-height: 1.8;
+  margin: 0 0 1.5rem;
+  max-width: 780px;
+}
+
+/* Row of stat boxes separated by vertical dividers */
+.about-stats {
+  display: flex;
+  align-items: center;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 2rem;
+}
+.stat-item:first-child {
+  padding-left: 0;
+}
+
+/* Large number/label (e.g. "8", "4", "MS") */
+.stat-number {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+  line-height: 1;
+}
+
+/* Small descriptor below the number */
+.stat-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--color-text-dim);
+  margin-top: 0.3rem;
+}
+
+/* Thin vertical line between stat items */
+.stat-divider {
+  width: 1px;
+  height: 32px;
+  background: var(--color-border);
+  flex-shrink: 0;
+}
+
+
+/* ============================================================
+   5. SEARCH SECTION
    Centered terminal-style input that filters project tiles
-   in real time via Angular's computed signal in app.ts.
+   in real time. Shows result count when a query is active.
    ============================================================ */
 
 .search-section {
-  margin-bottom: 2.5rem;
+  margin-bottom: 1.5rem;
   animation: hero-enter 0.8s var(--ease-spring) 0.48s both;
 }
 
@@ -267,7 +324,7 @@
   margin: 0 auto;
 }
 
-/* ">_" terminal prompt rendered via CSS — not in the HTML */
+/* ">_" terminal prompt rendered via CSS */
 .search-box::before {
   content: '>_';
   position: absolute;
@@ -288,7 +345,7 @@
   background: rgba(30, 41, 59, 0.65);
   border: 1px solid var(--color-border);
   color: var(--color-text);
-  padding: 0.85rem 1.25rem 0.85rem 3.2rem; /* left padding leaves room for ">_" */
+  padding: 0.85rem 1.25rem 0.85rem 3.2rem;
   border-radius: var(--radius-md);
   font-family: var(--font-mono);
   font-size: 0.85rem;
@@ -300,7 +357,6 @@
   color: var(--color-text-dim);
   font-style: italic;
 }
-/* Blue border glow when input is active */
 .search-box input:focus {
   border-color: var(--color-accent);
   background: rgba(30, 41, 59, 0.95);
@@ -309,19 +365,68 @@
     0 0 28px rgba(59, 130, 246, 0.07);
 }
 
+/* "Showing X of 8 projects" — visible only when search is active */
+.result-count {
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--color-text-dim);
+  margin: 0.625rem 0 0;
+  letter-spacing: 0.05em;
+}
+.result-count strong {
+  color: var(--color-accent);
+}
+
 
 /* ============================================================
-   5. PROJECT GRID & TILES
+   6. SECTION LABEL
+   Terminal-style "// PROJECTS" heading above the grid.
+   Grid briefly fades when isFiltering() is true (300ms).
+   ============================================================ */
+
+.section-label {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  animation: hero-enter 0.8s var(--ease-spring) 0.55s both;
+}
+
+/* Green terminal comment style */
+.section-label-text {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #10b981;
+  letter-spacing: 0.1em;
+}
+
+/* Dim subtitle to the right of the label */
+.section-label-sub {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--color-text-dim);
+  letter-spacing: 0.04em;
+}
+
+
+/* ============================================================
+   7. PROJECT GRID & TILES
    Responsive auto-fill grid of clickable project cards.
    Each tile fades and slides up on page load (staggered).
-   Hover: shimmer sweep, top accent bar, lift + shadow.
+   Hover: shimmer sweep, color accent bar, lift + shadow.
    ============================================================ */
 
 .project-grid {
   display: grid;
-  /* Auto-fill columns: minimum 300px wide, maximum 1fr */
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1.25rem;
+  /* Brief opacity dip when search results update */
+  transition: opacity 0.2s var(--ease-out);
+}
+.project-grid.is-filtering {
+  opacity: 0.35;
 }
 
 .project-tile {
@@ -335,13 +440,11 @@
     transform 0.3s var(--ease-spring),
     box-shadow 0.3s var(--ease-out);
   position: relative;
-  overflow: hidden; /* clips the shimmer ::before sweep */
-  /* animation-fill-mode: both keeps tile invisible (opacity:0) until its delay fires */
+  overflow: hidden;
   animation: tile-enter 0.5s var(--ease-spring) both;
 }
 
-/* Staggered entrance — each tile appears ~90ms after the previous one.
-   To add more tiles, extend the pattern below. */
+/* Staggered entrance delays */
 .project-tile:nth-child(1) { animation-delay: 0.58s; }
 .project-tile:nth-child(2) { animation-delay: 0.67s; }
 .project-tile:nth-child(3) { animation-delay: 0.76s; }
@@ -351,7 +454,7 @@
 .project-tile:nth-child(7) { animation-delay: 1.12s; }
 .project-tile:nth-child(8) { animation-delay: 1.21s; }
 
-/* Shimmer: a diagonal highlight sweeps left-to-right across the tile on hover */
+/* Shimmer sweep on hover */
 .project-tile::before {
   content: '';
   position: absolute;
@@ -371,25 +474,23 @@
   transform: translateX(120%);
 }
 
-/* Top accent bar: a thin blue gradient line that expands to full width on hover */
-.project-tile::after {
-  content: '';
+/* Color accent bar — background set dynamically via [style.background]="project.color" */
+.tile-accent-bar {
   position: absolute;
   top: 0;
-  left: 10%;
-  right: 10%;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
-  opacity: 0;
-  transition: opacity 0.3s var(--ease-out), left 0.3s var(--ease-out), right 0.3s var(--ease-out);
-}
-.project-tile:hover::after {
-  opacity: 1;
   left: 0;
   right: 0;
+  height: 3px;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  opacity: 0.6;
+  transition: opacity 0.3s var(--ease-out), height 0.25s var(--ease-out);
+}
+.project-tile:hover .tile-accent-bar {
+  opacity: 1;
+  height: 4px;
 }
 
-/* Lift + blue border + deep shadow on hover */
+/* Lift + border + shadow on hover */
 .project-tile:hover {
   border-color: rgba(59, 130, 246, 0.45);
   transform: translateY(-6px);
@@ -398,7 +499,7 @@
     0 0 0 1px rgba(59, 130, 246, 0.08);
 }
 
-/* Project title inside each tile */
+/* Project title */
 .project-tile h3 {
   font-size: 1.1rem;
   font-weight: 700;
@@ -408,18 +509,43 @@
   line-height: 1.4;
 }
 
-/* Role/award label shown below the title */
+/* Role label */
 .role-preview {
   color: var(--color-text-dim);
   font-size: 0.85rem;
   font-weight: 600;
-  margin: 0 0 1.5rem;
+  margin: 0 0 0.75rem; /* reduced — tag-list follows */
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
 
-/* "VIEW DETAILS →" link at the bottom of each tile.
-   Dim by default; fully opaque + arrow shifts right on hover. */
+/* Skill tag pills */
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-bottom: 1.25rem;
+}
+.tag {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 600;
+  padding: 0.2rem 0.55rem;
+  border-radius: 2rem;
+  background: rgba(59, 130, 246, 0.08);
+  border: 1px solid rgba(59, 130, 246, 0.18);
+  color: var(--color-text-dim);
+  letter-spacing: 0.03em;
+  transition: background 0.2s var(--ease-out), color 0.2s, border-color 0.2s;
+}
+.project-tile:hover .tag {
+  background: rgba(59, 130, 246, 0.15);
+  border-color: rgba(59, 130, 246, 0.3);
+  color: var(--color-text-muted);
+}
+
+/* "VIEW DETAILS →" link */
 .view-label {
   display: inline-flex;
   align-items: center;
@@ -437,9 +563,31 @@
   gap: 0.55rem;
 }
 
+/* Empty state when no search results */
+.no-results {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 3.5rem 1rem;
+  color: var(--color-text-dim);
+}
+.no-results-icon {
+  display: block;
+  font-size: 2.5rem;
+  margin-bottom: 0.75rem;
+  opacity: 0.35;
+}
+.no-results p {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  margin: 0;
+}
+.no-results strong {
+  color: var(--color-accent);
+}
+
 
 /* ============================================================
-   6. MODAL — OVERLAY & WINDOW
+   8. MODAL — OVERLAY & WINDOW
    Shown when a project tile is clicked. Controlled by
    selectedProject() signal in app.ts.
 
@@ -463,17 +611,16 @@
   padding: 1.5rem;
   animation: overlay-enter 0.25s var(--ease-out) both;
 }
-/* Reverse animation plays when modal is closing */
 .modal-overlay.is-closing {
   animation: overlay-enter 0.22s var(--ease-out) reverse both;
 }
 
-/* The white card that contains the project detail */
+/* The card that contains the project detail */
 .modal-window {
   background: var(--color-surface);
   width: 100%;
-  max-width: 720px;       /* cap width on large screens */
-  max-height: 85vh;       /* scrollable if content is long */
+  max-width: 720px;
+  max-height: 85vh;
   border-radius: var(--radius-xl);
   border: 1px solid rgba(59, 130, 246, 0.3);
   position: relative;
@@ -488,30 +635,38 @@
   animation: modal-enter 0.2s var(--ease-out) reverse both;
 }
 
+/* Color accent bar at the very top of the modal window.
+   Background color is set dynamically via [style.background]="project.color" */
+.modal-accent-bar {
+  height: 4px;
+  width: 100%;
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  flex-shrink: 0;
+}
+
 /* ---- Modal Header ----
-   Sticks to the top while scrolling long content.
-   Contains: project title (h2) + role pill (.modal-role). */
+   Sticks to the top while scrolling long content. */
 .modal-header {
   padding: 2.25rem 2.5rem 1.5rem;
   border-bottom: 1px solid var(--color-border);
   position: sticky;
   top: 0;
-  background: var(--color-surface); /* must match window bg to cover scroll content */
+  background: var(--color-surface);
   z-index: 10;
-  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  border-radius: 0; /* accent bar above handles top radius */
 }
 
 /* Project title */
 .modal-header h2 {
   font-size: 1.35rem;
   font-weight: 800;
-  margin: 0 2.75rem 0.625rem 0; /* right margin leaves room for the close button */
+  margin: 0 2.75rem 0.625rem 0;
   color: var(--color-text);
   letter-spacing: 0.01em;
   line-height: 1.3;
 }
 
-/* Role/title shown as a blue pill badge below the project title */
+/* Role pill badge */
 .modal-role {
   display: inline-block;
   color: var(--color-accent);
@@ -526,8 +681,7 @@
   margin: 0;
 }
 
-/* ---- Modal Body ----
-   Contains: scope/context paragraph + accomplishments list. */
+/* ---- Modal Body ---- */
 .modal-body {
   padding: 1.75rem 2.5rem 2.5rem;
 }
@@ -546,7 +700,7 @@
   font-weight: 600;
 }
 
-/* "KEY ACCOMPLISHMENTS" section label */
+/* "KEY ACCOMPLISHMENTS" label */
 .modal-body h4 {
   color: var(--color-accent);
   font-size: 0.65rem;
@@ -556,7 +710,7 @@
   margin: 0 0 0.875rem;
 }
 
-/* Accomplishment bullet list */
+/* Accomplishment list */
 .modal-body ul {
   list-style: none;
   padding: 0;
@@ -565,8 +719,6 @@
   flex-direction: column;
   gap: 0.375rem;
 }
-
-/* Each bullet item — card style, highlights on hover */
 .modal-body li {
   padding: 0.875rem 1rem 0.875rem 2rem;
   background: rgba(15, 23, 42, 0.45);
@@ -594,9 +746,7 @@
   line-height: 1.65;
 }
 
-/* ---- Close Button ----
-   Circular "✕" button fixed to the top-right of .modal-header.
-   Rotates 90° and turns red on hover. */
+/* ---- Close Button ---- */
 .close-btn {
   position: absolute;
   top: 1.375rem;
@@ -626,15 +776,71 @@
 
 
 /* ============================================================
-   7. RESPONSIVE
+   9. FOOTER
+   Centered footer with name, title, social icon links,
+   and copyright line.
+   ============================================================ */
+
+.site-footer {
+  margin-top: 4rem;
+  padding: 2.5rem 1.5rem 2rem;
+  border-top: 1px solid var(--color-border);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.footer-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text);
+  letter-spacing: 0.05em;
+}
+
+.footer-title {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--color-text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.footer-links {
+  display: flex;
+  gap: 1rem;
+  margin: 0.75rem 0 0.25rem;
+}
+.footer-links a {
+  color: var(--color-text-dim);
+  transition: color 0.2s, transform 0.2s var(--ease-spring);
+  display: flex;
+  align-items: center;
+}
+.footer-links a:hover {
+  color: var(--color-accent);
+  transform: translateY(-3px);
+}
+
+.footer-copy {
+  font-size: 0.65rem;
+  color: var(--color-text-dim);
+  letter-spacing: 0.05em;
+  font-family: var(--font-mono);
+  opacity: 0.6;
+}
+
+
+/* ============================================================
+   10. RESPONSIVE
    Adjustments for smaller screens.
-   640px: tablet/large phone — stack nav, single-column grid,
+   640px: tablet/large phone — single-column grid,
           modal slides up from bottom edge.
-   420px: small phone — hide button text labels, shrink badge.
+   420px: small phone — shrink badge, compact about section.
    ============================================================ */
 
 @media (max-width: 640px) {
-  /* Nav stays fixed on mobile too — just tuck it tighter */
   .top-nav {
     top: 0.5rem;
     right: 0.5rem;
@@ -645,7 +851,6 @@
     padding: 20px 16px;
   }
 
-  /* Tighten vertical space on the hero */
   .centered-header {
     margin-top: 1rem;
     margin-bottom: 2.5rem;
@@ -654,7 +859,16 @@
     letter-spacing: 0.08em;
   }
 
-  /* Single column grid on mobile */
+  .about-section {
+    padding: 1.375rem 1.25rem;
+  }
+  .about-bio {
+    font-size: 0.9rem;
+  }
+  .stat-item {
+    padding: 0 1.25rem;
+  }
+
   .project-grid {
     grid-template-columns: 1fr;
     gap: 0.875rem;
@@ -669,20 +883,38 @@
     max-height: 90vh;
     border-radius: var(--radius-xl) var(--radius-xl) var(--radius-md) var(--radius-md);
   }
-
-  /* Tighter side padding inside modal */
   .modal-header,
   .modal-body {
     padding-left: 1.375rem;
     padding-right: 1.375rem;
   }
+
+  .site-footer {
+    margin-top: 2.5rem;
+    padding: 2rem 1rem 1.5rem;
+  }
 }
 
 @media (max-width: 420px) {
-  /* Shrink cert badge text */
   .badge {
     font-size: 0.65rem;
     padding: 0.45rem 1rem;
     letter-spacing: 0.06em;
+  }
+
+  .about-section {
+    padding: 1.25rem 1rem;
+  }
+  .stat-item {
+    padding: 0 1rem;
+  }
+  .stat-number {
+    font-size: 1.35rem;
+  }
+
+  .section-label {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
   }
 }

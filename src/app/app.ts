@@ -19,9 +19,17 @@ export class App implements OnInit, AfterViewInit {
 
   ngOnInit() {
     const saved = localStorage.getItem('theme');
-    if (saved === 'light') {
-      this.isDarkMode.set(false);
-      document.body.classList.add('light-mode');
+    if (saved) {
+      if (saved === 'light') {
+        this.isDarkMode.set(false);
+        document.body.classList.add('light-mode');
+      }
+    } else {
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (!prefersDark) {
+        this.isDarkMode.set(false);
+        document.body.classList.add('light-mode');
+      }
     }
   }
 
@@ -158,6 +166,21 @@ export class App implements OnInit, AfterViewInit {
         'Asset Protection Standards: Formalized organizational security standards and policies for Acceptable Use (AUP), Mobile Device Management (MDM), password complexity, and PII protection based on contractual and regulatory sources.',
         'Incident Response Planning: Authored a formal Incident Response Plan (IRP) structured around the four NIST incident handling phases to ensure rapid containment and recovery.',
         'Business Continuity & Resilience: Developed a comprehensive Business Continuity Plan (BCP) including project scoping, Business Impact Analysis (BIA), and implementation strategies to mitigate natural disaster risks.'
+      ]
+    },
+    {
+      title: 'Cybersecurity Graduate Capstone',
+      role: 'WGU D490 | Security Architecture & Project Management',
+      color: '#d97706',
+      tags: ['Zero Trust', 'FISMA', 'NIST 800-53', 'Identity & Access', 'SOC', 'Project Management'],
+      scope: 'Designed and evaluated a comprehensive five-component security transformation for a mid-sized U.S. federal agency (500 employees), integrating nine graduate-level cybersecurity courses into a cohesive security architecture addressing documented vulnerabilities, compliance deficiencies, and governance gaps.',
+      bullets: [
+        'Zero-Trust Network Architecture: Designed secure network segmentation across five security zones using HPE/Fortigate/Sophos firewalls, implementing least-privilege access controls and defense-in-depth principles to eliminate implicit trust.',
+        'Identity & Access Management: Implemented centralized IAM via Okta with role-based access control (RBAC) and multi-factor authentication (MFA), achieving 100% least-privilege enforcement vs. current 30% effectiveness.',
+        'Governance & Compliance Framework: Aligned security architecture with FISMA and NIST SP 800-53 controls, remediating 80%+ of audit findings and addressing 12 open federal audit issues.',
+        'Secure Software Development Lifecycle: Established DevSecOps procedures integrating security testing, code review, and vulnerability scanning into development pipeline.',
+        'Security Operations Center (SOC) Implementation: Configured Splunk-based real-time threat detection and incident response, reducing mean time to detect (MTTD) from 180+ days to 14 days.',
+        'Enterprise Project Management: Developed comprehensive 8-month implementation plan with $913,320 budget allocation (hardware $192K, software $210K, services $87K, labor $688K), stakeholder engagement, and organizational change management.'
       ]
     }
   ]);

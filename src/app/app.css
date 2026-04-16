@@ -237,6 +237,12 @@
 }
 
 /* Wrapper around the .badge pill */
+.badge-clip {
+  width: 150px;
+  height: 168px;
+  overflow: hidden;
+}
+
 .cert-badges {
   display: flex;
   flex-wrap: wrap;

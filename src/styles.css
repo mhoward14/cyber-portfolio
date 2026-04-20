@@ -167,7 +167,8 @@ body.light-mode .project-tile {
 body.light-mode .project-tile:hover {
   box-shadow:
     0 16px 40px -8px rgba(0, 0, 0, 0.2),
-    0 0 0 1px rgba(37, 99, 235, 0.18) !important;
+    0 0 0 1px rgba(0, 122, 255, 0.3),
+    0 0 18px 3px rgba(0, 122, 255, 0.12) !important;
 }
 
 /* Search box: match the card surface so it sits in the palette */

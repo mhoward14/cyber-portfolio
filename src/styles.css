@@ -144,6 +144,7 @@ body.light-mode .about-bio-inner p {
 
 /* Nav icons: base buttons have color: white !important; override with dark
    so SVG fill="currentColor" renders dark instead of invisible white */
+body.light-mode .home-btn,
 body.light-mode .github-btn,
 body.light-mode .email-btn,
 body.light-mode .theme-btn {

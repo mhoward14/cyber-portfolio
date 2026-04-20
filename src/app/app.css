@@ -137,6 +137,19 @@
 }
 
 /* GitHub button */
+.home-btn {
+  background-color: var(--color-surface);
+  color: var(--color-text-muted) !important;
+  border: 1px solid var(--color-border);
+}
+.home-btn:hover {
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
+  color: white !important;
+  transform: translateY(-3px);
+  box-shadow: 0 12px 24px -6px var(--color-accent-glow);
+}
+
 .github-btn {
   background-color: var(--color-surface);
   color: white !important;

@@ -235,8 +235,8 @@
 
 .centered-header {
   text-align: center;
-  margin-top: 3.5rem;
-  margin-bottom: 3.5rem;
+  margin-top: 1.75rem;
+  margin-bottom: 2rem;
 }
 
 /* "MATTHEW HOWARD" — gradient text with periodic glitch animation */
@@ -321,8 +321,21 @@
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   padding: 1.5rem 2rem 0.75rem;
-  margin-bottom: 2.5rem;
+  margin-bottom: 1.5rem;
   animation: hero-enter 0.8s var(--ease-spring) 0.42s both;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.7);
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    color 0.3s ease,
+    box-shadow 0.35s var(--ease-out);
+}
+.about-section.is-expanded {
+  box-shadow:
+    0 2px 16px rgba(0, 0, 0, 0.7),
+    0 0 0 1px rgba(0, 122, 255, 0.35),
+    0 0 28px 5px rgba(0, 122, 255, 0.18);
+  border-color: rgba(0, 122, 255, 0.4);
 }
 
 /* Centered title line with pipe separators */
@@ -1039,6 +1052,14 @@ body.light-mode .email-btn:hover {
 /* About section: force white card + near-black text for clear contrast */
 body.light-mode .about-section {
   background: #ffffff !important;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(37, 99, 235, 0.06);
+}
+body.light-mode .about-section.is-expanded {
+  box-shadow:
+    0 8px 32px -6px rgba(0, 0, 0, 0.15),
+    0 0 0 1px rgba(0, 122, 255, 0.3),
+    0 0 22px 4px rgba(0, 122, 255, 0.12) !important;
+  border-color: rgba(0, 122, 255, 0.35) !important;
 }
 body.light-mode .about-bio-lead,
 body.light-mode .about-bio-inner p {

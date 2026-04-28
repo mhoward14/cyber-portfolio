@@ -187,14 +187,20 @@ body.light-mode .search-box input:focus {
 /* ========================================
    PROJECTS BAND
    Full-width gray band in light mode.
-   Negative margin-top pulls it up behind the about
-   card; the card's z-index: 5 keeps it on top.
+   Negative margin-top pulls it up behind the about card.
+   z-index: 2 keeps it below the top-section (z-index: 6).
    ======================================== */
 .projects-band {
   width: 100%;
   position: relative;
   z-index: 2;
   margin-top: -3.5rem;
+}
+
+/* Elevates the top container above the projects band so the
+   about card's stacking context beats the encroaching gray. */
+.top-section {
+  z-index: 6;
 }
 
 body.light-mode .projects-band {

@@ -11,13 +11,11 @@
     <!-- Light / Dark mode toggle -->
     <button class="nav-button theme-btn" (click)="toggleTheme()" [attr.aria-label]="isDarkMode() ? 'Switch to light mode' : 'Switch to dark mode'">
       @if (isDarkMode()) {
-        <!-- Sun icon: click to go light -->
         <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="4"></circle>
           <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
         </svg>
       } @else {
-        <!-- Moon icon: click to go dark -->
         <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
         </svg>
@@ -38,7 +36,7 @@
       </svg>
     </a>
 
-    <!-- Email — opens new email message -->
+    <!-- Email -->
     <a href="mailto:mhoward14@icloud.com" class="nav-button email-btn" aria-label="Send email">
       <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
         <path d="M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a1.75 1.75 0 01-1.855 0L1.5 8.67z" />
@@ -57,8 +55,10 @@
       <div class="badge-clip"><div data-iframe-width="150" data-iframe-height="270" data-share-badge-id="26b4730b-4c96-4f45-82fe-64a738a04e28" data-share-badge-host="https://www.credly.com"></div></div>
     </div>
   </header>
+</div>
 
-  <!-- About / Bio Section -->
+<!-- ── About card: bridges white top and gray band ── -->
+<div class="about-bridge">
   <section class="about-section" [class.is-expanded]="aboutExpanded()">
     <p class="about-title">Cybersecurity Professional&nbsp;&nbsp;|&nbsp;&nbsp;GRC &amp; RMF Specialist&nbsp;&nbsp;|&nbsp;&nbsp;U.S. Air Force Veteran</p>
 
@@ -166,7 +166,7 @@
   </div>
 }
 
-<!-- ── Footer section: white in light mode ── -->
+<!-- ── Footer: white in light mode ── -->
 <div class="container">
   <footer class="site-footer">
     <div class="footer-name">Matthew Howard</div>

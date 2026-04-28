@@ -101,7 +101,7 @@ export class App implements OnInit, AfterViewInit {
     },
     {
       title: 'Security Operations',
-      role: 'SOC Analyst',
+      role: 'SOC Analyst | CompTIA CySA+',
       color: '#f97316',
       tags: ['SOC', 'Incident Response', 'Digital Forensics', 'NIST IR', 'Threat Intelligence'],
       scope: 'Investigated simulated enterprise-level cybersecurity incident involving malicious network traffic and unauthorized access, performing comprehensive forensic analysis and developing remediation strategy.',

@@ -90,18 +90,18 @@ body::after {
    adjusts background effects.
    ======================================== */
 body.light-mode {
-  --color-bg:           #d4dff0;
-  --color-surface:      #f0f5ff;
-  --color-border:       #b8cce0;
-  --color-border-2:     #a0b8d4;
+  --color-bg:           #f3f4f6;
+  --color-surface:      #ffffff;
+  --color-border:       #e5e7eb;
+  --color-border-2:     #d1d5db;
   --color-accent:       #2563eb;
   --color-accent-dim:   rgba(37, 99, 235, 0.1);
   --color-accent-glow:  rgba(37, 99, 235, 0.25);
   --color-text:         #0f172a;
-  --color-text-muted:   #334155;
-  --color-text-dim:     #64748b;
+  --color-text-muted:   #374151;
+  --color-text-dim:     #6b7280;
 
-  background-color: #d4dff0;
+  background-color: #f3f4f6;
   color: #0f172a;
 }
 
@@ -131,9 +131,9 @@ body.light-mode .centered-header h1 {
   -webkit-text-fill-color: transparent !important;
 }
 
-/* About card: off-white surface to match card palette */
+/* About card: white surface */
 body.light-mode .about-section {
-  background: #f0f5ff !important;
+  background: #ffffff !important;
 }
 
 /* Bio text: force near-black so it reads on white card */
@@ -171,9 +171,9 @@ body.light-mode .project-tile:hover {
     0 0 18px 3px rgba(0, 122, 255, 0.12) !important;
 }
 
-/* Search box: match the card surface so it sits in the palette */
+/* Search box: white with gray border */
 body.light-mode .search-box input {
-  background: #f0f5ff !important;
+  background: #ffffff !important;
 }
 body.light-mode .search-box input:focus {
   background: #ffffff !important;

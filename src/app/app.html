@@ -5,6 +5,7 @@
   <span>Home</span>
 </a>
 
+<!-- ── Top section: white in light mode ── -->
 <div class="container">
   <nav class="top-nav">
     <!-- Light / Dark mode toggle -->
@@ -80,7 +81,7 @@
 
     <div class="about-stats">
       <div class="stat-item">
-        <span class="stat-number">8</span>
+        <span class="stat-number">9</span>
         <span class="stat-label">Projects</span>
       </div>
       <div class="stat-divider"></div>
@@ -95,71 +96,78 @@
       </div>
     </div>
   </section>
+</div>
 
-  <section class="search-section">
-    <div class="search-box">
-      <input type="text" placeholder="Search projects, skills, frameworks..."
-             [ngModel]="searchTerm()" (ngModelChange)="onSearch($event)">
+<!-- ── Projects band: gray in light mode ── -->
+<div class="projects-band">
+  <div class="projects-inner">
+    <section class="search-section">
+      <div class="search-box">
+        <input type="text" placeholder="Search projects, skills, frameworks..."
+               [ngModel]="searchTerm()" (ngModelChange)="onSearch($event)">
+      </div>
+      @if (isSearchActive()) {
+        <p class="result-count">
+          Showing <strong>{{ filteredProjects().length }}</strong> of <strong>{{ totalProjects() }}</strong> projects
+        </p>
+      }
+    </section>
+
+    <div class="section-label">
+      <span class="section-label-text">// PROJECTS</span>
+      <span class="section-label-sub">Select a project to view details</span>
     </div>
-    @if (isSearchActive()) {
-      <p class="result-count">
-        Showing <strong>{{ filteredProjects().length }}</strong> of <strong>{{ totalProjects() }}</strong> projects
-      </p>
-    }
-  </section>
 
-  <div class="section-label">
-    <span class="section-label-text">// PROJECTS</span>
-    <span class="section-label-sub">Select a project to view details</span>
-  </div>
-
-  <main class="project-grid" [class.is-filtering]="isFiltering()">
-    @for (project of filteredProjects(); track project.title) {
-      <div class="project-tile" (click)="openModal(project)">
-        <div class="tile-accent-bar" [style.background]="project.color"></div>
-        <h3>{{ project.title }}</h3>
-        <p class="role-preview">{{ project.role }}</p>
-        <div class="tag-list">
-          @for (tag of project.tags; track tag) {
-            <span class="tag">{{ tag }}</span>
-          }
-        </div>
-        <span class="view-label">View Details →</span>
-      </div>
-    }
-    @if (filteredProjects().length === 0) {
-      <div class="no-results">
-        <span class="no-results-icon">⌀</span>
-        <p>No projects match "<strong>{{ searchTerm() }}</strong>"</p>
-      </div>
-    }
-  </main>
-
-  @if (selectedProject(); as project) {
-    <div class="modal-overlay" [class.is-closing]="isClosing()" (click)="closeModal()">
-      <div class="modal-window" (click)="$event.stopPropagation()">
-        <div class="modal-accent-bar" [style.background]="project.color"></div>
-        <button class="close-btn" (click)="closeModal()">✕</button>
-        <div class="modal-header">
-          <h2>{{ project.title }}</h2>
-          <p class="modal-role">{{ project.role }}</p>
-        </div>
-        <div class="modal-body">
-          @if (project.scope) {
-            <p class="scope-text"><strong>Context:</strong> {{ project.scope }}</p>
-          }
-          <h4>Key Accomplishments</h4>
-          <ul>
-            @for (bullet of project.bullets; track bullet) {
-              <li>{{ bullet }}</li>
+    <main class="project-grid" [class.is-filtering]="isFiltering()">
+      @for (project of filteredProjects(); track project.title) {
+        <div class="project-tile" (click)="openModal(project)">
+          <div class="tile-accent-bar" [style.background]="project.color"></div>
+          <h3>{{ project.title }}</h3>
+          <p class="role-preview">{{ project.role }}</p>
+          <div class="tag-list">
+            @for (tag of project.tags; track tag) {
+              <span class="tag">{{ tag }}</span>
             }
-          </ul>
+          </div>
+          <span class="view-label">View Details →</span>
         </div>
+      }
+      @if (filteredProjects().length === 0) {
+        <div class="no-results">
+          <span class="no-results-icon">⌀</span>
+          <p>No projects match "<strong>{{ searchTerm() }}</strong>"</p>
+        </div>
+      }
+    </main>
+  </div>
+</div>
+
+@if (selectedProject(); as project) {
+  <div class="modal-overlay" [class.is-closing]="isClosing()" (click)="closeModal()">
+    <div class="modal-window" (click)="$event.stopPropagation()">
+      <div class="modal-accent-bar" [style.background]="project.color"></div>
+      <button class="close-btn" (click)="closeModal()">✕</button>
+      <div class="modal-header">
+        <h2>{{ project.title }}</h2>
+        <p class="modal-role">{{ project.role }}</p>
+      </div>
+      <div class="modal-body">
+        @if (project.scope) {
+          <p class="scope-text"><strong>Context:</strong> {{ project.scope }}</p>
+        }
+        <h4>Key Accomplishments</h4>
+        <ul>
+          @for (bullet of project.bullets; track bullet) {
+            <li>{{ bullet }}</li>
+          }
+        </ul>
       </div>
     </div>
-  }
+  </div>
+}
 
-  <!-- Footer -->
+<!-- ── Footer section: white in light mode ── -->
+<div class="container">
   <footer class="site-footer">
     <div class="footer-name">Matthew Howard</div>
     <div class="footer-title">MS Cybersecurity &amp; Information Assurance</div>

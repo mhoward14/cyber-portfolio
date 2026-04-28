@@ -185,40 +185,24 @@ body.light-mode .search-box input:focus {
 }
 
 /* ========================================
-   ABOUT BRIDGE
-   The about card sits in its own wrapper between
-   the white top section and the gray projects band.
-   A negative margin-bottom causes the gray band to
-   slide up behind the card's lower portion; z-index: 5
-   keeps the card rendered on top.
-   ======================================== */
-.about-bridge {
-  position: relative;
-  z-index: 5;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
-  margin-bottom: -3.5rem;
-}
-
-/* ========================================
    PROJECTS BAND
-   Full-width gray band in light mode that wraps
-   the search + label + project grid section.
-   In dark mode it's transparent (inherits body bg).
+   Full-width gray band in light mode.
+   Negative margin-top pulls it up behind the about
+   card; the card's z-index: 5 keeps it on top.
    ======================================== */
 .projects-band {
   width: 100%;
   position: relative;
   z-index: 2;
+  margin-top: -3.5rem;
 }
 
 body.light-mode .projects-band {
   background: #e5e7eb;
 }
 
-/* Extra top padding pushes search box clear of the overlapping about card.
-   3.5rem overlap + ~2rem breathing room = 5.5rem */
+/* padding-top pushes the search box clear of the card overlap:
+   3.5rem (band rise) + ~2rem breathing room */
 .projects-inner {
   max-width: 1200px;
   margin: 0 auto;

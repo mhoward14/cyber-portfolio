@@ -170,7 +170,7 @@ export class App implements OnInit, AfterViewInit {
     },
     {
       title: 'Cybersecurity Graduate Capstone',
-      role: 'WGU D490 | Security Architecture & Project Management',
+      role: 'Security Architecture & Project Management',
       color: '#d97706',
       tags: ['Zero Trust', 'FISMA', 'NIST 800-53', 'Identity & Access', 'SOC', 'Project Management'],
       scope: 'Designed and evaluated a comprehensive five-component security transformation for a mid-sized U.S. federal agency (500 employees), integrating nine graduate-level cybersecurity courses into a cohesive security architecture addressing documented vulnerabilities, compliance deficiencies, and governance gaps.',

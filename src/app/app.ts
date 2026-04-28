@@ -73,7 +73,7 @@ export class App implements OnInit, AfterViewInit {
     },
     {
       title: 'Penetration Testing',
-      role: 'Security Analyst | Dean\'s Excellence Award',
+      role: 'Security Analyst | CompTIA PenTest+ | Dean\'s Excellence Award',
       color: '#ef4444',
       tags: ['Penetration Testing', 'HIPAA', 'PCI DSS', 'Social Engineering', 'Reconnaissance'],
       scope: 'Designed comprehensive penetration testing engagement plan for healthcare organization (Pruhart Tech) protecting electronic Protected Health Information (ePHI) and payment data, with focus on evaluating security controls and identifying exploitation vulnerabilities.',

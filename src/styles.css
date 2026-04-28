@@ -101,7 +101,7 @@ body.light-mode {
   --color-text-muted:   #374151;
   --color-text-dim:     #6b7280;
 
-  background-color: #f3f4f6;
+  background-color: #ffffff;
   color: #0f172a;
 }
 
@@ -182,6 +182,28 @@ body.light-mode .search-box input:focus {
 @keyframes grid-drift {
   0%   { background-position: 0 0; }
   100% { background-position: 30px 30px; }
+}
+
+/* ========================================
+   PROJECTS BAND
+   Full-width gray band in light mode that wraps
+   the search + label + project grid section.
+   In dark mode it's transparent (inherits body bg).
+   ======================================== */
+.projects-band {
+  width: 100%;
+  position: relative;
+  z-index: 2;
+}
+
+body.light-mode .projects-band {
+  background: #f3f4f6;
+}
+
+.projects-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
 }
 
 /* ========================================

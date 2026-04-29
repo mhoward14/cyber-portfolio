@@ -58,17 +58,45 @@ export class App implements OnInit, AfterViewInit {
 
   projects = signal([
     {
-      title: 'Governance, Risk, & Compliance',
-      role: 'ISSO | Dean\'s Excellence Award',
-      color: '#3b82f6',
-      tags: ['GRC', 'NIST 800-53', 'FISMA', 'PCI DSS', 'POA&M', 'Risk Assessment'],
-      scope: 'Conducted comprehensive security system evaluation and gap analysis for a simulated healthcare technology organization (Fielder Medical Center), identifying critical deficiencies in access control, continuous monitoring, and security documentation.',
+      title: 'Security Foundations',
+      role: '(ISC)² Certified in Cybersecurity (CC)',
+      color: '#0ea5e9',
+      tags: ['(ISC)² CC', 'Security Principles', 'Access Control', 'Network Security', 'Business Continuity', 'Incident Response'],
+      scope: 'Demonstrated foundational cybersecurity knowledge and competencies aligned with the (ISC)² Certified in Cybersecurity (CC) certification framework, covering core security principles, access control concepts, network security, and security operations essential to entry-level cybersecurity practice.',
       bullets: [
-        'Security Control Mapping: Mapped five (5) critical security controls to NIST SP 800-53 Rev. 5, FISMA, and PCI DSS requirements, ensuring alignment with federal and industry compliance standards.',
-        'Risk Assessment & Prioritization: Performed comprehensive risk assessment using the NIST Cybersecurity Framework (CSF); identified and prioritized 28 risks, reducing high-risk exposure by 45% through strategic mitigation planning.',
-        'POA&M Development: Developed detailed Plan of Action and Milestones (POA&M) addressing identified gaps in access control policies, multifactor authentication, endpoint protection, and continuous monitoring programs.',
-        'Continuous Monitoring Strategy: Proposed enterprise-wide continuous monitoring strategy aligned with NIST SP 800-137, establishing metrics for ongoing security posture assessment.',
-        'Compliance Remediation: Addressed critical findings including missing MFA implementation (IA-2), inadequate least privilege enforcement (AC-6), insufficient endpoint protection, and outdated system security plans.'
+        'Security Principles: Applied core security concepts including the CIA triad (Confidentiality, Integrity, Availability), authentication, authorization, and non-repudiation to evaluate and support organizational security posture.',
+        'Business Continuity & Disaster Recovery: Identified and applied business continuity, disaster recovery, and incident response concepts to support organizational resilience and operational continuity under adverse conditions.',
+        'Access Control Concepts: Evaluated physical and logical access control models including discretionary, mandatory, and role-based access control, and applied least privilege and need-to-know principles.',
+        'Network Security: Demonstrated understanding of network threats, attacks, and countermeasures including firewalls, intrusion detection/prevention systems, and secure network design fundamentals.',
+        'Security Operations: Applied security operations concepts including data handling, logging and monitoring, configuration management, and best practice security policies to support a defensible security environment.'
+      ]
+    },
+    {
+      title: 'Secure Network Design',
+      role: 'Secure Network Design Engineer',
+      color: '#8b5cf6',
+      tags: ['Network Security', 'Zero Trust', 'HIPAA', 'PCI DSS', 'CVSS', 'VLAN'],
+      scope: 'Designed secure merged network architecture post-acquisition, integrating cloud and on-premises systems while ensuring HIPAA and PCI DSS compliance within budgetary constraints.',
+      bullets: [
+        'Secure Architecture Design: Designed comprehensive merged network architecture integrating cloud services and on-premises infrastructure following post-acquisition requirements.',
+        'Vulnerability Assessment: Identified and documented 20+ network vulnerabilities using Common Vulnerability Scoring System (CVSS) and NIST SP 800-30 Rev. 1 risk assessment methodologies.',
+        'Security Framework Implementation: Implemented zero trust architecture, least privilege access controls, and defense-in-depth security principles throughout network design.',
+        'Regulatory Compliance: Ensured full HIPAA and PCI DSS compliance for healthcare data and payment processing systems while adhering to $50K budget constraint.',
+        'Network Segmentation: Designed secure network segmentation strategy isolating sensitive data environments, implementing firewalls, VLANs, and access control lists.'
+      ]
+    },
+    {
+      title: 'Security Operations',
+      role: 'SOC Analyst',
+      color: '#f97316',
+      tags: ['CompTIA CySA+', 'SOC', 'Incident Response', 'Digital Forensics', 'NIST IR', 'Threat Intelligence'],
+      scope: 'Investigated simulated enterprise-level cybersecurity incident involving malicious network traffic and unauthorized access, performing comprehensive forensic analysis and developing remediation strategy.',
+      bullets: [
+        'Forensic Investigation: Performed comprehensive log analysis, network forensic review, and packet capture analysis to determine attack vectors and identify root cause of security incident.',
+        'Incident Classification: Properly categorized incident severity and impact scope, identifying affected systems, compromised data, and lateral movement indicators.',
+        'NIST Framework Alignment: Authored detailed incident response report with corrective actions aligned to NIST Incident Response Lifecycle (Preparation, Detection & Analysis, Containment, Eradication & Recovery, Post-Incident Activity).',
+        'Remediation Strategy: Developed comprehensive remediation plan including immediate containment actions, vulnerability patching, security control enhancements, and lessons learned documentation.',
+        'Threat Intelligence: Identified indicators of compromise (IOCs), malicious IP addresses, and attack patterns for threat intelligence sharing and future prevention.'
       ]
     },
     {
@@ -100,31 +128,27 @@ export class App implements OnInit, AfterViewInit {
       ]
     },
     {
-      title: 'Security Operations',
-      role: 'SOC Analyst',
-      color: '#f97316',
-      tags: ['CompTIA CySA+', 'SOC', 'Incident Response', 'Digital Forensics', 'NIST IR', 'Threat Intelligence'],
-      scope: 'Investigated simulated enterprise-level cybersecurity incident involving malicious network traffic and unauthorized access, performing comprehensive forensic analysis and developing remediation strategy.',
+      title: 'Governance, Risk, & Compliance',
+      role: 'ISSO | Dean\'s Excellence Award',
+      color: '#3b82f6',
+      tags: ['GRC', 'NIST 800-53', 'FISMA', 'PCI DSS', 'POA&M', 'Risk Assessment'],
+      scope: 'Conducted comprehensive security system evaluation and gap analysis for a simulated healthcare technology organization (Fielder Medical Center), identifying critical deficiencies in access control, continuous monitoring, and security documentation.',
       bullets: [
-        'Forensic Investigation: Performed comprehensive log analysis, network forensic review, and packet capture analysis to determine attack vectors and identify root cause of security incident.',
-        'Incident Classification: Properly categorized incident severity and impact scope, identifying affected systems, compromised data, and lateral movement indicators.',
-        'NIST Framework Alignment: Authored detailed incident response report with corrective actions aligned to NIST Incident Response Lifecycle (Preparation, Detection & Analysis, Containment, Eradication & Recovery, Post-Incident Activity).',
-        'Remediation Strategy: Developed comprehensive remediation plan including immediate containment actions, vulnerability patching, security control enhancements, and lessons learned documentation.',
-        'Threat Intelligence: Identified indicators of compromise (IOCs), malicious IP addresses, and attack patterns for threat intelligence sharing and future prevention.'
+        'Security Control Mapping: Mapped five (5) critical security controls to NIST SP 800-53 Rev. 5, FISMA, and PCI DSS requirements, ensuring alignment with federal and industry compliance standards.',
+        'Risk Assessment & Prioritization: Performed comprehensive risk assessment using the NIST Cybersecurity Framework (CSF); identified and prioritized 28 risks, reducing high-risk exposure by 45% through strategic mitigation planning.',
+        'POA&M Development: Developed detailed Plan of Action and Milestones (POA&M) addressing identified gaps in access control policies, multifactor authentication, endpoint protection, and continuous monitoring programs.',
+        'Continuous Monitoring Strategy: Proposed enterprise-wide continuous monitoring strategy aligned with NIST SP 800-137, establishing metrics for ongoing security posture assessment.',
+        'Compliance Remediation: Addressed critical findings including missing MFA implementation (IA-2), inadequate least privilege enforcement (AC-6), insufficient endpoint protection, and outdated system security plans.'
       ]
     },
     {
-      title: 'Secure Network Design',
-      role: 'Secure Network Design Engineer',
-      color: '#8b5cf6',
-      tags: ['Network Security', 'Zero Trust', 'HIPAA', 'PCI DSS', 'CVSS', 'VLAN'],
-      scope: 'Designed secure merged network architecture post-acquisition, integrating cloud and on-premises systems while ensuring HIPAA and PCI DSS compliance within budgetary constraints.',
+      title: 'Secure Software Design',
+      role: 'Academic Focus',
+      color: '#6366f1',
+      tags: ['DevSecOps', 'SDLC', 'Agile', 'Defense in Depth'],
       bullets: [
-        'Secure Architecture Design: Designed comprehensive merged network architecture integrating cloud services and on-premises infrastructure following post-acquisition requirements.',
-        'Vulnerability Assessment: Identified and documented 20+ network vulnerabilities using Common Vulnerability Scoring System (CVSS) and NIST SP 800-30 Rev. 1 risk assessment methodologies.',
-        'Security Framework Implementation: Implemented zero trust architecture, least privilege access controls, and defense-in-depth security principles throughout network design.',
-        'Regulatory Compliance: Ensured full HIPAA and PCI DSS compliance for healthcare data and payment processing systems while adhering to $50K budget constraint.',
-        'Network Segmentation: Designed secure network segmentation strategy isolating sensitive data environments, implementing firewalls, VLANs, and access control lists.'
+        'Applied Defense in Depth principles across the entire SDLC.',
+        'Adapted security activities to Agile and DevSecOps practices.'
       ]
     },
     {
@@ -140,16 +164,6 @@ export class App implements OnInit, AfterViewInit {
         'Software Application Integration: Assessed security implications of integrating software applications within enterprise environments, evaluating API security, secure coding practices, and application architecture vulnerabilities.',
         'Threat & Vulnerability Analysis: Conducted comprehensive threat modeling and vulnerability assessment using industry-standard methodologies to identify security gaps in enterprise architecture designs.',
         'Incident Response & Recovery: Developed incident response strategies and business continuity plans aligned with organizational risk tolerance and regulatory requirements, ensuring resilient security operations.'
-      ]
-    },
-    {
-      title: 'Secure Software Design',
-      role: 'Academic Focus',
-      color: '#6366f1',
-      tags: ['DevSecOps', 'SDLC', 'Agile', 'Defense in Depth'],
-      bullets: [
-        'Applied Defense in Depth principles across the entire SDLC.',
-        'Adapted security activities to Agile and DevSecOps practices.'
       ]
     },
     {

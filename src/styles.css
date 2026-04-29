@@ -194,25 +194,27 @@ body.light-mode .search-box input:focus {
   width: 100%;
   position: relative;
   z-index: 2;
-  margin-top: -3.5rem;
+  margin-top: -5rem;
 }
 
 /* Elevates the top container above the projects band so the
-   about card's stacking context beats the encroaching gray. */
+   about card's stacking context beats the encroaching gray.
+   padding-bottom: 0 so the container ends flush with the card,
+   letting the band's margin-top control the exact overlap. */
 .top-section {
   z-index: 6;
+  padding-bottom: 0;
 }
 
 body.light-mode .projects-band {
   background: #e5e7eb;
 }
 
-/* padding-top pushes the search box clear of the card overlap:
-   3.5rem (band rise) + ~2rem breathing room */
+/* padding-top = band rise (5rem) + breathing room (2rem) */
 .projects-inner {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 5.5rem 20px 40px;
+  padding: 7rem 20px 40px;
 }
 
 /* ========================================

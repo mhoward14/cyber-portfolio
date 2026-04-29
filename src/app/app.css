@@ -1049,10 +1049,14 @@ body.light-mode .email-btn:hover {
 /* Hero h1: gradient for light mode is set in styles.css (global file, not
    CDN-bundled) so it propagates reliably. Animation stays as hero-enter. */
 
-/* About section: force white card + near-black text for clear contrast */
+/* About section: white card with blue top accent bar */
 body.light-mode .about-section {
   background: #ffffff !important;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(37, 99, 235, 0.06);
+  border-top: 3px solid #2563eb !important;
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.04),
+    0 6px 24px rgba(0, 0, 0, 0.09),
+    0 0 0 1px rgba(0, 0, 0, 0.05);
 }
 body.light-mode .about-section.is-expanded {
   box-shadow:
@@ -1060,6 +1064,7 @@ body.light-mode .about-section.is-expanded {
     0 0 0 1px rgba(0, 122, 255, 0.3),
     0 0 22px 4px rgba(0, 122, 255, 0.12) !important;
   border-color: rgba(0, 122, 255, 0.35) !important;
+  border-top-color: #2563eb !important;
 }
 body.light-mode .about-bio-lead,
 body.light-mode .about-bio-inner p {
@@ -1074,23 +1079,22 @@ body.light-mode .about-stats {
   border-top-color: #e2e8f0;
 }
 
-/* Search input: white fill */
+/* Search input: white with crisp border */
 body.light-mode .search-box input {
-  background: rgba(255, 255, 255, 0.9);
+  background: #ffffff;
+  border-color: #d1d5db;
+  color: #0f172a;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 }
 body.light-mode .search-box input:focus {
   background: #ffffff;
+  border-color: #2563eb;
+  box-shadow:
+    0 0 0 3px rgba(37, 99, 235, 0.12),
+    0 1px 3px rgba(0, 0, 0, 0.06);
 }
 
-/* Project tiles: subtle shadow instead of flat */
-body.light-mode .project-tile {
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
-}
-body.light-mode .project-tile:hover {
-  box-shadow:
-    0 16px 40px -8px rgba(0, 0, 0, 0.12),
-    0 0 0 1px rgba(37, 99, 235, 0.1);
-}
+/* Project tiles in light mode */
 body.light-mode .project-tile::before {
   background: linear-gradient(
     105deg,
@@ -1099,8 +1103,34 @@ body.light-mode .project-tile::before {
     transparent 65%
   );
 }
+/* Bolder accent bars in light mode */
+body.light-mode .tile-accent-bar {
+  opacity: 0.85;
+}
+/* More visible tags in light mode */
+body.light-mode .tag {
+  background: rgba(37, 99, 235, 0.08);
+  border-color: rgba(37, 99, 235, 0.22);
+  color: #334155;
+}
+body.light-mode .project-tile:hover .tag {
+  background: rgba(37, 99, 235, 0.14);
+  border-color: rgba(37, 99, 235, 0.35);
+  color: #1e3a8a;
+}
 
-/* Section label: keep terminal green, it works on both modes */
+/* Section label: blue in light mode instead of terminal green */
+body.light-mode .section-label-text {
+  color: #2563eb;
+}
+body.light-mode .section-label-sub {
+  color: #6b7280;
+}
+
+/* Cert badges: drop-shadow so they lift off the white background */
+body.light-mode .badge-clip {
+  filter: drop-shadow(0 3px 10px rgba(0, 0, 0, 0.13));
+}
 
 /* Modal overlay: slightly less opaque on light pages */
 body.light-mode .modal-overlay {

@@ -185,36 +185,36 @@ body.light-mode .search-box input:focus {
 }
 
 /* ========================================
-   PROJECTS BAND
-   Full-width gray band in light mode.
-   Negative margin-top pulls it up behind the about card.
-   z-index: 2 keeps it below the top-section (z-index: 6).
+   PROJECTS BAND & ABOUT BRIDGE
+   The about card is the first child of .projects-band.
+   A child always paints above its parent's background,
+   so no z-index tricks are needed.
+   margin-top on .about-bridge pulls the card up into the
+   white section above; the gray band shows behind the
+   card's lower portion automatically.
    ======================================== */
 .projects-band {
   width: 100%;
   position: relative;
   z-index: 2;
-  margin-top: -5rem;
-}
-
-/* Elevates the top container above the projects band so the
-   about card's stacking context beats the encroaching gray.
-   padding-bottom: 0 so the container ends flush with the card,
-   letting the band's margin-top control the exact overlap. */
-.top-section {
-  z-index: 6;
-  padding-bottom: 0;
 }
 
 body.light-mode .projects-band {
   background: #e5e7eb;
 }
 
-/* padding-top = band rise (5rem) + breathing room (2rem) */
+.about-bridge {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  margin-top: -8rem;
+  margin-bottom: 2rem;
+}
+
 .projects-inner {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 7rem 20px 40px;
+  padding: 0 20px 40px;
 }
 
 /* ========================================

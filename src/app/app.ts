@@ -75,7 +75,7 @@ export class App implements OnInit, AfterViewInit {
       title: 'Penetration Testing',
       role: 'Security Analyst | Dean\'s Excellence Award',
       color: '#ef4444',
-      tags: ['Penetration Testing', 'HIPAA', 'PCI DSS', 'Social Engineering', 'Reconnaissance'],
+      tags: ['CompTIA PenTest+', 'Penetration Testing', 'HIPAA', 'PCI DSS', 'Social Engineering', 'Reconnaissance'],
       scope: 'Designed comprehensive penetration testing engagement plan for healthcare organization (Pruhart Tech) protecting electronic Protected Health Information (ePHI) and payment data, with focus on evaluating security controls and identifying exploitation vulnerabilities.',
       bullets: [
         'Engagement Planning: Developed detailed penetration testing methodology covering reconnaissance, vulnerability assessment, exploitation, and post-exploitation phases aligned with industry best practices.',
@@ -103,7 +103,7 @@ export class App implements OnInit, AfterViewInit {
       title: 'Security Operations',
       role: 'SOC Analyst',
       color: '#f97316',
-      tags: ['SOC', 'Incident Response', 'Digital Forensics', 'NIST IR', 'Threat Intelligence'],
+      tags: ['CompTIA CySA+', 'SOC', 'Incident Response', 'Digital Forensics', 'NIST IR', 'Threat Intelligence'],
       scope: 'Investigated simulated enterprise-level cybersecurity incident involving malicious network traffic and unauthorized access, performing comprehensive forensic analysis and developing remediation strategy.',
       bullets: [
         'Forensic Investigation: Performed comprehensive log analysis, network forensic review, and packet capture analysis to determine attack vectors and identify root cause of security incident.',
@@ -131,7 +131,7 @@ export class App implements OnInit, AfterViewInit {
       title: 'Cybersecurity Architecture & Engineering',
       role: 'Architecture & Engineering Specialist',
       color: '#10b981',
-      tags: ['SecurityX', 'Enterprise Architecture', 'Cloud Security', 'Threat Modeling', 'DLP'],
+      tags: ['CompTIA SecurityX', 'Enterprise Architecture', 'Cloud Security', 'Threat Modeling', 'DLP'],
       scope: 'Advanced cybersecurity architecture and engineering competencies aligned with CompTIA SecurityX certification framework, focusing on enterprise-wide security solution design, cloud architecture security, threat analysis, and incident response strategy.',
       bullets: [
         'Enterprise Security Architecture: Evaluated and designed secure enterprise architecture solutions integrating security controls across distributed environments, ensuring alignment with organizational policies and compliance frameworks.',
@@ -156,7 +156,7 @@ export class App implements OnInit, AfterViewInit {
       title: 'Cybersecurity Management',
       role: 'Chief Information Security Officer (CISO)',
       color: '#f59e0b',
-      tags: ['CISO', 'GDPR', 'PCI DSS', 'NICE Framework', 'BCP/BIA', 'IRP'],
+      tags: ['ISACA CISM', 'CISO', 'GDPR', 'PCI DSS', 'NICE Framework', 'BCP/BIA', 'IRP'],
       scope: 'Led the strategic response to an independent security assessment for a retail bookseller (SAGE Books). Developed a comprehensive cybersecurity roadmap to remediate critical gaps in e-commerce security, governance, and regulatory compliance.',
       bullets: [
         'Regulatory Compliance & Mitigation: Developed enterprise-wide mitigation strategies to address framework gaps, ensuring strict alignment with PCI DSS and GDPR requirements for secure e-commerce and data privacy.',

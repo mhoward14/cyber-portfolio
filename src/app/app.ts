@@ -61,14 +61,14 @@ export class App implements OnInit, AfterViewInit {
       title: 'Security Foundations',
       role: '(ISC)² Certified in Cybersecurity (CC)',
       color: '#0ea5e9',
-      tags: ['(ISC)² CC', 'Security Principles', 'Access Control', 'Network Security', 'Business Continuity', 'Incident Response'],
-      scope: 'Demonstrated foundational cybersecurity knowledge and competencies aligned with the (ISC)² Certified in Cybersecurity (CC) certification framework, covering core security principles, access control concepts, network security, and security operations essential to entry-level cybersecurity practice.',
+      tags: ['(ISC)² CC', 'Security Principles', 'Risk Management', 'Access Control', 'Network Security', 'Security Operations'],
+      scope: 'Earned the (ISC)² Certified in Cybersecurity (CC) credential by demonstrating mastery across five core domains: Security Principles, Business Continuity/Disaster Recovery/Incident Response, Access Controls, Network Security, and Security Operations — establishing the foundational knowledge required for a career in cybersecurity.',
       bullets: [
-        'Security Principles: Applied core security concepts including the CIA triad (Confidentiality, Integrity, Availability), authentication, authorization, and non-repudiation to evaluate and support organizational security posture.',
-        'Business Continuity & Disaster Recovery: Identified and applied business continuity, disaster recovery, and incident response concepts to support organizational resilience and operational continuity under adverse conditions.',
-        'Access Control Concepts: Evaluated physical and logical access control models including discretionary, mandatory, and role-based access control, and applied least privilege and need-to-know principles.',
-        'Network Security: Demonstrated understanding of network threats, attacks, and countermeasures including firewalls, intrusion detection/prevention systems, and secure network design fundamentals.',
-        'Security Operations: Applied security operations concepts including data handling, logging and monitoring, configuration management, and best practice security policies to support a defensible security environment.'
+        'Security Principles (26%): Applied CIA triad concepts (Confidentiality, Integrity, Availability), risk management processes (identification, assessment, treatment), technical/administrative/physical security controls, and governance frameworks including policies and procedures to evaluate organizational security posture.',
+        'Business Continuity, DR & Incident Response (10%): Developed understanding of Business Continuity Planning (BCP), Business Impact Analysis (BIA), Recovery Time/Point Objectives (RTO/RPO), disaster recovery site types (hot/warm/cold), and the full incident response lifecycle — Preparation, Detection, Containment, Eradication, Recovery, and Post-Incident Review.',
+        'Access Controls Concepts (22%): Evaluated physical controls (badge systems, mantraps, CCTV, CPTED) and logical access models including Discretionary (DAC), Mandatory (MAC), and Role-Based Access Control (RBAC), applying least privilege and separation of duties principles to restrict unauthorized access.',
+        'Network Security (24%): Demonstrated proficiency in OSI/TCP-IP models, IPv4/IPv6, network threat categories (DDoS, MITM, malware), detection methods (IDS/HIDS/NIDS), and security infrastructure including firewalls, IPS, VLANs, DMZs, VPNs, micro-segmentation, and Zero Trust network principles.',
+        'Security Operations (18%): Applied data security controls including symmetric/asymmetric encryption and hashing, data classification and retention policy, system hardening through configuration management and patch management, and security awareness training covering social engineering, password protection, AUP, BYOD, and change management.'
       ]
     },
     {

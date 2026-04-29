@@ -158,17 +158,19 @@ body:not(.light-mode) .project-tile {
   box-shadow: 0 2px 16px rgba(0, 0, 0, 0.7);
 }
 
-/* Light mode: stronger elevation so cards clearly sit above the blue-gray bg */
+/* Light mode: multi-layer shadow so cards really lift off the band */
 body.light-mode .project-tile {
   box-shadow:
-    0 2px 12px rgba(0, 0, 0, 0.12),
-    0 0 0 1px rgba(37, 99, 235, 0.07) !important;
+    0 1px 2px rgba(0, 0, 0, 0.04),
+    0 4px 16px rgba(0, 0, 0, 0.09),
+    0 0 0 1px rgba(0, 0, 0, 0.05) !important;
 }
 body.light-mode .project-tile:hover {
+  transform: translateY(-8px);
   box-shadow:
-    0 16px 40px -8px rgba(0, 0, 0, 0.2),
-    0 0 0 1px rgba(0, 122, 255, 0.3),
-    0 0 18px 3px rgba(0, 122, 255, 0.12) !important;
+    0 24px 56px -10px rgba(0, 0, 0, 0.22),
+    0 0 0 1px rgba(0, 122, 255, 0.35),
+    0 0 32px 6px rgba(0, 122, 255, 0.16) !important;
 }
 
 /* Search box: white with gray border */
@@ -200,7 +202,7 @@ body.light-mode .search-box input:focus {
 }
 
 body.light-mode .projects-band {
-  background: #e5e7eb;
+  background: rgba(229, 231, 235, 0.82);
 }
 
 .about-bridge {

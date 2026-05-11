@@ -1,4 +1,5 @@
-<div class="container">
+<!-- Top white section: nav + header -->
+<div class="container top-section">
   <nav class="top-nav">
     <!-- GitHub -->
     <a href="https://github.com/mhoward14" target="_blank" class="nav-button github-btn" aria-label="GitHub Profile">
@@ -14,7 +15,7 @@
       </svg>
     </a>
 
-    <!-- Email — opens new email message -->
+    <!-- Email -->
     <a href="mailto:mhoward14@icloud.com" class="nav-button email-btn" aria-label="Send email">
       <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
         <path d="M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a1.75 1.75 0 01-1.855 0L1.5 8.67z" />
@@ -30,92 +31,117 @@
       <span class="badge">CompTIA PenTest+ | CySA+ | Security+ | (ISC)² CC</span>
     </div>
   </header>
+</div>
 
-  <!-- About / Bio Section -->
-  <section class="about-section">
-    <p class="about-bio">Cybersecurity professional specializing in GRC, cloud security, penetration testing, and enterprise security architecture. MS in Cybersecurity &amp; Information Assurance candidate with a Dean's Excellence Award, bringing a full-stack development background to security-first thinking.</p>
-    <div class="about-stats">
-      <div class="stat-item">
-        <span class="stat-number">8</span>
-        <span class="stat-label">Projects</span>
+<!-- Gray band: about card is first child and straddles the white/gray boundary -->
+<div class="projects-band">
+  <div class="about-bridge">
+    <section class="about-section" [class.is-expanded]="aboutExpanded()">
+      <button class="about-toggle" (click)="toggleAbout()"
+              [attr.aria-expanded]="aboutExpanded()" aria-label="Expand profile details">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+             width="16" height="16" [class.rotated]="aboutExpanded()">
+          <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+        </svg>
+      </button>
+      <p class="about-bio">Cybersecurity professional specializing in GRC, cloud security, penetration testing, and enterprise security architecture. MS in Cybersecurity &amp; Information Assurance candidate with a Dean's Excellence Award, bringing a full-stack development background to security-first thinking.</p>
+      <div class="about-stats">
+        <div class="stat-item">
+          <span class="stat-number">{{ totalProjects() }}</span>
+          <span class="stat-label">Projects</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-number">4</span>
+          <span class="stat-label">Certifications</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-number">MS</span>
+          <span class="stat-label">Degree</span>
+        </div>
       </div>
-      <div class="stat-divider"></div>
-      <div class="stat-item">
-        <span class="stat-number">4</span>
-        <span class="stat-label">Certifications</span>
-      </div>
-      <div class="stat-divider"></div>
-      <div class="stat-item">
-        <span class="stat-number">MS</span>
-        <span class="stat-label">Degree</span>
-      </div>
-    </div>
-  </section>
-
-  <section class="search-section">
-    <div class="search-box">
-      <input type="text" placeholder="Search projects, skills, frameworks..."
-             [ngModel]="searchTerm()" (ngModelChange)="onSearch($event)">
-    </div>
-    @if (isSearchActive()) {
-      <p class="result-count">
-        Showing <strong>{{ filteredProjects().length }}</strong> of <strong>{{ totalProjects() }}</strong> projects
-      </p>
-    }
-  </section>
-
-  <div class="section-label">
-    <span class="section-label-text">// PROJECTS</span>
-    <span class="section-label-sub">Select a project to view details</span>
+    </section>
   </div>
 
-  <main class="project-grid" [class.is-filtering]="isFiltering()">
-    @for (project of filteredProjects(); track project.title) {
-      <div class="project-tile" (click)="openModal(project)">
-        <div class="tile-accent-bar" [style.background]="project.color"></div>
-        <h3>{{ project.title }}</h3>
-        <p class="role-preview">{{ project.role }}</p>
-        <div class="tag-list">
-          @for (tag of project.tags; track tag) {
-            <span class="tag">{{ tag }}</span>
-          }
-        </div>
-        <span class="view-label">View Details →</span>
+  <div class="projects-inner">
+    <section class="search-section">
+      <div class="search-box">
+        <input type="text" placeholder="Search projects, skills, frameworks..."
+               [ngModel]="searchTerm()" (ngModelChange)="onSearch($event)">
       </div>
-    }
-    @if (filteredProjects().length === 0) {
-      <div class="no-results">
-        <span class="no-results-icon">⌀</span>
-        <p>No projects match "<strong>{{ searchTerm() }}</strong>"</p>
-      </div>
-    }
-  </main>
+      @if (isSearchActive()) {
+        <p class="result-count">
+          Showing <strong>{{ filteredProjects().length }}</strong> of <strong>{{ totalProjects() }}</strong> projects
+        </p>
+      }
+    </section>
 
-  @if (selectedProject(); as project) {
-    <div class="modal-overlay" [class.is-closing]="isClosing()" (click)="closeModal()">
-      <div class="modal-window" (click)="$event.stopPropagation()">
-        <div class="modal-accent-bar" [style.background]="project.color"></div>
-        <button class="close-btn" (click)="closeModal()">✕</button>
-        <div class="modal-header">
-          <h2>{{ project.title }}</h2>
-          <p class="modal-role">{{ project.role }}</p>
-        </div>
-        <div class="modal-body">
-          @if (project.scope) {
-            <p class="scope-text"><strong>Context:</strong> {{ project.scope }}</p>
-          }
-          <h4>Key Accomplishments</h4>
-          <ul>
-            @for (bullet of project.bullets; track bullet) {
-              <li>{{ bullet }}</li>
+    <div class="section-label">
+      <span class="section-label-text">// PROJECTS</span>
+      <span class="section-label-sub">Select a project to view details</span>
+    </div>
+
+    <main class="project-grid" [class.is-filtering]="isFiltering()">
+      @for (project of filteredProjects(); track project.title) {
+        <div class="project-tile" (click)="openModal(project)">
+          <div class="tile-accent-bar" [style.background]="project.color"></div>
+          <h3>{{ project.title }}</h3>
+          <p class="role-preview">{{ project.role }}</p>
+          <div class="tag-list">
+            @for (tag of project.tags; track tag) {
+              <span class="tag">{{ tag }}</span>
             }
-          </ul>
+          </div>
+          <span class="view-label">View Details →</span>
         </div>
+      }
+      @if (filteredProjects().length === 0) {
+        <div class="no-results">
+          <span class="no-results-icon">⌀</span>
+          <p>No projects match "<strong>{{ searchTerm() }}</strong>"</p>
+        </div>
+      }
+    </main>
+  </div>
+</div>
+
+@if (selectedProject(); as project) {
+  <div class="modal-overlay" [class.is-closing]="isClosing()" (click)="closeModal()">
+    <div class="modal-window" (click)="$event.stopPropagation()">
+      <div class="modal-accent-bar" [style.background]="project.color"></div>
+      <button class="close-btn" (click)="closeModal()">✕</button>
+      <div class="modal-header">
+        <h2>{{ project.title }}</h2>
+        <p class="modal-role">{{ project.role }}</p>
+      </div>
+      <div class="modal-body">
+        @if (project.scope) {
+          <p class="scope-text"><strong>Context:</strong> {{ project.scope }}</p>
+        }
+        <h4>Key Accomplishments</h4>
+        <ul>
+          @for (bullet of project.bullets; track bullet) {
+            <li>{{ bullet }}</li>
+          }
+        </ul>
+        @if (project.paperOnRequest) {
+          <div class="paper-request">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="14" height="14" aria-hidden="true">
+              <path fill-rule="evenodd" d="M5.625 1.5c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0016.5 9h-1.875a1.875 1.875 0 01-1.875-1.875V5.25A3.75 3.75 0 009 1.5H5.625zM7.5 15a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5A.75.75 0 017.5 15zm.75 2.25a.75.75 0 000 1.5H12a.75.75 0 000-1.5H8.25z" clip-rule="evenodd" />
+              <path d="M12.971 1.816A5.23 5.23 0 0114.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 013.434 1.279 9.768 9.768 0 00-6.963-6.963z" />
+            </svg>
+            Academic paper available upon request —
+            <a href="mailto:mhoward14@icloud.com">mhoward14@icloud.com</a>
+          </div>
+        }
       </div>
     </div>
-  }
+  </div>
+}
 
-  <!-- Footer -->
+<!-- Footer -->
+<div class="container">
   <footer class="site-footer">
     <div class="footer-name">Matthew Howard</div>
     <div class="footer-title">MS Cybersecurity &amp; Information Assurance</div>

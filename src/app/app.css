@@ -11,7 +11,9 @@
    7.  Project Grid      (Tile cards with color bars + tags)
    8.  Modal             (Overlay + detail window)
    9.  Footer            (Name, links, copyright)
-   10. Responsive        (Mobile breakpoints)
+   10. Paper-on-Request  (Academic paper notice in modals)
+   11. Light Mode        (body.light-mode overrides)
+   12. Responsive        (Mobile breakpoints)
 
    CSS variables (colors, fonts, radii, easings) are defined
    in src/styles.css under :root — edit them there to retheme
@@ -249,8 +251,48 @@
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   padding: 1.75rem 2rem;
-  margin-bottom: 2.5rem;
+  margin-bottom: 0;
   animation: hero-enter 0.8s var(--ease-spring) 0.42s both;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.7);
+  transition: box-shadow 0.35s var(--ease-out), border-color 0.35s var(--ease-out);
+  position: relative;
+}
+.about-section.is-expanded {
+  box-shadow:
+    0 0 0 1px rgba(0, 122, 255, 0.4),
+    0 8px 32px rgba(0, 0, 0, 0.6),
+    0 0 40px 6px rgba(0, 122, 255, 0.18);
+  border-color: rgba(0, 122, 255, 0.4);
+}
+
+/* Chevron expand/collapse button */
+.about-toggle {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--color-text-dim);
+  transition: all 0.25s var(--ease-out);
+  padding: 0;
+}
+.about-toggle:hover {
+  border-color: rgba(0, 122, 255, 0.5);
+  color: #007AFF;
+  background: rgba(0, 122, 255, 0.08);
+}
+.about-toggle svg {
+  transition: transform 0.3s var(--ease-spring);
+}
+.about-toggle svg.rotated {
+  transform: rotate(180deg);
 }
 
 /* Professional summary paragraph */
@@ -445,14 +487,16 @@
 }
 
 /* Staggered entrance delays */
-.project-tile:nth-child(1) { animation-delay: 0.58s; }
-.project-tile:nth-child(2) { animation-delay: 0.67s; }
-.project-tile:nth-child(3) { animation-delay: 0.76s; }
-.project-tile:nth-child(4) { animation-delay: 0.85s; }
-.project-tile:nth-child(5) { animation-delay: 0.94s; }
-.project-tile:nth-child(6) { animation-delay: 1.03s; }
-.project-tile:nth-child(7) { animation-delay: 1.12s; }
-.project-tile:nth-child(8) { animation-delay: 1.21s; }
+.project-tile:nth-child(1)  { animation-delay: 0.58s; }
+.project-tile:nth-child(2)  { animation-delay: 0.67s; }
+.project-tile:nth-child(3)  { animation-delay: 0.76s; }
+.project-tile:nth-child(4)  { animation-delay: 0.85s; }
+.project-tile:nth-child(5)  { animation-delay: 0.94s; }
+.project-tile:nth-child(6)  { animation-delay: 1.03s; }
+.project-tile:nth-child(7)  { animation-delay: 1.12s; }
+.project-tile:nth-child(8)  { animation-delay: 1.21s; }
+.project-tile:nth-child(9)  { animation-delay: 1.30s; }
+.project-tile:nth-child(10) { animation-delay: 1.39s; }
 
 /* Shimmer sweep on hover */
 .project-tile::before {
@@ -833,7 +877,185 @@
 
 
 /* ============================================================
-   10. RESPONSIVE
+   10. PAPER-ON-REQUEST NOTICE
+   Shown at the bottom of the modal body for projects where
+   paperOnRequest is true.
+   ============================================================ */
+
+.paper-request {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-sm);
+  background: rgba(59, 130, 246, 0.06);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  color: var(--color-text-muted);
+  font-size: 0.82rem;
+  font-family: var(--font-mono);
+  letter-spacing: 0.02em;
+  flex-wrap: wrap;
+}
+.paper-request svg {
+  flex-shrink: 0;
+  color: var(--color-accent);
+}
+.paper-request a {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.paper-request a:hover {
+  color: #93c5fd;
+}
+
+
+/* ============================================================
+   11. LIGHT MODE OVERRIDES
+   Applied when body.light-mode is present (toggled via JS or
+   browser theme). Re-tunes surfaces, shadows, and accents for
+   a high-contrast light presentation.
+   ============================================================ */
+
+body.light-mode .about-section {
+  background: #ffffff !important;
+  border-top: 3px solid #2563eb !important;
+  border-color: #e2e8f0 !important;
+  border-top-color: #2563eb !important;
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.05),
+    0 6px 24px rgba(0, 0, 0, 0.09),
+    0 0 0 1px rgba(0, 0, 0, 0.04) !important;
+}
+body.light-mode .about-section.is-expanded {
+  box-shadow:
+    0 0 0 2px rgba(0, 122, 255, 0.35),
+    0 8px 32px rgba(0, 0, 0, 0.12),
+    0 0 36px 6px rgba(0, 122, 255, 0.14) !important;
+  border-top-color: #007AFF !important;
+}
+body.light-mode .about-bio {
+  color: #374151 !important;
+}
+body.light-mode .stat-label {
+  color: #6b7280 !important;
+}
+body.light-mode .about-toggle {
+  border-color: #d1d5db !important;
+  color: #6b7280 !important;
+}
+
+body.light-mode .project-tile {
+  background: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.04),
+    0 4px 16px rgba(0, 0, 0, 0.08),
+    0 0 0 1px rgba(0, 0, 0, 0.04) !important;
+}
+body.light-mode .project-tile:hover {
+  transform: translateY(-8px) !important;
+  box-shadow:
+    0 24px 56px -10px rgba(0, 0, 0, 0.2),
+    0 0 0 1px rgba(0, 122, 255, 0.35),
+    0 0 32px 6px rgba(0, 122, 255, 0.14) !important;
+  border-color: rgba(0, 122, 255, 0.3) !important;
+}
+body.light-mode .project-tile h3 {
+  color: #0f172a !important;
+}
+body.light-mode .role-preview {
+  color: #475569 !important;
+}
+body.light-mode .tile-accent-bar {
+  opacity: 0.9 !important;
+  height: 4px !important;
+}
+body.light-mode .tag {
+  background: rgba(37, 99, 235, 0.07) !important;
+  border-color: rgba(37, 99, 235, 0.2) !important;
+  color: #334155 !important;
+}
+body.light-mode .project-tile:hover .tag {
+  background: rgba(37, 99, 235, 0.14) !important;
+  border-color: rgba(37, 99, 235, 0.3) !important;
+  color: #1e3a8a !important;
+}
+
+body.light-mode .section-label-text {
+  color: #2563eb !important;
+}
+body.light-mode .section-label-sub {
+  color: #94a3b8 !important;
+}
+
+body.light-mode .search-box input {
+  background: #ffffff !important;
+  border-color: #d1d5db !important;
+  color: #0f172a !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06) !important;
+}
+body.light-mode .search-box input:focus {
+  border-color: #2563eb !important;
+  box-shadow:
+    0 0 0 3px rgba(37, 99, 235, 0.12),
+    0 1px 3px rgba(0, 0, 0, 0.06) !important;
+}
+body.light-mode .result-count {
+  color: #6b7280 !important;
+}
+
+body.light-mode .modal-window {
+  background: #ffffff !important;
+  border-color: rgba(37, 99, 235, 0.2) !important;
+}
+body.light-mode .modal-header {
+  background: #ffffff !important;
+  border-bottom-color: #e2e8f0 !important;
+}
+body.light-mode .modal-header h2 {
+  color: #0f172a !important;
+}
+body.light-mode .modal-body li {
+  background: #f8fafc !important;
+  border-color: #e2e8f0 !important;
+  color: #374151 !important;
+}
+body.light-mode .modal-body li:hover {
+  background: rgba(37, 99, 235, 0.04) !important;
+  border-color: rgba(37, 99, 235, 0.2) !important;
+  color: #0f172a !important;
+}
+body.light-mode .scope-text {
+  color: #374151 !important;
+}
+
+body.light-mode .paper-request {
+  background: rgba(37, 99, 235, 0.05) !important;
+  border-color: rgba(37, 99, 235, 0.18) !important;
+  color: #374151 !important;
+}
+
+body.light-mode .badge {
+  background: rgba(37, 99, 235, 0.08) !important;
+  border-color: rgba(37, 99, 235, 0.25) !important;
+  color: #1d4ed8 !important;
+}
+
+body.light-mode .site-footer {
+  border-top-color: #e2e8f0 !important;
+}
+body.light-mode .footer-name {
+  color: #0f172a !important;
+}
+body.light-mode .footer-copy {
+  color: #94a3b8 !important;
+}
+
+
+/* ============================================================
+   12. RESPONSIVE
    Adjustments for smaller screens.
    640px: tablet/large phone — single-column grid,
           modal slides up from bottom edge.

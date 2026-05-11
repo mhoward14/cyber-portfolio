@@ -112,3 +112,91 @@ a, .btn {
   text-decoration: none;
   transition: color 0.2s;
 }
+
+/* ========================================
+   BANDED LAYOUT
+   Top white container ends after the cert badges.
+   The gray projects-band contains both the about
+   card (which straddles upward via negative margin)
+   and the project grid below.
+   ======================================== */
+
+/* Removes bottom padding from the top container so the
+   gray band starts right at the cert badge boundary. */
+.top-section {
+  padding-bottom: 0;
+}
+
+/* Full-width gray band housing about card + project grid */
+.projects-band {
+  width: 100%;
+  background: #d1d5db;
+}
+
+/* Constrained wrapper for the about card.
+   Negative margin-top pulls it up into the white section,
+   creating the straddle effect. */
+.about-bridge {
+  max-width: 1200px;
+  margin: 0 auto;
+  margin-top: -4rem;
+  margin-bottom: 3.5rem;
+  padding: 0 20px;
+}
+
+/* Constrained wrapper for search + grid */
+.projects-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px 48px;
+}
+
+
+/* ========================================
+   LIGHT MODE
+   Toggle body.light-mode to activate.
+   Uses !important to override Angular's
+   component-scoped [_ngcontent] specificity.
+   ======================================== */
+
+body.light-mode {
+  --color-bg:           #f8fafc;
+  --color-surface:      #ffffff;
+  --color-border:       #e2e8f0;
+  --color-border-2:     #cbd5e1;
+  --color-accent:       #2563eb;
+  --color-accent-dim:   rgba(37, 99, 235, 0.08);
+  --color-accent-glow:  rgba(37, 99, 235, 0.25);
+  --color-text:         #0f172a;
+  --color-text-muted:   #374151;
+  --color-text-dim:     #6b7280;
+  background-color: #ffffff;
+  color: #0f172a;
+}
+
+/* Dot grid — more visible blue dots in light mode */
+body.light-mode::before {
+  background-image: radial-gradient(circle, rgba(37, 99, 235, 0.22) 1px, transparent 1px);
+}
+
+/* CRT scanlines hidden in light mode */
+body.light-mode::after {
+  opacity: 0;
+}
+
+/* Gray band slightly transparent so dot grid bleeds through */
+body.light-mode .projects-band {
+  background: rgba(226, 232, 240, 0.88);
+}
+
+/* Name gradient — deep blue in light mode */
+body.light-mode .centered-header h1 {
+  background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 55%, #3b82f6 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+body.light-mode .subtitle {
+  color: #334155 !important;
+}

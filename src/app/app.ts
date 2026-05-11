@@ -14,66 +14,25 @@ export class App {
   selectedProject = signal<any | null>(null);
   isClosing = signal(false);
   isFiltering = signal(false);
+  aboutExpanded = signal(false);
 
   projects = signal([
     {
-      title: 'GRC Performance Assessment',
-      role: 'ISSO | Dean\'s Excellence Award',
-      color: '#3b82f6',
-      tags: ['GRC', 'NIST 800-53', 'FISMA', 'PCI DSS', 'POA&M', 'Risk Assessment'],
-      scope: 'Conducted comprehensive security system evaluation and gap analysis for a simulated healthcare technology organization (Fielder Medical Center), identifying critical deficiencies in access control, continuous monitoring, and security documentation.',
+      title: 'Security Foundations',
+      role: '(ISC)² Certified in Cybersecurity (CC)',
+      color: '#0ea5e9',
+      tags: ['(ISC)² CC', 'Security Principles', 'Access Control', 'Network Security', 'Incident Response'],
+      scope: 'Demonstrated foundational cybersecurity knowledge across the five (ISC)² CC exam domains, earning industry-recognized certification that validates core security principles, access controls, network security, and security operations competencies.',
       bullets: [
-        'Security Control Mapping: Mapped five (5) critical security controls to NIST SP 800-53 Rev. 5, FISMA, and PCI DSS requirements, ensuring alignment with federal and industry compliance standards.',
-        'Risk Assessment & Prioritization: Performed comprehensive risk assessment using the NIST Cybersecurity Framework (CSF); identified and prioritized 28 risks, reducing high-risk exposure by 45% through strategic mitigation planning.',
-        'POA&M Development: Developed detailed Plan of Action and Milestones (POA&M) addressing identified gaps in access control policies, multifactor authentication, endpoint protection, and continuous monitoring programs.',
-        'Continuous Monitoring Strategy: Proposed enterprise-wide continuous monitoring strategy aligned with NIST SP 800-137, establishing metrics for ongoing security posture assessment.',
-        'Compliance Remediation: Addressed critical findings including missing MFA implementation (IA-2), inadequate least privilege enforcement (AC-6), insufficient endpoint protection, and outdated system security plans.'
+        'Security Principles: Applied foundational security concepts including the CIA triad, authentication, authorization, and non-repudiation; understood governance frameworks and the role of security policies, standards, and procedures in organizational risk management.',
+        'Business Continuity & Incident Response: Analyzed business continuity planning (BCP), disaster recovery (DR), and incident response lifecycle concepts; recognized the importance of organizational resilience and the steps to manage and recover from security events.',
+        'Access Controls: Evaluated physical and logical access control models including DAC, MAC, RBAC, and ABAC; applied least privilege and need-to-know principles to protect sensitive resources across enterprise environments.',
+        'Network Security: Identified network threats, vulnerabilities, and defense strategies; demonstrated knowledge of network topologies, OSI model layers, common protocols (TCP/IP, DNS, DHCP), and network security devices including firewalls, IDS/IPS, and VPNs.',
+        'Security Operations: Applied operational security principles including configuration management, patch management, data handling, and the importance of security awareness training in reducing human-factor risk.'
       ]
     },
     {
-      title: 'Penetration Testing Engagement Plan',
-      role: 'Security Analyst | Dean\'s Excellence Award',
-      color: '#ef4444',
-      tags: ['Penetration Testing', 'HIPAA', 'PCI DSS', 'Social Engineering', 'Reconnaissance'],
-      scope: 'Designed comprehensive penetration testing engagement plan for healthcare organization (Pruhart Tech) protecting electronic Protected Health Information (ePHI) and payment data, with focus on evaluating security controls and identifying exploitation vulnerabilities.',
-      bullets: [
-        'Engagement Planning: Developed detailed penetration testing methodology covering reconnaissance, vulnerability assessment, exploitation, and post-exploitation phases aligned with industry best practices.',
-        'Scope Definition: Defined comprehensive testing scope encompassing internal/external network exposures, Active Directory infrastructure, endpoint security controls, and sensitive data repositories.',
-        'Social Engineering Assessment: Designed targeted social engineering test scenarios evaluating organizational susceptibility to phishing, pretexting, and psychological manipulation tactics.',
-        'Compliance Integration: Ensured testing approach aligned with HIPAA and PCI DSS regulatory requirements, balancing thorough security assessment with operational continuity and patient safety.',
-        'Risk Management Framework: Established clear rules of engagement, escalation procedures, and incident response protocols to minimize risk during active testing operations.'
-      ]
-    },
-    {
-      title: 'Cloud Security Implementation Plan',
-      role: 'Azure Cloud Security Engineer',
-      color: '#06b6d4',
-      tags: ['Azure', 'PaaS', 'RBAC', 'Key Vault', 'NIST 800-53', 'FISMA'],
-      scope: 'Designed and implemented secure hybrid Microsoft Azure Platform-as-a-Service (PaaS) environment integrated with legacy on-premises applications, ensuring compliance with federal and industry security standards.',
-      bullets: [
-        'Secure Architecture Design: Built secure hybrid Azure PaaS environment integrating cloud services with legacy systems while maintaining security boundaries and data protection.',
-        'Identity & Access Management: Implemented comprehensive Role-Based Access Control (RBAC) model enforcing least privilege principles across all Azure resources and services.',
-        'Data Protection: Integrated Azure Key Vault for centralized cryptographic key management and data encryption at rest and in transit.',
-        'Compliance Validation: Aligned cloud infrastructure with FISMA, NIST 800-53, and PCI DSS standards; passed comprehensive security review with zero findings.',
-        'Security Monitoring: Configured Azure Security Center and native logging capabilities for continuous security monitoring and threat detection.'
-      ]
-    },
-    {
-      title: 'Security Operations Incident Response',
-      role: 'SOC Analyst',
-      color: '#f97316',
-      tags: ['SOC', 'Incident Response', 'Digital Forensics', 'NIST IR', 'Threat Intelligence'],
-      scope: 'Investigated simulated enterprise-level cybersecurity incident involving malicious network traffic and unauthorized access, performing comprehensive forensic analysis and developing remediation strategy.',
-      bullets: [
-        'Forensic Investigation: Performed comprehensive log analysis, network forensic review, and packet capture analysis to determine attack vectors and identify root cause of security incident.',
-        'Incident Classification: Properly categorized incident severity and impact scope, identifying affected systems, compromised data, and lateral movement indicators.',
-        'NIST Framework Alignment: Authored detailed incident response report with corrective actions aligned to NIST Incident Response Lifecycle (Preparation, Detection & Analysis, Containment, Eradication & Recovery, Post-Incident Activity).',
-        'Remediation Strategy: Developed comprehensive remediation plan including immediate containment actions, vulnerability patching, security control enhancements, and lessons learned documentation.',
-        'Threat Intelligence: Identified indicators of compromise (IOCs), malicious IP addresses, and attack patterns for threat intelligence sharing and future prevention.'
-      ]
-    },
-    {
-      title: 'Secure Network Merger',
+      title: 'Secure Network Design',
       role: 'Secure Network Design Engineer',
       color: '#8b5cf6',
       tags: ['Network Security', 'Zero Trust', 'HIPAA', 'PCI DSS', 'CVSS', 'VLAN'],
@@ -87,18 +46,61 @@ export class App {
       ]
     },
     {
-      title: 'Cybersecurity Architecture & Engineering',
-      role: 'Architecture & Engineering Specialist',
-      color: '#10b981',
-      tags: ['SecurityX', 'Enterprise Architecture', 'Cloud Security', 'Threat Modeling', 'DLP'],
-      scope: 'Advanced cybersecurity architecture and engineering competencies aligned with CompTIA SecurityX certification framework, focusing on enterprise-wide security solution design, cloud architecture security, threat analysis, and incident response strategy.',
+      title: 'Security Operations',
+      role: 'SOC Analyst',
+      color: '#f97316',
+      tags: ['SOC', 'Incident Response', 'Digital Forensics', 'NIST IR', 'Threat Intelligence'],
+      scope: 'Investigated simulated enterprise-level cybersecurity incident involving malicious network traffic and unauthorized access, performing comprehensive forensic analysis and developing remediation strategy.',
       bullets: [
-        'Enterprise Security Architecture: Evaluated and designed secure enterprise architecture solutions integrating security controls across distributed environments, ensuring alignment with organizational policies and compliance frameworks.',
-        'Cloud & Virtualization Security: Analyzed cloud and virtualization security solutions, assessing architecture designs for Infrastructure-as-a-Service (IaaS), Platform-as-a-Service (PaaS), and Software-as-a-Service (SaaS) deployment models.',
-        'Enterprise Data Security Controls: Applied enterprise-grade data protection controls including encryption, data loss prevention (DLP), rights management, and secure data lifecycle management across complex IT environments.',
-        'Software Application Integration: Assessed security implications of integrating software applications within enterprise environments, evaluating API security, secure coding practices, and application architecture vulnerabilities.',
-        'Threat & Vulnerability Analysis: Conducted comprehensive threat modeling and vulnerability assessment using industry-standard methodologies to identify security gaps in enterprise architecture designs.',
-        'Incident Response & Recovery: Developed incident response strategies and business continuity plans aligned with organizational risk tolerance and regulatory requirements, ensuring resilient security operations.'
+        'Forensic Investigation: Performed comprehensive log analysis, network forensic review, and packet capture analysis to determine attack vectors and identify root cause of security incident.',
+        'Incident Classification: Properly categorized incident severity and impact scope, identifying affected systems, compromised data, and lateral movement indicators.',
+        'NIST Framework Alignment: Authored detailed incident response report with corrective actions aligned to NIST Incident Response Lifecycle (Preparation, Detection & Analysis, Containment, Eradication & Recovery, Post-Incident Activity).',
+        'Remediation Strategy: Developed comprehensive remediation plan including immediate containment actions, vulnerability patching, security control enhancements, and lessons learned documentation.',
+        'Threat Intelligence: Identified indicators of compromise (IOCs), malicious IP addresses, and attack patterns for threat intelligence sharing and future prevention.'
+      ]
+    },
+    {
+      title: 'Penetration Testing',
+      role: 'Security Analyst | Dean\'s Excellence Award',
+      color: '#ef4444',
+      tags: ['CompTIA PenTest+', 'HIPAA', 'PCI DSS', 'Social Engineering', 'Reconnaissance'],
+      paperOnRequest: true,
+      scope: 'Designed comprehensive penetration testing engagement plan for healthcare organization (Pruhart Tech) protecting electronic Protected Health Information (ePHI) and payment data, with focus on evaluating security controls and identifying exploitation vulnerabilities.',
+      bullets: [
+        'Engagement Planning: Developed detailed penetration testing methodology covering reconnaissance, vulnerability assessment, exploitation, and post-exploitation phases aligned with industry best practices.',
+        'Scope Definition: Defined comprehensive testing scope encompassing internal/external network exposures, Active Directory infrastructure, endpoint security controls, and sensitive data repositories.',
+        'Social Engineering Assessment: Designed targeted social engineering test scenarios evaluating organizational susceptibility to phishing, pretexting, and psychological manipulation tactics.',
+        'Compliance Integration: Ensured testing approach aligned with HIPAA and PCI DSS regulatory requirements, balancing thorough security assessment with operational continuity and patient safety.',
+        'Risk Management Framework: Established clear rules of engagement, escalation procedures, and incident response protocols to minimize risk during active testing operations.'
+      ]
+    },
+    {
+      title: 'Cloud Security',
+      role: 'Azure Cloud Security Engineer',
+      color: '#06b6d4',
+      tags: ['Azure', 'PaaS', 'RBAC', 'Key Vault', 'NIST 800-53', 'FISMA'],
+      scope: 'Designed and implemented secure hybrid Microsoft Azure Platform-as-a-Service (PaaS) environment integrated with legacy on-premises applications, ensuring compliance with federal and industry security standards.',
+      bullets: [
+        'Secure Architecture Design: Built secure hybrid Azure PaaS environment integrating cloud services with legacy systems while maintaining security boundaries and data protection.',
+        'Identity & Access Management: Implemented comprehensive Role-Based Access Control (RBAC) model enforcing least privilege principles across all Azure resources and services.',
+        'Data Protection: Integrated Azure Key Vault for centralized cryptographic key management and data encryption at rest and in transit.',
+        'Compliance Validation: Aligned cloud infrastructure with FISMA, NIST 800-53, and PCI DSS standards; passed comprehensive security review with zero findings.',
+        'Security Monitoring: Configured Azure Security Center and native logging capabilities for continuous security monitoring and threat detection.'
+      ]
+    },
+    {
+      title: 'Governance, Risk, & Compliance',
+      role: 'ISSO | Dean\'s Excellence Award',
+      color: '#3b82f6',
+      tags: ['GRC', 'NIST 800-53', 'FISMA', 'PCI DSS', 'POA&M', 'Risk Assessment'],
+      paperOnRequest: true,
+      scope: 'Conducted comprehensive security system evaluation and gap analysis for a simulated healthcare technology organization (Fielder Medical Center), identifying critical deficiencies in access control, continuous monitoring, and security documentation.',
+      bullets: [
+        'Security Control Mapping: Mapped five (5) critical security controls to NIST SP 800-53 Rev. 5, FISMA, and PCI DSS requirements, ensuring alignment with federal and industry compliance standards.',
+        'Risk Assessment & Prioritization: Performed comprehensive risk assessment using the NIST Cybersecurity Framework (CSF); identified and prioritized 28 risks, reducing high-risk exposure by 45% through strategic mitigation planning.',
+        'POA&M Development: Developed detailed Plan of Action and Milestones (POA&M) addressing identified gaps in access control policies, multifactor authentication, endpoint protection, and continuous monitoring programs.',
+        'Continuous Monitoring Strategy: Proposed enterprise-wide continuous monitoring strategy aligned with NIST SP 800-137, establishing metrics for ongoing security posture assessment.',
+        'Compliance Remediation: Addressed critical findings including missing MFA implementation (IA-2), inadequate least privilege enforcement (AC-6), insufficient endpoint protection, and outdated system security plans.'
       ]
     },
     {
@@ -112,19 +114,50 @@ export class App {
       ]
     },
     {
+      title: 'Cybersecurity Architecture & Engineering',
+      role: 'Architecture & Engineering Specialist',
+      color: '#10b981',
+      tags: ['CompTIA SecurityX', 'Enterprise Architecture', 'Cloud Security', 'Threat Modeling', 'DLP'],
+      scope: 'Advanced cybersecurity architecture and engineering competencies aligned with CompTIA SecurityX certification framework, focusing on enterprise-wide security solution design, cloud architecture security, threat analysis, and incident response strategy.',
+      bullets: [
+        'Enterprise Security Architecture: Evaluated and designed secure enterprise architecture solutions integrating security controls across distributed environments, ensuring alignment with organizational policies and compliance frameworks.',
+        'Cloud & Virtualization Security: Analyzed cloud and virtualization security solutions, assessing architecture designs for Infrastructure-as-a-Service (IaaS), Platform-as-a-Service (PaaS), and Software-as-a-Service (SaaS) deployment models.',
+        'Enterprise Data Security Controls: Applied enterprise-grade data protection controls including encryption, data loss prevention (DLP), rights management, and secure data lifecycle management across complex IT environments.',
+        'Software Application Integration: Assessed security implications of integrating software applications within enterprise environments, evaluating API security, secure coding practices, and application architecture vulnerabilities.',
+        'Threat & Vulnerability Analysis: Conducted comprehensive threat modeling and vulnerability assessment using industry-standard methodologies to identify security gaps in enterprise architecture designs.',
+        'Incident Response & Recovery: Developed incident response strategies and business continuity plans aligned with organizational risk tolerance and regulatory requirements, ensuring resilient security operations.'
+      ]
+    },
+    {
       title: 'Cybersecurity Management',
       role: 'Chief Information Security Officer (CISO)',
       color: '#f59e0b',
-      tags: ['CISO', 'GDPR', 'PCI DSS', 'NICE Framework', 'BCP/BIA', 'IRP'],
+      tags: ['ISACA CISM', 'GDPR', 'PCI DSS', 'NICE Framework', 'BCP/BIA', 'IRP'],
+      paperOnRequest: true,
       scope: 'Led the strategic response to an independent security assessment for a retail bookseller (SAGE Books). Developed a comprehensive cybersecurity roadmap to remediate critical gaps in e-commerce security, governance, and regulatory compliance.',
       bullets: [
         'Regulatory Compliance & Mitigation: Developed enterprise-wide mitigation strategies to address framework gaps, ensuring strict alignment with PCI DSS and GDPR requirements for secure e-commerce and data privacy.',
         'Governance & Workforce Development: Identified and defined three critical security leadership roles using the NICE Framework to manage institutional risk, compliance, and governance functions.',
-        'Vulnerability Analysis: Conducted a multifaceted threat assessment identifying three physical and three logical vulnerabilities, evaluating their direct impact on the organizations security posture.',
+        'Vulnerability Analysis: Conducted a multifaceted threat assessment identifying three physical and three logical vulnerabilities, evaluating their direct impact on the organization\'s security posture.',
         'Security Awareness Training: Engineered a NIST-aligned cybersecurity awareness program encompassing annual requirements, specialized role-based training, and continuous awareness initiatives.',
         'Asset Protection Standards: Formalized organizational security standards and policies for Acceptable Use (AUP), Mobile Device Management (MDM), password complexity, and PII protection based on contractual and regulatory sources.',
         'Incident Response Planning: Authored a formal Incident Response Plan (IRP) structured around the four NIST incident handling phases to ensure rapid containment and recovery.',
         'Business Continuity & Resilience: Developed a comprehensive Business Continuity Plan (BCP) including project scoping, Business Impact Analysis (BIA), and implementation strategies to mitigate natural disaster risks.'
+      ]
+    },
+    {
+      title: 'Cybersecurity Graduate Capstone',
+      role: 'Graduate Researcher | MS Cybersecurity',
+      color: '#d97706',
+      tags: ['Risk Management', 'Policy Development', 'NIST CSF', 'Threat Intelligence', 'Executive Reporting'],
+      paperOnRequest: true,
+      scope: 'Comprehensive graduate capstone integrating advanced cybersecurity competencies across risk management, policy development, threat intelligence, and enterprise security architecture to address complex real-world security challenges.',
+      bullets: [
+        'Integrated Security Assessment: Synthesized knowledge across all cybersecurity domains to conduct a holistic enterprise security assessment identifying critical risks, compliance gaps, and strategic remediation priorities.',
+        'Policy & Governance Framework: Developed comprehensive security governance documentation including policies, standards, and procedures aligned with industry best practices and regulatory requirements.',
+        'Threat Intelligence Analysis: Analyzed the current threat landscape using intelligence-driven methodologies to identify emerging threats, TTPs (Tactics, Techniques, and Procedures), and their potential organizational impact.',
+        'Executive Risk Communication: Produced executive-level risk reports translating complex technical findings into actionable business recommendations, demonstrating the ability to communicate security posture to non-technical leadership.',
+        'Strategic Security Roadmap: Developed multi-year cybersecurity improvement roadmap prioritizing investments based on risk reduction potential, regulatory requirements, and organizational objectives.'
       ]
     }
   ]);
@@ -140,6 +173,10 @@ export class App {
 
   totalProjects = computed(() => this.projects().length);
   isSearchActive = computed(() => this.searchTerm().trim().length > 0);
+
+  toggleAbout() {
+    this.aboutExpanded.update(v => !v);
+  }
 
   onSearch(value: string) {
     this.isFiltering.set(true);

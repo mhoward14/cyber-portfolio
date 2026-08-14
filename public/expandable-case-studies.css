@@ -1,0 +1,258 @@
+/* Expandable project case studies. Loaded in addition to the existing portfolio styles. */
+
+.hero-positioning {
+  margin: -0.65rem 0 0;
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.055em;
+  text-transform: uppercase;
+  animation: hero-enter 0.8s var(--ease-spring) 0.28s both;
+}
+
+.expandable-project {
+  padding: 0 !important;
+  cursor: default !important;
+  overflow: hidden;
+  align-self: start;
+}
+
+.expandable-project.is-expanded {
+  grid-column: 1 / -1;
+  border-color: color-mix(in srgb, var(--project-color) 46%, var(--color-border));
+  box-shadow:
+    0 18px 55px -18px rgba(0, 0, 0, 0.65),
+    0 0 0 1px rgba(0, 122, 255, 0.24),
+    0 0 28px 5px rgba(0, 122, 255, 0.13);
+}
+
+body.light-mode .expandable-project.is-expanded {
+  box-shadow:
+    0 24px 56px -16px rgba(0, 0, 0, 0.20),
+    0 0 0 1px rgba(0, 122, 255, 0.28),
+    0 0 32px 6px rgba(0, 122, 255, 0.12) !important;
+}
+
+.project-summary {
+  display: block;
+  width: 100%;
+  padding: 1.875rem 1.875rem 1.5rem;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+}
+
+.project-summary:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: -4px;
+  border-radius: var(--radius-lg);
+}
+
+.expandable-project .role-preview {
+  transition: color 0.25s ease;
+}
+
+.expandable-project .view-label {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.project-chevron {
+  width: 17px;
+  height: 17px;
+  flex-shrink: 0;
+  transition: transform 0.32s var(--ease-spring);
+}
+
+.project-chevron.is-expanded {
+  transform: rotate(180deg);
+}
+
+.project-detail-wrapper {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition:
+    grid-template-rows 0.46s var(--ease-spring),
+    opacity 0.3s ease;
+}
+
+.project-detail-wrapper.is-expanded {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+
+.project-detail-inner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.project-detail-wrapper.is-expanded .project-detail-inner {
+  border-top: 1px solid var(--color-border);
+}
+
+.project-detail-inner {
+  padding: 0 1.875rem;
+}
+
+.project-detail-wrapper.is-expanded .project-detail-inner {
+  padding-top: 1.6rem;
+  padding-bottom: 2rem;
+}
+
+.academic-project-note {
+  margin: 0 0 1.6rem;
+  padding: 0.9rem 1rem;
+  border-left: 3px solid var(--project-color);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  background: color-mix(in srgb, var(--project-color) 8%, transparent);
+  color: var(--color-text-muted);
+  font-size: 0.84rem;
+  line-height: 1.62;
+}
+
+.academic-project-note strong {
+  color: var(--color-text);
+}
+
+.case-section {
+  margin: 0 0 1.65rem;
+}
+
+.case-section:last-child {
+  margin-bottom: 0;
+}
+
+.case-section h4 {
+  margin: 0 0 0.8rem;
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.105em;
+  text-transform: uppercase;
+}
+
+.case-section p,
+.case-section li {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+
+.case-section p {
+  margin: 0;
+}
+
+.case-section ul {
+  margin: 0;
+  padding-left: 1.35rem;
+}
+
+.case-section li {
+  margin: 0.32rem 0;
+  padding-left: 0.15rem;
+}
+
+.framework-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.48rem;
+}
+
+.framework-pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 0.38rem 0.68rem;
+  border: 1px solid color-mix(in srgb, var(--project-color) 35%, var(--color-border));
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--project-color) 8%, var(--color-surface));
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.69rem;
+  font-weight: 650;
+  line-height: 1.25;
+}
+
+.deliverable-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+.deliverable-card {
+  padding: 0.78rem 0.88rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: rgba(15, 23, 42, 0.42);
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1.42;
+}
+
+body.light-mode .deliverable-card {
+  background: #f8fafc;
+  color: #334155;
+}
+
+.demonstrates-section {
+  padding: 1rem 1.1rem;
+  border-left: 3px solid var(--color-accent);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  background: var(--color-accent-dim);
+}
+
+.demonstrates-section h4 {
+  margin-bottom: 0.55rem;
+}
+
+/* Keep the existing card-hover language. The expanded card itself stays put. */
+.expandable-project.is-expanded:hover {
+  transform: none !important;
+}
+
+.expandable-project.is-expanded::before {
+  display: none;
+}
+
+/* Light mode needs near-black body copy inside expanded case studies. */
+body.light-mode .case-section p,
+body.light-mode .case-section li,
+body.light-mode .academic-project-note,
+body.light-mode .framework-pill {
+  color: #334155;
+}
+
+body.light-mode .academic-project-note strong {
+  color: #0f172a;
+}
+
+@media (max-width: 760px) {
+  .hero-positioning {
+    padding: 0 2.6rem;
+    font-size: 0.64rem;
+    line-height: 1.65;
+  }
+
+  .project-summary {
+    padding: 1.55rem 1.35rem 1.25rem;
+  }
+
+  .project-detail-inner {
+    padding-left: 1.35rem;
+    padding-right: 1.35rem;
+  }
+
+  .deliverable-grid {
+    grid-template-columns: 1fr;
+  }
+}

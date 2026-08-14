@@ -236,6 +236,86 @@ body.light-mode .academic-project-note strong {
   color: #0f172a;
 }
 
+/* Recruiter-priority layout: capstone alone, then three rows of three. */
+.capstone-project { order: 1; }
+.management-project { order: 2; }
+.architecture-project { order: 3; }
+.grc-project { order: 4; }
+.operations-project { order: 5; }
+.pentest-project { order: 6; }
+.cloud-project { order: 7; }
+.network-project { order: 8; }
+.software-project { order: 9; }
+.foundations-project { order: 10; }
+
+@media (min-width: 1001px) {
+  .prioritized-grid:not(.search-active):not(:has(.expandable-project.is-expanded)) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-rows: repeat(4, auto);
+  }
+
+  .prioritized-grid:not(.search-active):not(:has(.expandable-project.is-expanded)) .capstone-project {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .prioritized-grid:not(.search-active):not(:has(.expandable-project.is-expanded)) .management-project {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .prioritized-grid:not(.search-active):not(:has(.expandable-project.is-expanded)) .architecture-project {
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  .prioritized-grid:not(.search-active):not(:has(.expandable-project.is-expanded)) .grc-project {
+    grid-column: 3;
+    grid-row: 2;
+  }
+
+  .prioritized-grid:not(.search-active):not(:has(.expandable-project.is-expanded)) .operations-project {
+    grid-column: 1;
+    grid-row: 3;
+  }
+
+  .prioritized-grid:not(.search-active):not(:has(.expandable-project.is-expanded)) .pentest-project {
+    grid-column: 2;
+    grid-row: 3;
+  }
+
+  .prioritized-grid:not(.search-active):not(:has(.expandable-project.is-expanded)) .cloud-project {
+    grid-column: 3;
+    grid-row: 3;
+  }
+
+  .prioritized-grid:not(.search-active):not(:has(.expandable-project.is-expanded)) .network-project {
+    grid-column: 1;
+    grid-row: 4;
+  }
+
+  .prioritized-grid:not(.search-active):not(:has(.expandable-project.is-expanded)) .software-project {
+    grid-column: 2;
+    grid-row: 4;
+  }
+
+  .prioritized-grid:not(.search-active):not(:has(.expandable-project.is-expanded)) .foundations-project {
+    grid-column: 3;
+    grid-row: 4;
+  }
+
+  /* Search and expanded-case-study states reflow naturally, but retain priority order. */
+  .prioritized-grid.search-active .expandable-project,
+  .prioritized-grid:has(.expandable-project.is-expanded) .expandable-project {
+    grid-row: auto;
+    grid-column: auto;
+  }
+
+  .prioritized-grid:has(.expandable-project.is-expanded) .expandable-project.is-expanded {
+    grid-column: 1 / -1;
+  }
+}
+
 @media (max-width: 760px) {
   .hero-positioning {
     padding: 0 2.6rem;

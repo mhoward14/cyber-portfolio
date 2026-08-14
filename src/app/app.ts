@@ -28,10 +28,21 @@ export class App implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    const script = document.createElement('script');
-    script.src = 'https://cdn.credly.com/assets/utilities/embed.js';
-    script.async = true;
-    document.body.appendChild(script);
+    if (!document.querySelector('link[data-expandable-case-studies]')) {
+      const stylesheet = document.createElement('link');
+      stylesheet.rel = 'stylesheet';
+      stylesheet.href = 'expandable-case-studies.css';
+      stylesheet.setAttribute('data-expandable-case-studies', 'true');
+      document.head.appendChild(stylesheet);
+    }
+
+    if (!document.querySelector('script[data-credly-embed]')) {
+      const script = document.createElement('script');
+      script.src = 'https://cdn.credly.com/assets/utilities/embed.js';
+      script.async = true;
+      script.setAttribute('data-credly-embed', 'true');
+      document.body.appendChild(script);
+    }
   }
 
   toggleTheme() {

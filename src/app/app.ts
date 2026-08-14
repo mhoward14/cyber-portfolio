@@ -11,25 +11,19 @@ import { FormsModule } from '@angular/forms';
 })
 export class App implements OnInit, AfterViewInit {
   searchTerm = signal('');
-  selectedProject = signal<any | null>(null);
-  isClosing = signal(false);
   isFiltering = signal(false);
   aboutExpanded = signal(false);
   isDarkMode = signal(true);
+  expandedProject = signal<string | null>(null);
 
   ngOnInit() {
     const saved = localStorage.getItem('theme');
-    if (saved) {
-      if (saved === 'light') {
-        this.isDarkMode.set(false);
-        document.body.classList.add('light-mode');
-      }
-    } else {
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      if (!prefersDark) {
-        this.isDarkMode.set(false);
-        document.body.classList.add('light-mode');
-      }
+    if (saved === 'light') {
+      this.isDarkMode.set(false);
+      document.body.classList.add('light-mode');
+    } else if (!saved && !window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      this.isDarkMode.set(false);
+      document.body.classList.add('light-mode');
     }
   }
 
@@ -43,168 +37,214 @@ export class App implements OnInit, AfterViewInit {
   toggleTheme() {
     const goingLight = this.isDarkMode();
     this.isDarkMode.set(!goingLight);
-    if (goingLight) {
-      document.body.classList.add('light-mode');
-      localStorage.setItem('theme', 'light');
-    } else {
-      document.body.classList.remove('light-mode');
-      localStorage.setItem('theme', 'dark');
-    }
+    document.body.classList.toggle('light-mode', goingLight);
+    localStorage.setItem('theme', goingLight ? 'light' : 'dark');
   }
 
   toggleAbout() {
     this.aboutExpanded.set(!this.aboutExpanded());
   }
 
+  toggleProject(title: string) {
+    this.expandedProject.set(this.expandedProject() === title ? null : title);
+  }
+
+  isExpanded(title: string) {
+    return this.expandedProject() === title;
+  }
+
   projects = signal([
     {
-      title: 'Security Foundations',
-      role: '(ISC)² Certified in Cybersecurity (CC)',
-      color: '#0ea5e9',
-      tags: ['(ISC)² CC', 'Security Principles', 'Risk Management', 'Access Control', 'Network Security', 'Security Operations'],
-      scope: 'Earned the (ISC)² Certified in Cybersecurity (CC) credential by demonstrating mastery across five core domains: Security Principles, Business Continuity/Disaster Recovery/Incident Response, Access Controls, Network Security, and Security Operations — establishing the foundational knowledge required for a career in cybersecurity.',
-      bullets: [
-        'Security Principles (26%): Applied CIA triad concepts (Confidentiality, Integrity, Availability), risk management processes (identification, assessment, treatment), technical/administrative/physical security controls, and governance frameworks including policies and procedures to evaluate organizational security posture.',
-        'Business Continuity, DR & Incident Response (10%): Developed understanding of Business Continuity Planning (BCP), Business Impact Analysis (BIA), Recovery Time/Point Objectives (RTO/RPO), disaster recovery site types (hot/warm/cold), and the full incident response lifecycle — Preparation, Detection, Containment, Eradication, Recovery, and Post-Incident Review.',
-        'Access Controls Concepts (22%): Evaluated physical controls (badge systems, mantraps, CCTV, CPTED) and logical access models including Discretionary (DAC), Mandatory (MAC), and Role-Based Access Control (RBAC), applying least privilege and separation of duties principles to restrict unauthorized access.',
-        'Network Security (24%): Demonstrated proficiency in OSI/TCP-IP models, IPv4/IPv6, network threat categories (DDoS, MITM, malware), detection methods (IDS/HIDS/NIDS), and security infrastructure including firewalls, IPS, VLANs, DMZs, VPNs, micro-segmentation, and Zero Trust network principles.',
-        'Security Operations (18%): Applied data security controls including symmetric/asymmetric encryption and hashing, data classification and retention policy, system hardening through configuration management and patch management, and security awareness training covering social engineering, password protection, AUP, BYOD, and change management.'
-      ]
-    },
-    {
-      title: 'Secure Network Design',
-      role: 'Secure Network Design Engineer',
-      color: '#8b5cf6',
-      tags: ['Network Security', 'Zero Trust', 'HIPAA', 'PCI DSS', 'CVSS', 'VLAN'],
-      scope: 'Designed secure merged network architecture post-acquisition, integrating cloud and on-premises systems while ensuring HIPAA and PCI DSS compliance within budgetary constraints.',
-      bullets: [
-        'Secure Architecture Design: Designed comprehensive merged network architecture integrating cloud services and on-premises infrastructure following post-acquisition requirements.',
-        'Vulnerability Assessment: Identified and documented 20+ network vulnerabilities using Common Vulnerability Scoring System (CVSS) and NIST SP 800-30 Rev. 1 risk assessment methodologies.',
-        'Security Framework Implementation: Implemented zero trust architecture, least privilege access controls, and defense-in-depth security principles throughout network design.',
-        'Regulatory Compliance: Ensured full HIPAA and PCI DSS compliance for healthcare data and payment processing systems while adhering to $50K budget constraint.',
-        'Network Segmentation: Designed secure network segmentation strategy isolating sensitive data environments, implementing firewalls, VLANs, and access control lists.'
-      ]
-    },
-    {
-      title: 'Security Operations',
-      role: 'SOC Analyst',
-      color: '#f97316',
-      tags: ['CompTIA CySA+', 'SOC', 'Incident Response', 'Digital Forensics', 'NIST IR', 'Threat Intelligence'],
-      scope: 'Investigated simulated enterprise-level cybersecurity incident involving malicious network traffic and unauthorized access, performing comprehensive forensic analysis and developing remediation strategy.',
-      bullets: [
-        'Forensic Investigation: Performed comprehensive log analysis, network forensic review, and packet capture analysis to determine attack vectors and identify root cause of security incident.',
-        'Incident Classification: Properly categorized incident severity and impact scope, identifying affected systems, compromised data, and lateral movement indicators.',
-        'NIST Framework Alignment: Authored detailed incident response report with corrective actions aligned to NIST Incident Response Lifecycle (Preparation, Detection & Analysis, Containment, Eradication & Recovery, Post-Incident Activity).',
-        'Remediation Strategy: Developed comprehensive remediation plan including immediate containment actions, vulnerability patching, security control enhancements, and lessons learned documentation.',
-        'Threat Intelligence: Identified indicators of compromise (IOCs), malicious IP addresses, and attack patterns for threat intelligence sharing and future prevention.'
-      ]
-    },
-    {
-      title: 'Penetration Testing',
-      role: 'Security Analyst | Dean\'s Excellence Award',
-      color: '#ef4444',
-      tags: ['CompTIA PenTest+', 'Penetration Testing', 'HIPAA', 'PCI DSS', 'Social Engineering', 'Reconnaissance'],
-      scope: 'Designed comprehensive penetration testing engagement plan for healthcare organization (Pruhart Tech) protecting electronic Protected Health Information (ePHI) and payment data, with focus on evaluating security controls and identifying exploitation vulnerabilities.',
-      bullets: [
-        'Engagement Planning: Developed detailed penetration testing methodology covering reconnaissance, vulnerability assessment, exploitation, and post-exploitation phases aligned with industry best practices.',
-        'Scope Definition: Defined comprehensive testing scope encompassing internal/external network exposures, Active Directory infrastructure, endpoint security controls, and sensitive data repositories.',
-        'Social Engineering Assessment: Designed targeted social engineering test scenarios evaluating organizational susceptibility to phishing, pretexting, and psychological manipulation tactics.',
-        'Compliance Integration: Ensured testing approach aligned with HIPAA and PCI DSS regulatory requirements, balancing thorough security assessment with operational continuity and patient safety.',
-        'Risk Management Framework: Established clear rules of engagement, escalation procedures, and incident response protocols to minimize risk during active testing operations.'
-      ]
-    },
-    {
-      title: 'Cloud Security',
-      role: 'Azure Cloud Security Engineer',
-      color: '#06b6d4',
-      tags: ['Azure', 'PaaS', 'RBAC', 'Key Vault', 'NIST 800-53', 'FISMA'],
-      scope: 'Designed and implemented secure hybrid Microsoft Azure Platform-as-a-Service (PaaS) environment integrated with legacy on-premises applications, ensuring compliance with federal and industry security standards.',
-      bullets: [
-        'Secure Architecture Design: Built secure hybrid Azure PaaS environment integrating cloud services with legacy systems while maintaining security boundaries and data protection.',
-        'Identity & Access Management: Implemented comprehensive Role-Based Access Control (RBAC) model enforcing least privilege principles across all Azure resources and services.',
-        'Data Protection: Integrated Azure Key Vault for centralized cryptographic key management and data encryption at rest and in transit.',
-        'Compliance Validation: Aligned cloud infrastructure with FISMA, NIST 800-53, and PCI DSS standards; passed comprehensive security review with zero findings.',
-        'Security Monitoring: Configured Azure Security Center and native logging capabilities for continuous security monitoring and threat detection.'
-      ]
+      title: 'Cybersecurity Graduate Capstone',
+      role: 'Graduate Capstone | Federal Cybersecurity Architecture & Governance',
+      color: '#d97706',
+      tags: ['NIST 800-53', 'FISMA', 'Zero Trust', 'Splunk ES', 'Okta', 'CrowdStrike'],
+      academicNote: 'Simulated 500-user U.S. federal agency environment. Results and performance measures are design targets, modeled improvements, and implementation criteria rather than claims from a production federal deployment.',
+      context: 'Designed an integrated cybersecurity architecture and governance program to address fragmented infrastructure, weak access control, limited monitoring, unresolved audit findings, legacy-system risk, and inconsistent security governance.',
+      approach: [
+        'Designed a five-zone zero-trust network segmentation model aligned with NIST SP 800-207.',
+        'Designed centralized identity lifecycle management using Okta and Active Directory with RBAC, MFA, SSO, least privilege, provisioning/deprovisioning, and quarterly access reviews.',
+        'Designed centralized Splunk Enterprise Security monitoring across endpoint, identity, network, server, database, email, Azure, and AWS data sources.',
+        'Integrated CrowdStrike Falcon EDR, next-generation firewalls, encryption, backup, high availability, and incident-response workflows.',
+        'Developed security policies, risk reviews, risk-register practices, POA&M-based remediation, acceptance criteria, KPIs, and a phased eight-month implementation roadmap.'
+      ],
+      frameworks: ['NIST SP 800-53 Rev. 5', 'NIST CSF', 'NIST SP 800-207', 'FISMA', 'Splunk Enterprise Security', 'Okta', 'Active Directory', 'CrowdStrike Falcon', 'Azure', 'AWS', 'RBAC / MFA / SSO', 'Zero Trust'],
+      deliverables: ['Security governance policy set', 'Zero-trust network architecture', 'IAM architecture and access-review model', 'SIEM / SOC monitoring strategy', 'Incident-response and forensic workflow', 'Risk register and POA&M remediation model', 'Implementation roadmap and budget', 'KPIs, acceptance criteria, and evaluation plan'],
+      demonstrates: 'Ability to integrate governance, risk, architecture, IAM, security operations, incident response, and federal compliance requirements into a cohesive cybersecurity program, then communicate the design through policies, architecture decisions, implementation planning, and measurable acceptance criteria.'
     },
     {
       title: 'Governance, Risk, & Compliance',
-      role: 'ISSO | Dean\'s Excellence Award',
+      role: "ISSO | Dean's Excellence Award",
       color: '#3b82f6',
       tags: ['GRC', 'NIST 800-53', 'FISMA', 'PCI DSS', 'POA&M', 'Risk Assessment'],
-      scope: 'Conducted comprehensive security system evaluation and gap analysis for a simulated healthcare technology organization (Fielder Medical Center), identifying critical deficiencies in access control, continuous monitoring, and security documentation.',
-      bullets: [
-        'Security Control Mapping: Mapped five (5) critical security controls to NIST SP 800-53 Rev. 5, FISMA, and PCI DSS requirements, ensuring alignment with federal and industry compliance standards.',
-        'Risk Assessment & Prioritization: Performed comprehensive risk assessment using the NIST Cybersecurity Framework (CSF); identified and prioritized 28 risks, reducing high-risk exposure by 45% through strategic mitigation planning.',
-        'POA&M Development: Developed detailed Plan of Action and Milestones (POA&M) addressing identified gaps in access control policies, multifactor authentication, endpoint protection, and continuous monitoring programs.',
-        'Continuous Monitoring Strategy: Proposed enterprise-wide continuous monitoring strategy aligned with NIST SP 800-137, establishing metrics for ongoing security posture assessment.',
-        'Compliance Remediation: Addressed critical findings including missing MFA implementation (IA-2), inadequate least privilege enforcement (AC-6), insufficient endpoint protection, and outdated system security plans.'
-      ]
+      academicNote: 'Graduate performance assessment for a simulated healthcare technology organization. Findings and remediation recommendations were produced as part of the academic scenario.',
+      context: 'Conducted a comprehensive security-system evaluation and gap analysis for Fielder Medical Center, identifying critical deficiencies in access control, continuous monitoring, and security documentation.',
+      approach: [
+        'Mapped five critical security controls to NIST SP 800-53 Rev. 5, FISMA, and PCI DSS requirements.',
+        'Performed a NIST Cybersecurity Framework-based risk assessment and prioritized 28 identified risks.',
+        'Developed a POA&M addressing access-control, MFA, endpoint-protection, and continuous-monitoring gaps.',
+        'Designed an enterprise continuous-monitoring strategy aligned with NIST SP 800-137.',
+        'Translated assessment findings into specific remediation actions and defensible compliance documentation.'
+      ],
+      frameworks: ['NIST SP 800-53 Rev. 5', 'NIST CSF', 'NIST SP 800-137', 'FISMA', 'PCI DSS', 'POA&M', 'Risk Assessment', 'Continuous Monitoring'],
+      deliverables: ['Security control mapping', '28-item prioritized risk assessment', 'Plan of Action & Milestones', 'Continuous monitoring strategy', 'Compliance remediation plan', 'Security documentation gap analysis'],
+      demonstrates: 'Ability to perform ISSO/GRC-style analysis by connecting technical findings to controls, risk, remediation priorities, POA&M actions, continuous monitoring, and audit-ready documentation.'
     },
     {
-      title: 'Secure Software Design',
-      role: 'Academic Focus',
-      color: '#6366f1',
-      tags: ['DevSecOps', 'SDLC', 'Agile', 'Defense in Depth'],
-      bullets: [
-        'Applied Defense in Depth principles across the entire SDLC.',
-        'Adapted security activities to Agile and DevSecOps practices.'
-      ]
+      title: 'Penetration Testing',
+      role: "Security Analyst | Dean's Excellence Award",
+      color: '#ef4444',
+      tags: ['CompTIA PenTest+', 'Penetration Testing', 'HIPAA', 'PCI DSS', 'Social Engineering', 'Reconnaissance'],
+      academicNote: 'Graduate penetration-testing engagement plan for a simulated healthcare organization. The project focused on planning, methodology, scope, risk controls, and reporting rather than an unsupervised attack on a live organization.',
+      context: 'Designed a comprehensive penetration-testing engagement for Pruhart Tech, a healthcare environment protecting ePHI and payment data, with a focus on evaluating controls while preserving operational continuity.',
+      approach: [
+        'Developed a methodology covering reconnaissance, vulnerability assessment, exploitation, and post-exploitation phases.',
+        'Defined internal and external scope across network exposures, Active Directory, endpoint controls, and sensitive-data repositories.',
+        'Designed social-engineering scenarios covering phishing, pretexting, and user susceptibility.',
+        'Established rules of engagement, escalation procedures, testing boundaries, and incident-response safeguards.',
+        'Aligned the engagement approach with HIPAA and PCI DSS obligations.'
+      ],
+      frameworks: ['CompTIA PenTest+', 'Reconnaissance', 'Vulnerability Assessment', 'Active Directory', 'Social Engineering', 'HIPAA', 'PCI DSS', 'Rules of Engagement'],
+      deliverables: ['Penetration-test engagement plan', 'Scope and assumptions', 'Rules of engagement', 'Social-engineering test scenarios', 'Escalation and safety procedures', 'Compliance considerations', 'Reporting methodology'],
+      demonstrates: 'Ability to structure a professional penetration-testing engagement, define scope and risk controls, integrate compliance considerations, and communicate a defensible testing methodology before active assessment begins.'
     },
     {
       title: 'Cybersecurity Architecture & Engineering',
       role: 'Architecture & Engineering Specialist',
       color: '#10b981',
       tags: ['CompTIA SecurityX', 'Enterprise Architecture', 'Cloud Security', 'Threat Modeling', 'DLP'],
-      scope: 'Advanced cybersecurity architecture and engineering competencies aligned with CompTIA SecurityX certification framework, focusing on enterprise-wide security solution design, cloud architecture security, threat analysis, and incident response strategy.',
-      bullets: [
-        'Enterprise Security Architecture: Evaluated and designed secure enterprise architecture solutions integrating security controls across distributed environments, ensuring alignment with organizational policies and compliance frameworks.',
-        'Cloud & Virtualization Security: Analyzed cloud and virtualization security solutions, assessing architecture designs for Infrastructure-as-a-Service (IaaS), Platform-as-a-Service (PaaS), and Software-as-a-Service (SaaS) deployment models.',
-        'Enterprise Data Security Controls: Applied enterprise-grade data protection controls including encryption, data loss prevention (DLP), rights management, and secure data lifecycle management across complex IT environments.',
-        'Software Application Integration: Assessed security implications of integrating software applications within enterprise environments, evaluating API security, secure coding practices, and application architecture vulnerabilities.',
-        'Threat & Vulnerability Analysis: Conducted comprehensive threat modeling and vulnerability assessment using industry-standard methodologies to identify security gaps in enterprise architecture designs.',
-        'Incident Response & Recovery: Developed incident response strategies and business continuity plans aligned with organizational risk tolerance and regulatory requirements, ensuring resilient security operations.'
-      ]
+      academicNote: 'Graduate architecture and engineering work aligned with advanced enterprise-security concepts and the CompTIA SecurityX framework.',
+      context: 'Evaluated enterprise security architectures across distributed, cloud, virtualized, application, and data environments with emphasis on resilient design and secure integration.',
+      approach: [
+        'Evaluated enterprise architectures integrating security controls across distributed environments.',
+        'Analyzed IaaS, PaaS, SaaS, and virtualization security considerations.',
+        'Applied encryption, data loss prevention, rights management, and secure data-lifecycle controls.',
+        'Assessed API security, secure coding considerations, and software-integration risk.',
+        'Conducted threat modeling and vulnerability analysis to identify architecture weaknesses.',
+        'Developed incident-response and business-continuity strategies aligned with organizational risk tolerance.'
+      ],
+      frameworks: ['CompTIA SecurityX', 'Enterprise Architecture', 'IaaS / PaaS / SaaS', 'Threat Modeling', 'DLP', 'Encryption', 'API Security', 'Business Continuity'],
+      deliverables: ['Architecture evaluations', 'Cloud-security design analysis', 'Data-protection control strategy', 'Threat models', 'Application-integration risk analysis', 'Incident-response and resilience recommendations'],
+      demonstrates: 'Ability to evaluate security as a system-of-systems problem and balance architecture, cloud, applications, data protection, resilience, and risk rather than treating controls in isolation.'
+    },
+    {
+      title: 'Cloud Security',
+      role: 'Azure Cloud Security Engineer',
+      color: '#06b6d4',
+      tags: ['Azure', 'PaaS', 'RBAC', 'Key Vault', 'NIST 800-53', 'FISMA'],
+      academicNote: 'Graduate cloud-security implementation project using a simulated hybrid Azure environment.',
+      context: 'Designed a secure hybrid Microsoft Azure Platform-as-a-Service environment integrated with legacy on-premises applications while maintaining federal and industry security requirements.',
+      approach: [
+        'Designed a hybrid Azure PaaS architecture with defined security boundaries between cloud and legacy systems.',
+        'Applied Azure RBAC and least privilege across resources and services.',
+        'Integrated Azure Key Vault for centralized key management and encryption.',
+        'Aligned the architecture with FISMA, NIST SP 800-53, and PCI DSS requirements.',
+        'Designed monitoring and logging using Azure-native security capabilities.'
+      ],
+      frameworks: ['Microsoft Azure', 'Azure PaaS', 'Azure RBAC', 'Azure Key Vault', 'Azure Security Center', 'NIST SP 800-53', 'FISMA', 'PCI DSS', 'Encryption'],
+      deliverables: ['Hybrid cloud architecture', 'RBAC access model', 'Key-management design', 'Encryption strategy', 'Compliance mapping', 'Monitoring and logging plan'],
+      demonstrates: 'Ability to apply identity, encryption, monitoring, and compliance controls to a hybrid cloud architecture while accounting for integration with legacy systems.'
+    },
+    {
+      title: 'Security Operations',
+      role: 'SOC Analyst',
+      color: '#f97316',
+      tags: ['CompTIA CySA+', 'SOC', 'Incident Response', 'Digital Forensics', 'NIST IR', 'Threat Intelligence'],
+      academicNote: 'Graduate incident-response investigation using simulated enterprise evidence and attack activity.',
+      context: 'Investigated a simulated enterprise incident involving malicious network traffic and unauthorized access, then developed a response and remediation strategy.',
+      approach: [
+        'Performed log analysis, network-forensic review, and packet-capture analysis to determine attack vectors and root cause.',
+        'Classified incident severity and impact and identified affected systems, compromised data, and lateral-movement indicators.',
+        'Aligned investigation and reporting with the NIST incident-response lifecycle.',
+        'Developed containment, remediation, patching, and control-improvement recommendations.',
+        'Identified indicators of compromise, malicious IP addresses, and attack patterns for future detection.'
+      ],
+      frameworks: ['CompTIA CySA+', 'SOC Operations', 'NIST Incident Response', 'Log Analysis', 'Packet Analysis', 'Digital Forensics', 'IOCs', 'Threat Intelligence'],
+      deliverables: ['Incident investigation report', 'Attack-vector analysis', 'Incident classification', 'IOC list', 'Containment plan', 'Remediation recommendations', 'Lessons learned'],
+      demonstrates: 'Ability to move from raw security evidence to incident classification, attack reconstruction, containment, remediation, and lessons learned in a structured SOC/IR workflow.'
+    },
+    {
+      title: 'Secure Network Design',
+      role: 'Secure Network Design Engineer',
+      color: '#8b5cf6',
+      tags: ['Network Security', 'Zero Trust', 'HIPAA', 'PCI DSS', 'CVSS', 'VLAN'],
+      academicNote: 'Graduate secure-network design project for a simulated post-acquisition merger environment.',
+      context: 'Designed a secure merged network architecture after an acquisition, integrating cloud and on-premises infrastructure while meeting healthcare and payment-card security requirements within defined budget constraints.',
+      approach: [
+        'Designed a merged network architecture integrating cloud services with on-premises infrastructure.',
+        'Identified and documented more than 20 vulnerabilities using CVSS and NIST SP 800-30 Rev. 1 methods.',
+        'Applied zero trust, least privilege, and defense-in-depth principles.',
+        'Designed segmentation using firewalls, VLANs, and access-control lists.',
+        'Addressed HIPAA and PCI DSS requirements while working within the project budget.'
+      ],
+      frameworks: ['NIST SP 800-30 Rev. 1', 'CVSS', 'Zero Trust', 'Defense in Depth', 'VLANs', 'Firewalls', 'ACLs', 'HIPAA', 'PCI DSS'],
+      deliverables: ['Merged network architecture', 'Vulnerability register', 'CVSS scoring', 'Risk analysis', 'Segmentation design', 'Firewall / VLAN / ACL strategy', 'Compliance design'],
+      demonstrates: 'Ability to combine architecture, vulnerability assessment, segmentation, regulatory requirements, and project constraints into a practical network-security design.'
     },
     {
       title: 'Cybersecurity Management',
       role: 'Chief Information Security Officer (CISO)',
       color: '#f59e0b',
       tags: ['ISACA CISM', 'CISO', 'GDPR', 'PCI DSS', 'NICE Framework', 'BCP/BIA', 'IRP'],
-      scope: 'Led the strategic response to an independent security assessment for a retail bookseller (SAGE Books). Developed a comprehensive cybersecurity roadmap to remediate critical gaps in e-commerce security, governance, and regulatory compliance.',
-      bullets: [
-        'Regulatory Compliance & Mitigation: Developed enterprise-wide mitigation strategies to address framework gaps, ensuring strict alignment with PCI DSS and GDPR requirements for secure e-commerce and data privacy.',
-        'Governance & Workforce Development: Identified and defined three critical security leadership roles using the NICE Framework to manage institutional risk, compliance, and governance functions.',
-        'Vulnerability Analysis: Conducted a multifaceted threat assessment identifying three physical and three logical vulnerabilities, evaluating their direct impact on the organizations security posture.',
-        'Security Awareness Training: Engineered a NIST-aligned cybersecurity awareness program encompassing annual requirements, specialized role-based training, and continuous awareness initiatives.',
-        'Asset Protection Standards: Formalized organizational security standards and policies for Acceptable Use (AUP), Mobile Device Management (MDM), password complexity, and PII protection based on contractual and regulatory sources.',
-        'Incident Response Planning: Authored a formal Incident Response Plan (IRP) structured around the four NIST incident handling phases to ensure rapid containment and recovery.',
-        'Business Continuity & Resilience: Developed a comprehensive Business Continuity Plan (BCP) including project scoping, Business Impact Analysis (BIA), and implementation strategies to mitigate natural disaster risks.'
-      ]
+      academicNote: 'Graduate cybersecurity-management assessment for a simulated retail organization.',
+      context: 'Led the strategic response to an independent security assessment for SAGE Books and developed a cybersecurity roadmap addressing e-commerce security, governance, compliance, workforce, incident response, and resilience.',
+      approach: [
+        'Developed enterprise mitigation strategies aligned with PCI DSS and GDPR.',
+        'Defined three critical security leadership roles using the NICE Framework.',
+        'Conducted physical and logical vulnerability analysis.',
+        'Designed a NIST-aligned cybersecurity awareness and role-based training program.',
+        'Formalized standards for acceptable use, mobile devices, passwords, and PII protection.',
+        'Authored an incident-response plan and a business-continuity plan with BIA and implementation strategy.'
+      ],
+      frameworks: ['CISM Domains', 'NICE Framework', 'PCI DSS', 'GDPR', 'NIST Incident Response', 'BCP', 'BIA', 'Security Awareness', 'Policy Governance'],
+      deliverables: ['Cybersecurity roadmap', 'Leadership-role definitions', 'Vulnerability assessment', 'Security awareness program', 'Security policy standards', 'Incident Response Plan', 'Business Continuity Plan'],
+      demonstrates: 'Ability to operate at the management layer by translating security findings into governance, workforce, policy, training, incident-response, and continuity programs.'
     },
     {
-      title: 'Cybersecurity Graduate Capstone',
-      role: 'Security Architecture & Project Management',
-      color: '#d97706',
-      tags: ['Zero Trust', 'FISMA', 'NIST 800-53', 'Identity & Access', 'SOC', 'Project Management'],
-      scope: 'Designed and evaluated a comprehensive five-component security transformation for a mid-sized U.S. federal agency (500 employees), integrating nine graduate-level cybersecurity courses into a cohesive security architecture addressing documented vulnerabilities, compliance deficiencies, and governance gaps.',
-      bullets: [
-        'Zero-Trust Network Architecture: Designed secure network segmentation across five security zones using HPE/Fortigate/Sophos firewalls, implementing least-privilege access controls and defense-in-depth principles to eliminate implicit trust.',
-        'Identity & Access Management: Implemented centralized IAM via Okta with role-based access control (RBAC) and multi-factor authentication (MFA), achieving 100% least-privilege enforcement vs. current 30% effectiveness.',
-        'Governance & Compliance Framework: Aligned security architecture with FISMA and NIST SP 800-53 controls, remediating 80%+ of audit findings and addressing 12 open federal audit issues.',
-        'Secure Software Development Lifecycle: Established DevSecOps procedures integrating security testing, code review, and vulnerability scanning into development pipeline.',
-        'Security Operations Center (SOC) Implementation: Configured Splunk-based real-time threat detection and incident response, reducing mean time to detect (MTTD) from 180+ days to 14 days.',
-        'Enterprise Project Management: Developed comprehensive 8-month implementation plan with $913,320 budget allocation (hardware $192K, software $210K, services $87K, labor $688K), stakeholder engagement, and organizational change management.'
-      ]
+      title: 'Secure Software Design',
+      role: 'Academic Focus',
+      color: '#6366f1',
+      tags: ['DevSecOps', 'SDLC', 'Agile', 'Defense in Depth'],
+      academicNote: 'Graduate coursework focused on secure software design and integration of security activities throughout the development lifecycle.',
+      context: 'Applied security principles to software-development lifecycle decisions, with emphasis on integrating rather than bolting on security controls.',
+      approach: [
+        'Applied defense-in-depth principles across the software development lifecycle.',
+        'Adapted security activities to Agile development practices.',
+        'Integrated DevSecOps concepts into development and deployment workflows.',
+        'Considered secure design, testing, change management, and operational feedback as connected lifecycle activities.'
+      ],
+      frameworks: ['DevSecOps', 'Secure SDLC', 'Agile', 'Defense in Depth', 'Secure Design', 'Security Testing', 'Change Management'],
+      deliverables: ['Secure SDLC approach', 'DevSecOps integration model', 'Agile security practices', 'Defense-in-depth design considerations'],
+      demonstrates: 'Understanding of how cybersecurity fits into software delivery, including secure design, iterative development, testing, deployment, and operational feedback.'
+    },
+    {
+      title: 'Security Foundations',
+      role: '(ISC)² Certified in Cybersecurity (CC)',
+      color: '#0ea5e9',
+      tags: ['(ISC)² CC', 'Security Principles', 'Risk Management', 'Access Control', 'Network Security', 'Security Operations'],
+      academicNote: 'Credential-based competency area rather than a standalone graduate project. Included to show the foundational security domains supporting the advanced portfolio work.',
+      context: 'Demonstrated foundational cybersecurity knowledge across governance, risk, access control, continuity, network security, and security operations through the (ISC)² Certified in Cybersecurity credential.',
+      approach: [
+        'Applied CIA triad, governance, risk-management, and security-control concepts.',
+        'Covered business continuity, disaster recovery, and the incident-response lifecycle.',
+        'Evaluated logical and physical access-control models including RBAC, least privilege, and separation of duties.',
+        'Applied network-security concepts including firewalls, IDS/IPS, VLANs, DMZs, VPNs, microsegmentation, and zero trust.',
+        'Applied data protection, system hardening, patch management, and security-awareness concepts.'
+      ],
+      frameworks: ['(ISC)² CC', 'CIA Triad', 'Risk Management', 'RBAC', 'BCP / DR', 'Incident Response', 'Network Security', 'Zero Trust', 'Security Operations'],
+      deliverables: ['Foundational security competency', 'Risk-management knowledge', 'Access-control knowledge', 'Network-security knowledge', 'Security-operations knowledge'],
+      demonstrates: 'A broad security foundation that supports the more specialized GRC, architecture, penetration-testing, cloud, and operations work shown elsewhere in the portfolio.'
     }
   ]);
 
   filteredProjects = computed(() => {
-    const term = this.searchTerm().toLowerCase();
+    const term = this.searchTerm().trim().toLowerCase();
+    if (!term) return this.projects();
     return this.projects().filter((p: any) =>
-      p.title.toLowerCase().includes(term) ||
-      p.role.toLowerCase().includes(term) ||
-      (p.tags && p.tags.some((t: string) => t.toLowerCase().includes(term)))
+      [p.title, p.role, p.context, ...(p.tags || []), ...(p.frameworks || [])]
+        .join(' ')
+        .toLowerCase()
+        .includes(term)
     );
   });
 
@@ -214,22 +254,7 @@ export class App implements OnInit, AfterViewInit {
   onSearch(value: string) {
     this.isFiltering.set(true);
     this.searchTerm.set(value);
+    this.expandedProject.set(null);
     setTimeout(() => this.isFiltering.set(false), 300);
-  }
-
-  openModal(project: any) {
-    this.selectedProject.set(project);
-    this.isClosing.set(false);
-    document.body.style.overflow = 'hidden';
-  }
-
-  closeModal() {
-    if (this.isClosing()) return;
-    this.isClosing.set(true);
-    setTimeout(() => {
-      this.selectedProject.set(null);
-      this.isClosing.set(false);
-      document.body.style.overflow = 'auto';
-    }, 240);
   }
 }

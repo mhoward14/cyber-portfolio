@@ -97,9 +97,21 @@
       <span class="section-label-sub">Select a project to expand its case study</span>
     </div>
 
-    <main class="project-grid" [class.is-filtering]="isFiltering()">
+    <main class="project-grid prioritized-grid" [class.is-filtering]="isFiltering()" [class.search-active]="isSearchActive()">
       @for (project of filteredProjects(); track project.title) {
-        <article class="project-tile expandable-project" [class.is-expanded]="isExpanded(project.title)" [style.--project-color]="project.color">
+        <article class="project-tile expandable-project"
+          [class.is-expanded]="isExpanded(project.title)"
+          [class.capstone-project]="project.title === 'Cybersecurity Graduate Capstone'"
+          [class.management-project]="project.title === 'Cybersecurity Management'"
+          [class.architecture-project]="project.title === 'Cybersecurity Architecture & Engineering'"
+          [class.grc-project]="project.title === 'Governance, Risk, & Compliance'"
+          [class.operations-project]="project.title === 'Security Operations'"
+          [class.pentest-project]="project.title === 'Penetration Testing'"
+          [class.cloud-project]="project.title === 'Cloud Security'"
+          [class.network-project]="project.title === 'Secure Network Design'"
+          [class.software-project]="project.title === 'Secure Software Design'"
+          [class.foundations-project]="project.title === 'Security Foundations'"
+          [style.--project-color]="project.color">
           <div class="tile-accent-bar" [style.background]="project.color"></div>
 
           <button class="project-summary" type="button" (click)="toggleProject(project.title)" [attr.aria-expanded]="isExpanded(project.title)">

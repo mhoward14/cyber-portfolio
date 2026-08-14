@@ -5,10 +5,8 @@
   <span>Home</span>
 </a>
 
-<!-- ── Top section: white in light mode (nav + header only) ── -->
 <div class="container">
   <nav class="top-nav">
-    <!-- Light / Dark mode toggle -->
     <button class="nav-button theme-btn" (click)="toggleTheme()" [attr.aria-label]="isDarkMode() ? 'Switch to light mode' : 'Switch to dark mode'">
       @if (isDarkMode()) {
         <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -22,21 +20,18 @@
       }
     </button>
 
-    <!-- GitHub -->
-    <a href="https://github.com/mhoward14" target="_blank" class="nav-button github-btn" aria-label="GitHub Profile">
+    <a href="https://github.com/mhoward14" target="_blank" rel="noopener" class="nav-button github-btn" aria-label="GitHub Profile">
       <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
         <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
       </svg>
     </a>
 
-    <!-- LinkedIn -->
-    <a href="https://www.linkedin.com/in/mhowardcybersecurity" target="_blank" class="nav-button linkedin-btn" aria-label="LinkedIn Profile">
+    <a href="https://www.linkedin.com/in/mhowardcybersecurity" target="_blank" rel="noopener" class="nav-button linkedin-btn" aria-label="LinkedIn Profile">
       <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
         <path d="M4.98 3.5c0 1.381-1.11 2.5-2.48 2.5s-2.48-1.119-2.48-2.5c0-1.38 1.11-2.5 2.48-2.5s2.48 1.12 2.48 2.5zM5 8H0v16h5V8zm7.982 0H8.014v16h4.969v-8.399c0-4.67 6.029-5.052 6.029 0V24H24v-10.131c0-7.88-8.922-7.593-11.018-3.714V8z"/>
       </svg>
     </a>
 
-    <!-- Email -->
     <a href="mailto:mhoward14@icloud.com" class="nav-button email-btn" aria-label="Send email">
       <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
         <path d="M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a1.75 1.75 0 01-1.855 0L1.5 8.67z" />
@@ -47,7 +42,8 @@
 
   <header class="centered-header">
     <h1>MATTHEW HOWARD</h1>
-    <p class="subtitle">MS in Cybersecurity &amp; Information Assurance</p>
+    <p class="subtitle">M.S. Cybersecurity &amp; Information Assurance</p>
+    <p class="hero-positioning">Cybersecurity&nbsp;&nbsp;|&nbsp;&nbsp;GRC &amp; RMF&nbsp;&nbsp;|&nbsp;&nbsp;Security Architecture&nbsp;&nbsp;|&nbsp;&nbsp;U.S. Air Force Veteran</p>
     <div class="cert-badges">
       <div class="badge-clip"><div data-iframe-width="150" data-iframe-height="270" data-share-badge-id="758aec6e-c4d6-4411-ab36-99a3fec65c28" data-share-badge-host="https://www.credly.com"></div></div>
       <div class="badge-clip"><div data-iframe-width="150" data-iframe-height="270" data-share-badge-id="3a4771ad-d6f1-4e38-a127-d0483c44cc4c" data-share-badge-host="https://www.credly.com"></div></div>
@@ -57,44 +53,31 @@
   </header>
 </div>
 
-<!-- ── Projects band: about card is the first child, pulled up into white ── -->
 <div class="projects-band">
   <div class="about-bridge">
     <section class="about-section" [class.is-expanded]="aboutExpanded()">
-      <p class="about-title">Cybersecurity Professional&nbsp;&nbsp;|&nbsp;&nbsp;GRC &amp; RMF Specialist&nbsp;&nbsp;|&nbsp;&nbsp;U.S. Air Force Veteran</p>
-
-      <p class="about-bio-lead">Detail-driven Cybersecurity Compliance Analyst with 20+ years of experience leading assessments, producing audit-ready documentation, and managing end-to-end compliance programs across large, highly regulated organizations. Deep professional expertise in NIST 800-53 security control assessment methodology, SSP and POA&amp;M development, policy and SOP authoring, and evidence collection. Proven ability to translate complex regulatory requirements into clear, defensible documentation and actionable remediation plans that satisfy both technical teams and auditors.</p>
+      <p class="about-title">Cybersecurity Professional&nbsp;&nbsp;|&nbsp;&nbsp;GRC &amp; RMF&nbsp;&nbsp;|&nbsp;&nbsp;Security Architecture&nbsp;&nbsp;|&nbsp;&nbsp;U.S. Air Force Veteran</p>
+      <p class="about-bio-lead">Retired U.S. Air Force information technology and knowledge-management professional with 21 years of experience supporting secure, regulated environments and a completed M.S. in Cybersecurity &amp; Information Assurance. Graduate work applies current cybersecurity frameworks and technologies across GRC, penetration testing, cloud security, incident response, identity and access management, zero-trust architecture, and security operations.</p>
 
       <button class="about-toggle" (click)="toggleAbout()" [attr.aria-label]="aboutExpanded() ? 'Collapse bio' : 'Expand bio'">
-        <svg class="toggle-chevron" [class.is-expanded]="aboutExpanded()"
-             xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-             stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <svg class="toggle-chevron" [class.is-expanded]="aboutExpanded()" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <polyline points="6 9 12 15 18 9"></polyline>
         </svg>
       </button>
 
       <div class="about-bio-wrapper" [class.is-expanded]="aboutExpanded()">
         <div class="about-bio-inner">
-          <p>Grounded in a career that spans network and systems administration, information management, and physical and information security, I bring both the technical foundation and the compliance depth to operate effectively across the full security lifecycle. Seeking a role where that expertise is applied directly.</p>
-          <p>Exceptional technical writer recognized with multiple Dean's Excellence Awards. Currently completing an M.S. in Cybersecurity &amp; Information Assurance at Western Governors University (Spring 2026). Active CompTIA Security+, CySA+, and PenTest+ certifications; (ISC)&sup2; CC; SecurityX and ISACA CISM in progress. TS/SCI clearance eligible.</p>
+          <p>Professional experience includes information-security responsibilities, COMSEC, inspection preparation, POA&amp;M creation and management, security documentation, SOP development, and support to protected environments. Graduate projects extend that foundation through applied security analysis, architecture design, risk assessment, and technical documentation.</p>
+          <p>Recognized with multiple Dean's Excellence Awards. M.S. in Cybersecurity &amp; Information Assurance, Western Governors University, completed May 2026. Active CompTIA Security+, CySA+, and PenTest+ certifications and (ISC)&sup2; Certified in Cybersecurity. Previously held TS/SCI.</p>
         </div>
       </div>
 
       <div class="about-stats">
-        <div class="stat-item">
-          <span class="stat-number">10</span>
-          <span class="stat-label">Projects</span>
-        </div>
+        <div class="stat-item"><span class="stat-number">10</span><span class="stat-label">Projects</span></div>
         <div class="stat-divider"></div>
-        <div class="stat-item">
-          <span class="stat-number">4</span>
-          <span class="stat-label">Certifications</span>
-        </div>
+        <div class="stat-item"><span class="stat-number">4</span><span class="stat-label">Certifications</span></div>
         <div class="stat-divider"></div>
-        <div class="stat-item">
-          <span class="stat-number">MS</span>
-          <span class="stat-label">Degree</span>
-        </div>
+        <div class="stat-item"><span class="stat-number">MS</span><span class="stat-label">Degree</span></div>
       </div>
     </section>
   </div>
@@ -102,35 +85,84 @@
   <div class="projects-inner">
     <section class="search-section">
       <div class="search-box">
-        <input type="text" placeholder="Search projects, skills, frameworks..."
-               [ngModel]="searchTerm()" (ngModelChange)="onSearch($event)">
+        <input type="text" placeholder="Search projects, skills, frameworks..." [ngModel]="searchTerm()" (ngModelChange)="onSearch($event)">
       </div>
       @if (isSearchActive()) {
-        <p class="result-count">
-          Showing <strong>{{ filteredProjects().length }}</strong> of <strong>{{ totalProjects() }}</strong> projects
-        </p>
+        <p class="result-count">Showing <strong>{{ filteredProjects().length }}</strong> of <strong>{{ totalProjects() }}</strong> projects</p>
       }
     </section>
 
     <div class="section-label">
       <span class="section-label-text">// PROJECTS</span>
-      <span class="section-label-sub">Select a project to view details</span>
+      <span class="section-label-sub">Select a project to expand its case study</span>
     </div>
 
     <main class="project-grid" [class.is-filtering]="isFiltering()">
       @for (project of filteredProjects(); track project.title) {
-        <div class="project-tile" (click)="openModal(project)">
+        <article class="project-tile expandable-project" [class.is-expanded]="isExpanded(project.title)" [style.--project-color]="project.color">
           <div class="tile-accent-bar" [style.background]="project.color"></div>
-          <h3>{{ project.title }}</h3>
-          <p class="role-preview">{{ project.role }}</p>
-          <div class="tag-list">
-            @for (tag of project.tags; track tag) {
-              <span class="tag">{{ tag }}</span>
-            }
+
+          <button class="project-summary" type="button" (click)="toggleProject(project.title)" [attr.aria-expanded]="isExpanded(project.title)">
+            <h3>{{ project.title }}</h3>
+            <p class="role-preview" [style.color]="project.color">{{ project.role }}</p>
+            <div class="tag-list">
+              @for (tag of project.tags; track tag) {
+                <span class="tag">{{ tag }}</span>
+              }
+            </div>
+            <span class="view-label">
+              {{ isExpanded(project.title) ? 'Close Case Study' : 'View Case Study' }}
+              <svg class="project-chevron" [class.is-expanded]="isExpanded(project.title)" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </span>
+          </button>
+
+          <div class="project-detail-wrapper" [class.is-expanded]="isExpanded(project.title)">
+            <div class="project-detail-inner">
+              <div class="academic-project-note"><strong>Academic project:</strong> {{ project.academicNote }}</div>
+
+              <section class="case-section">
+                <h4>Context</h4>
+                <p>{{ project.context }}</p>
+              </section>
+
+              <section class="case-section">
+                <h4>Approach</h4>
+                <ul>
+                  @for (item of project.approach; track item) {
+                    <li>{{ item }}</li>
+                  }
+                </ul>
+              </section>
+
+              <section class="case-section">
+                <h4>Frameworks &amp; Technologies</h4>
+                <div class="framework-list">
+                  @for (framework of project.frameworks; track framework) {
+                    <span class="framework-pill">{{ framework }}</span>
+                  }
+                </div>
+              </section>
+
+              <section class="case-section">
+                <h4>Key Deliverables</h4>
+                <div class="deliverable-grid">
+                  @for (deliverable of project.deliverables; track deliverable) {
+                    <div class="deliverable-card">{{ deliverable }}</div>
+                  }
+                </div>
+              </section>
+
+              <section class="case-section demonstrates-section">
+                <h4>What This Demonstrates</h4>
+                <p>{{ project.demonstrates }}</p>
+              </section>
+            </div>
           </div>
-          <span class="view-label">View Details →</span>
-        </div>
+        </article>
       }
+
       @if (filteredProjects().length === 0) {
         <div class="no-results">
           <span class="no-results-icon">⌀</span>
@@ -141,53 +173,15 @@
   </div>
 </div>
 
-@if (selectedProject(); as project) {
-  <div class="modal-overlay" [class.is-closing]="isClosing()" (click)="closeModal()">
-    <div class="modal-window" (click)="$event.stopPropagation()">
-      <div class="modal-accent-bar" [style.background]="project.color"></div>
-      <button class="close-btn" (click)="closeModal()">✕</button>
-      <div class="modal-header">
-        <h2>{{ project.title }}</h2>
-        <p class="modal-role">{{ project.role }}</p>
-      </div>
-      <div class="modal-body">
-        @if (project.scope) {
-          <p class="scope-text"><strong>Context:</strong> {{ project.scope }}</p>
-        }
-        <h4>Key Accomplishments</h4>
-        <ul>
-          @for (bullet of project.bullets; track bullet) {
-            <li>{{ bullet }}</li>
-          }
-        </ul>
-      </div>
-    </div>
-  </div>
-}
-
-<!-- ── Footer: white in light mode ── -->
 <div class="container">
   <footer class="site-footer">
     <div class="footer-name">Matthew Howard</div>
-    <div class="footer-title">MS Cybersecurity &amp; Information Assurance</div>
+    <div class="footer-title">M.S. Cybersecurity &amp; Information Assurance</div>
     <div class="footer-links">
-      <a href="https://github.com/mhoward14" target="_blank" aria-label="GitHub">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
-          <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-        </svg>
-      </a>
-      <a href="https://www.linkedin.com/in/mhowardcybersecurity" target="_blank" aria-label="LinkedIn">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
-          <path d="M4.98 3.5c0 1.381-1.11 2.5-2.48 2.5s-2.48-1.119-2.48-2.5c0-1.38 1.11-2.5 2.48-2.5s2.48 1.12 2.48 2.5zM5 8H0v16h5V8zm7.982 0H8.014v16h4.969v-8.399c0-4.67 6.029-5.052 6.029 0V24H24v-10.131c0-7.88-8.922-7.593-11.018-3.714V8z"/>
-        </svg>
-      </a>
-      <a href="mailto:mhoward14@icloud.com" aria-label="Email">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
-          <path d="M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a1.75 1.75 0 01-1.855 0L1.5 8.67z" />
-          <path d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a.25.25 0 00.286 0L22.5 6.908z" />
-        </svg>
-      </a>
+      <a href="https://github.com/mhoward14" target="_blank" rel="noopener" aria-label="GitHub">GitHub</a>
+      <a href="https://www.linkedin.com/in/mhowardcybersecurity" target="_blank" rel="noopener" aria-label="LinkedIn">LinkedIn</a>
+      <a href="mailto:mhoward14@icloud.com" aria-label="Email">Email</a>
     </div>
-    <div class="footer-copy">&copy; 2026 Matthew Howard &middot; All rights reserved</div>
+    <div class="copyright">Cybersecurity Portfolio</div>
   </footer>
 </div>

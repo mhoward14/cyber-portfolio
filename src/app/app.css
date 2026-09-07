@@ -93,12 +93,12 @@
   box-shadow: 0 8px 20px -4px var(--color-accent-glow);
 }
 
-/* Framework Crosswalk pill — dedicated teal accent so the tool reads as its
+/* Framework Crosswalk pill — dedicated magenta accent so the tool reads as its
    own thing, consistent with each project tile having its own color */
 .crosswalk-nav-btn:hover {
-  background: #00bcd4;
-  border-color: #00bcd4;
-  box-shadow: 0 8px 20px -4px rgba(0, 188, 212, 0.45);
+  background: #ec4899;
+  border-color: #ec4899;
+  box-shadow: 0 8px 20px -4px rgba(236, 72, 153, 0.45);
 }
 
 /* RMF Control Tracker pill — dedicated violet accent, same pattern */
@@ -184,41 +184,41 @@
 
 /* Nav: counter the color: white !important on dark-mode buttons so SVG
    fill="currentColor" picks up a dark color in light mode */
-body.light-mode .github-btn,
-body.light-mode .email-btn,
-body.light-mode .theme-btn {
+:host-context(.light-mode) .github-btn,
+:host-context(.light-mode) .email-btn,
+:host-context(.light-mode) .theme-btn {
   background-color: var(--color-surface);
   border-color: var(--color-border);
   color: #1e293b !important;
 }
-body.light-mode .github-btn svg,
-body.light-mode .github-btn path,
-body.light-mode .email-btn svg,
-body.light-mode .email-btn path,
-body.light-mode .theme-btn svg,
-body.light-mode .theme-btn path,
-body.light-mode .theme-btn polyline,
-body.light-mode .theme-btn circle {
+:host-context(.light-mode) .github-btn svg,
+:host-context(.light-mode) .github-btn path,
+:host-context(.light-mode) .email-btn svg,
+:host-context(.light-mode) .email-btn path,
+:host-context(.light-mode) .theme-btn svg,
+:host-context(.light-mode) .theme-btn path,
+:host-context(.light-mode) .theme-btn polyline,
+:host-context(.light-mode) .theme-btn circle {
   stroke: #1e293b;
   fill: #1e293b;
   color: #1e293b;
 }
 /* Theme (moon/sun) and email icons are stroke-based, not fill */
-body.light-mode .email-btn path {
+:host-context(.light-mode) .email-btn path {
   fill: #1e293b;
   stroke: none;
 }
-body.light-mode .github-btn:hover path {
+:host-context(.light-mode) .github-btn:hover path {
   fill: white;
 }
-body.light-mode .email-btn:hover path {
+:host-context(.light-mode) .email-btn:hover path {
   fill: white;
 }
-body.light-mode .github-btn:hover {
+:host-context(.light-mode) .github-btn:hover {
   background-color: #1e293b;
   border-color: #1e293b;
 }
-body.light-mode .email-btn:hover {
+:host-context(.light-mode) .email-btn:hover {
   border-color: var(--color-accent);
 }
 

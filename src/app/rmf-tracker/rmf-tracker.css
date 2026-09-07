@@ -365,7 +365,7 @@
   border-radius: var(--radius-sm);
   padding: 0.6rem 0.7rem;
 }
-body.light-mode .control-detail textarea {
+:host-context(.light-mode) .control-detail textarea {
   background: rgba(241, 245, 249, 0.6);
 }
 .control-detail textarea:focus {
@@ -411,7 +411,7 @@ body.light-mode .control-detail textarea {
   padding: 0.8rem;
   white-space: pre;
 }
-body.light-mode .poam-panel textarea {
+:host-context(.light-mode) .poam-panel textarea {
   background: rgba(241, 245, 249, 0.6);
 }
 .copy-btn {

@@ -93,12 +93,12 @@
   box-shadow: 0 8px 20px -4px var(--color-accent-glow);
 }
 
-/* Framework Crosswalk pill — dedicated magenta accent so the tool reads as its
+/* Framework Crosswalk pill — dedicated indigo accent so the tool reads as its
    own thing, consistent with each project tile having its own color */
 .crosswalk-nav-btn:hover {
-  background: #ec4899;
-  border-color: #ec4899;
-  box-shadow: 0 8px 20px -4px rgba(236, 72, 153, 0.45);
+  background: #6366f1;
+  border-color: #6366f1;
+  box-shadow: 0 8px 20px -4px rgba(99, 102, 241, 0.45);
 }
 
 /* RMF Control Tracker pill — dedicated violet accent, same pattern */

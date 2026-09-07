@@ -2,13 +2,24 @@
    CROSSWALK.CSS — SECURITY FRAMEWORK CROSSWALK PAGE
    Shares the site's terminal-UI building blocks (`.search-box`,
    `.section-label`, `.no-results`, the `hero-enter`/`tile-enter`
-   keyframes — all defined in the global src/styles.css) and
-   retints them magenta (#ec4899) as this feature's own dedicated
-   accent, the same way each project tile on the homepage gets
-   its own color. Everything else (surfaces, borders, shadows,
-   type scale) reuses the same tokens as home.css so the page
-   reads as part of the same site, not a bolted-on tool.
+   keyframes — all defined in the global src/styles.css). Page
+   chrome (title, disclaimer, search prompt, section label) uses
+   magenta (#ec4899) as this feature's own dedicated accent, the
+   same way each project tile on the homepage gets its own color.
+   Everything else (surfaces, borders, shadows, type scale) reuses
+   the same tokens as home.css so the page reads as part of the
+   same site, not a bolted-on tool.
+
+   Each framework additionally gets its OWN color, applied via a
+   `.fw-nist` / `.fw-cis` / `.fw-iso` class (set in the template)
+   that defines a local `--fw` custom property — used on the anchor
+   toggle, every framework cell/badge/label, and the detail modal —
+   so the tool reads as genuinely three-framework, not monochrome.
    ============================================================ */
+
+.fw-nist { --fw: #ec4899; }
+.fw-cis  { --fw: #14b8a6; }
+.fw-iso  { --fw: #eab308; }
 
 .crosswalk-page {
   padding-top: 5rem;
@@ -167,8 +178,11 @@
   cursor: pointer;
   transition: all 0.2s var(--ease-out);
 }
+.crosswalk-anchor button:not(.active):hover {
+  color: var(--fw);
+}
 .crosswalk-anchor button.active {
-  background-color: #ec4899;
+  background-color: var(--fw);
   color: #ffffff;
 }
 
@@ -315,11 +329,11 @@ body:not(.light-mode) .crosswalk-row {
   background-color: rgba(241, 245, 249, 0.8);
 }
 .crosswalk-cell.anchor {
-  border-color: #ec4899;
-  box-shadow: 0 0 0 1px #ec4899 inset;
+  border-color: var(--fw);
+  box-shadow: 0 0 0 1px var(--fw) inset;
 }
 .crosswalk-cell:hover {
-  border-color: rgba(236, 72, 153, 0.6);
+  border-color: color-mix(in srgb, var(--fw) 60%, transparent);
   transform: translateY(-2px);
 }
 
@@ -328,7 +342,7 @@ body:not(.light-mode) .crosswalk-row {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--color-text-dim);
+  color: var(--fw);
   margin-bottom: 0.375rem;
 }
 
@@ -351,7 +365,7 @@ body:not(.light-mode) .crosswalk-row {
   display: inline-flex;
   align-items: center;
   margin-top: 0.6rem;
-  color: #ec4899;
+  color: var(--fw);
   font-size: 0.68rem;
   font-weight: 700;
   letter-spacing: 0.04em;
@@ -404,20 +418,23 @@ body:not(.light-mode) .crosswalk-row {
   max-width: 640px;
   max-height: 85vh;
   border-radius: var(--radius-xl);
-  border: 1px solid rgba(236, 72, 153, 0.3);
+  border: 1px solid color-mix(in srgb, var(--fw) 30%, transparent);
   position: relative;
   overflow-y: auto;
   animation: modal-enter 0.3s var(--ease-spring) both;
   box-shadow:
     0 48px 96px -24px rgba(0, 0, 0, 0.7),
-    0 0 0 1px rgba(236, 72, 153, 0.08),
-    0 0 64px -24px rgba(236, 72, 153, 0.2);
+    0 0 0 1px color-mix(in srgb, var(--fw) 8%, transparent),
+    0 0 64px -24px color-mix(in srgb, var(--fw) 20%, transparent);
 }
 
+/* The modal window carries a .fw-X class matching whichever cell was
+   clicked, so the whole modal — accent bar, border, glow — takes on
+   that framework's color, not always the page's default magenta. */
 .modal-accent-bar {
   height: 4px;
   width: 100%;
-  background: #ec4899;
+  background: var(--fw);
   border-radius: var(--radius-xl) var(--radius-xl) 0 0;
 }
 
@@ -482,9 +499,9 @@ body:not(.light-mode) .crosswalk-row {
   background: rgba(241, 245, 249, 0.6);
 }
 .crosswalk-detail.is-primary {
-  border-color: #ec4899;
-  background: rgba(236, 72, 153, 0.06);
-  box-shadow: 0 0 0 1px rgba(236, 72, 153, 0.15);
+  border-color: var(--fw);
+  background: color-mix(in srgb, var(--fw) 6%, transparent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--fw) 15%, transparent);
 }
 
 .crosswalk-detail-head {
@@ -498,10 +515,7 @@ body:not(.light-mode) .crosswalk-row {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--color-text-dim);
-}
-.crosswalk-detail.is-primary .crosswalk-detail-framework {
-  color: #ec4899;
+  color: var(--fw);
 }
 .crosswalk-detail-id {
   font-family: var(--font-mono);
@@ -538,7 +552,7 @@ body:not(.light-mode) .crosswalk-row {
   padding-top: 0.625rem;
 }
 .crosswalk-detail-footer a {
-  color: #ec4899;
+  color: var(--fw);
   font-weight: 700;
   text-decoration: none;
 }

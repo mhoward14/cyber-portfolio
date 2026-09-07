@@ -40,6 +40,123 @@
 }
 
 /* ========================================
+   SHARED TERMINAL-UI BUILDING BLOCKS
+   Used by more than one page/component (Home, Crosswalk, and any
+   future routed page) — kept here so they can't drift out of sync
+   the way per-component copies would. A page can retint these
+   (e.g. Crosswalk's teal accent) by scoping an override to its own
+   root class rather than duplicating the whole block.
+   ======================================== */
+
+/* Terminal-style search input with a ">_" prompt decoration */
+.search-box {
+  position: relative;
+  max-width: 500px;
+  margin: 0 auto;
+}
+.search-box::before {
+  content: '>_';
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  pointer-events: none;
+  z-index: 1;
+  letter-spacing: -0.05em;
+}
+.search-box input {
+  width: 100%;
+  background: rgba(30, 41, 59, 0.65);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  padding: 0.85rem 1.25rem 0.85rem 3.2rem;
+  border-radius: var(--radius-md);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  outline: none;
+  transition: all 0.25s var(--ease-out);
+  letter-spacing: 0.02em;
+}
+.search-box input::placeholder {
+  color: var(--color-text-dim);
+  font-style: italic;
+}
+.search-box input:focus {
+  border-color: var(--color-accent);
+  background: rgba(30, 41, 59, 0.95);
+  box-shadow:
+    0 0 0 3px rgba(59, 130, 246, 0.1),
+    0 0 28px rgba(59, 130, 246, 0.07);
+}
+body.light-mode .search-box input {
+  background: #ffffff;
+  border-color: #d1d5db;
+  color: #0f172a;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+body.light-mode .search-box input:focus {
+  background: #ffffff;
+  border-color: #2563eb;
+  box-shadow:
+    0 0 0 3px rgba(37, 99, 235, 0.12),
+    0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+/* Terminal-style "// LABEL" heading used above a content section */
+.section-label {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  animation: hero-enter 0.8s var(--ease-spring) 0.55s both;
+}
+.section-label-text {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #10b981;
+  letter-spacing: 0.1em;
+}
+.section-label-sub {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--color-text-dim);
+  letter-spacing: 0.04em;
+}
+body.light-mode .section-label-text {
+  color: #2563eb;
+}
+body.light-mode .section-label-sub {
+  color: #6b7280;
+}
+
+/* Empty state when a search/filter yields no results */
+.no-results {
+  text-align: center;
+  padding: 3.5rem 1rem;
+  color: var(--color-text-dim);
+}
+.no-results-icon {
+  display: block;
+  font-size: 2.5rem;
+  margin-bottom: 0.75rem;
+  opacity: 0.35;
+}
+.no-results p {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  margin: 0;
+}
+.no-results strong {
+  color: var(--color-accent);
+}
+
+/* ========================================
    GLOBAL RESET & FOUNDATION
    ======================================== */
 *, *::before, *::after {

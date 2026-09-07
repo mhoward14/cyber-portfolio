@@ -1,0 +1,47 @@
+# ============================================================
+# Framework Publication Watch
+#
+# Checks twice a year whether NIST SP 800-53, CIS Controls, or
+# ISO/IEC 27001 appear to have published a new revision, and opens
+# a GitHub issue (labeled "framework-watch") if so. It never edits
+# the Framework Crosswalk data itself — a new revision needs a
+# human to read the actual change and update
+# src/app/crosswalk/crosswalk-data.ts accordingly.
+#
+# See .github/scripts/check-framework-updates.mjs for the detection
+# logic and .github/framework-versions.json for the stored baseline
+# (update that file's pageTitle fields after resolving a flagged
+# issue, so future runs only flag genuinely new changes).
+# ============================================================
+
+name: Framework Publication Watch
+
+on:
+  schedule:
+    # 13:00 UTC on Jan 1 and Jul 1 — these publications revise every
+    # several years at most, so checking more often just adds noise.
+    - cron: "0 13 1 1,7 *"
+  # Lets you trigger a check on demand from the Actions tab
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: "20"
+
+      - name: Check framework publication pages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: node .github/scripts/check-framework-updates.mjs

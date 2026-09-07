@@ -1,0 +1,18 @@
+{
+  "_comment": "Baseline 'last seen' state for each framework source, used by check-framework-updates.yml to detect a possible new publication. Update this file's pageTitle/versionHint by hand only after you've reviewed a flagged change and updated the crosswalk data in src/app/crosswalk/crosswalk-data.ts to match — that's what closes the loop and stops the biannual check from re-flagging the same change.",
+  "nist": {
+    "url": "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final",
+    "versionHint": "Rev. 5",
+    "pageTitle": ""
+  },
+  "cis": {
+    "url": "https://www.cisecurity.org/controls/cis-controls-navigator",
+    "versionHint": "v8.1",
+    "pageTitle": ""
+  },
+  "iso": {
+    "url": "https://www.iso.org/standard/27001.html",
+    "versionHint": "2022",
+    "pageTitle": ""
+  }
+}

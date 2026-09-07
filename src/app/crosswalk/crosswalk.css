@@ -4,8 +4,9 @@
    `.section-label`, `.no-results`, the `hero-enter`/`tile-enter`
    keyframes — all defined in the global src/styles.css). Page
    chrome (title, disclaimer, search prompt, section label) uses
-   magenta (#ec4899) as this feature's own dedicated accent, the
-   same way each project tile on the homepage gets its own color.
+   indigo (#6366f1) as this tool's own dedicated identity color —
+   distinct from the site's blue, RMF Tracker's violet, and each
+   framework's own color below.
    Everything else (surfaces, borders, shadows, type scale) reuses
    the same tokens as home.css so the page reads as part of the
    same site, not a bolted-on tool.
@@ -43,7 +44,7 @@
   animation: hero-enter 0.6s var(--ease-spring) both;
 }
 .back-link:hover {
-  color: #ec4899;
+  color: #6366f1;
   gap: 0.55rem;
 }
 .back-chevron {
@@ -57,7 +58,7 @@
 }
 
 .crosswalk-title {
-  color: #ec4899;
+  color: #6366f1;
   font-size: clamp(1.6rem, 4vw, 2.5rem);
   font-weight: 900;
   letter-spacing: 0.04em;
@@ -81,7 +82,7 @@
   margin: 0 auto 2rem;
   padding: 0.875rem 1.125rem;
   border: 1px solid var(--color-border);
-  border-left: 3px solid #ec4899;
+  border-left: 3px solid #6366f1;
   border-radius: var(--radius-md);
   background-color: var(--color-surface);
   box-shadow: 0 2px 16px rgba(0, 0, 0, 0.35);
@@ -91,7 +92,7 @@
   animation: hero-enter 0.8s var(--ease-spring) 0.25s both;
 }
 .crosswalk-disclaimer a {
-  color: #ec4899;
+  color: #6366f1;
 }
 
 .crosswalk-controls {
@@ -122,18 +123,18 @@
   margin: 0;
 }
 .crosswalk-search::before {
-  color: #ec4899;
+  color: #6366f1;
 }
 .crosswalk-search input:focus {
-  border-color: #ec4899;
+  border-color: #6366f1;
   box-shadow:
-    0 0 0 3px rgba(236, 72, 153, 0.12),
-    0 0 28px rgba(236, 72, 153, 0.08);
+    0 0 0 3px rgba(99, 102, 241, 0.12),
+    0 0 28px rgba(99, 102, 241, 0.08);
 }
 :host-context(.light-mode) .crosswalk-search input:focus {
-  border-color: #ec4899;
+  border-color: #6366f1;
   box-shadow:
-    0 0 0 3px rgba(236, 72, 153, 0.14),
+    0 0 0 3px rgba(99, 102, 241, 0.14),
     0 1px 3px rgba(0, 0, 0, 0.06);
 }
 
@@ -190,7 +191,7 @@
    styles; this modifier retints the accent text magenta to match
    the page instead of the site-wide green/blue. */
 .crosswalk-accent-text {
-  color: #ec4899 !important;
+  color: #6366f1 !important;
 }
 
 .crosswalk-list {
@@ -237,7 +238,7 @@ body:not(.light-mode) .crosswalk-row {
   left: 0;
   right: 0;
   height: 3px;
-  background: #ec4899;
+  background: #6366f1;
   opacity: 0.6;
   transition: opacity 0.3s var(--ease-out), height 0.25s var(--ease-out);
 }
@@ -247,18 +248,18 @@ body:not(.light-mode) .crosswalk-row {
 }
 
 .crosswalk-row:hover {
-  border-color: rgba(236, 72, 153, 0.5);
+  border-color: rgba(99, 102, 241, 0.5);
   transform: translateY(-4px);
   box-shadow:
     0 20px 48px -10px rgba(255, 255, 255, 0.06),
-    0 0 0 1px rgba(236, 72, 153, 0.22),
-    0 0 22px 4px rgba(236, 72, 153, 0.13);
+    0 0 0 1px rgba(99, 102, 241, 0.22),
+    0 0 22px 4px rgba(99, 102, 241, 0.13);
 }
 :host-context(.light-mode) .crosswalk-row:hover {
   box-shadow:
     0 24px 56px -10px rgba(0, 0, 0, 0.18),
-    0 0 0 1px rgba(236, 72, 153, 0.3),
-    0 0 28px 5px rgba(236, 72, 153, 0.14);
+    0 0 0 1px rgba(99, 102, 241, 0.3),
+    0 0 28px 5px rgba(99, 102, 241, 0.14);
 }
 
 .crosswalk-row-head {
@@ -283,9 +284,9 @@ body:not(.light-mode) .crosswalk-row {
 }
 
 .crosswalk-family-tag {
-  color: #ec4899;
-  background: rgba(236, 72, 153, 0.1);
-  border: 1px solid rgba(236, 72, 153, 0.25);
+  color: #6366f1;
+  background: rgba(99, 102, 241, 0.1);
+  border: 1px solid rgba(99, 102, 241, 0.25);
 }
 
 .crosswalk-strength.strong {

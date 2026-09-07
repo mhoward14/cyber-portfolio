@@ -45,7 +45,7 @@
 
     <div class="crosswalk-anchor" role="group" aria-label="Anchor framework">
       @for (key of frameworkKeys; track key) {
-        <button type="button" [class.active]="anchor() === key" (click)="setAnchor(key)">
+        <button type="button" [class]="'fw-' + key" [class.active]="anchor() === key" (click)="setAnchor(key)">
           {{ frameworkLabels[key] }}
         </button>
       }
@@ -72,7 +72,7 @@
 
         <div class="crosswalk-grid">
           @for (key of orderedKeys(); track key) {
-            <button type="button" class="crosswalk-cell" [class.anchor]="key === anchor()" (click)="openDetail(entry, key)">
+            <button type="button" class="crosswalk-cell" [class]="'fw-' + key" [class.anchor]="key === anchor()" (click)="openDetail(entry, key)">
               <div class="crosswalk-cell-framework">{{ frameworkLabels[key] }}</div>
               <div class="crosswalk-cell-id">{{ entry.frameworks[key].id }}</div>
               <div class="crosswalk-cell-title">{{ entry.frameworks[key].title }}</div>
@@ -94,7 +94,7 @@
 
 @if (selectedEntry(); as entry) {
   <div class="modal-overlay" (click)="closeDetail()">
-    <div class="modal-window crosswalk-modal" (click)="$event.stopPropagation()">
+    <div class="modal-window crosswalk-modal" [class]="'fw-' + selectedFramework()" (click)="$event.stopPropagation()">
       <div class="modal-accent-bar"></div>
       <div class="modal-header">
         <span class="crosswalk-family-tag">{{ entry.family }}</span>
@@ -110,7 +110,7 @@
         }
 
         @for (key of detailOrderedKeys(); track key) {
-          <section class="crosswalk-detail" [class.is-primary]="key === selectedFramework()">
+          <section class="crosswalk-detail" [class]="'fw-' + key" [class.is-primary]="key === selectedFramework()">
             <div class="crosswalk-detail-head">
               <span class="crosswalk-detail-framework">{{ frameworkLabels[key] }}</span>
               <span class="crosswalk-detail-id">{{ entry.frameworks[key].id }}</span>

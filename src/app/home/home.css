@@ -580,7 +580,7 @@
    CDN-bundled) so it propagates reliably. Animation stays as hero-enter. */
 
 /* About section: white card with blue top accent bar */
-body.light-mode .about-section {
+:host-context(.light-mode) .about-section {
   background: #ffffff !important;
   border-top: 3px solid #2563eb !important;
   box-shadow:
@@ -588,7 +588,7 @@ body.light-mode .about-section {
     0 6px 24px rgba(0, 0, 0, 0.09),
     0 0 0 1px rgba(0, 0, 0, 0.05);
 }
-body.light-mode .about-section.is-expanded {
+:host-context(.light-mode) .about-section.is-expanded {
   box-shadow:
     0 8px 32px -6px rgba(0, 0, 0, 0.15),
     0 0 0 1px rgba(0, 122, 255, 0.3),
@@ -596,21 +596,21 @@ body.light-mode .about-section.is-expanded {
   border-color: rgba(0, 122, 255, 0.35) !important;
   border-top-color: #2563eb !important;
 }
-body.light-mode .about-bio-lead,
-body.light-mode .about-bio-inner p {
+:host-context(.light-mode) .about-bio-lead,
+:host-context(.light-mode) .about-bio-inner p {
   color: #0f172a !important;
   border-left-color: rgba(37, 99, 235, 0.4);
 }
-body.light-mode .about-toggle {
+:host-context(.light-mode) .about-toggle {
   border-top-color: #e2e8f0;
   color: #64748b;
 }
-body.light-mode .about-stats {
+:host-context(.light-mode) .about-stats {
   border-top-color: #e2e8f0;
 }
 
 /* Project tiles in light mode */
-body.light-mode .project-tile::before {
+:host-context(.light-mode) .project-tile::before {
   background: linear-gradient(
     105deg,
     transparent 35%,
@@ -619,23 +619,23 @@ body.light-mode .project-tile::before {
   );
 }
 /* Bolder accent bars in light mode */
-body.light-mode .tile-accent-bar {
+:host-context(.light-mode) .tile-accent-bar {
   opacity: 0.85;
 }
 /* More visible tags in light mode */
-body.light-mode .tag {
+:host-context(.light-mode) .tag {
   background: rgba(37, 99, 235, 0.08);
   border-color: rgba(37, 99, 235, 0.22);
   color: #334155;
 }
-body.light-mode .project-tile:hover .tag {
+:host-context(.light-mode) .project-tile:hover .tag {
   background: rgba(37, 99, 235, 0.14);
   border-color: rgba(37, 99, 235, 0.35);
   color: #1e3a8a;
 }
 
 /* Cert badges: drop-shadow so they lift off the white background */
-body.light-mode .badge-clip {
+:host-context(.light-mode) .badge-clip {
   filter: drop-shadow(0 3px 10px rgba(0, 0, 0, 0.13));
 }
 

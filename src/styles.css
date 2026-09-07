@@ -29,6 +29,17 @@
 }
 
 /* ========================================
+   SHARED KEYFRAMES
+   Used by both the App nav shell and the Home component,
+   which live in separate stylesheets — defined once here so
+   they can't drift out of sync with each other.
+   ======================================== */
+@keyframes hero-enter {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ========================================
    GLOBAL RESET & FOUNDATION
    ======================================== */
 *, *::before, *::after {

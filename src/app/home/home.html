@@ -1,0 +1,158 @@
+<div class="container">
+  <header class="centered-header">
+    <h1>MATTHEW HOWARD</h1>
+    <p class="subtitle">M.S. Cybersecurity &amp; Information Assurance</p>
+    <p class="hero-positioning">Cybersecurity&nbsp;&nbsp;|&nbsp;&nbsp;GRC &amp; RMF&nbsp;&nbsp;|&nbsp;&nbsp;Security Architecture&nbsp;&nbsp;|&nbsp;&nbsp;U.S. Air Force Veteran</p>
+    <div class="cert-badges">
+      <div class="badge-clip"><div data-iframe-width="150" data-iframe-height="270" data-share-badge-id="758aec6e-c4d6-4411-ab36-99a3fec65c28" data-share-badge-host="https://www.credly.com"></div></div>
+      <div class="badge-clip"><div data-iframe-width="150" data-iframe-height="270" data-share-badge-id="3a4771ad-d6f1-4e38-a127-d0483c44cc4c" data-share-badge-host="https://www.credly.com"></div></div>
+      <div class="badge-clip"><div data-iframe-width="150" data-iframe-height="270" data-share-badge-id="e74e35af-29c9-4e55-9b0d-634cc0df1e99" data-share-badge-host="https://www.credly.com"></div></div>
+      <div class="badge-clip"><div data-iframe-width="150" data-iframe-height="270" data-share-badge-id="26b4730b-4c96-4f45-82fe-64a738a04e28" data-share-badge-host="https://www.credly.com"></div></div>
+    </div>
+  </header>
+</div>
+
+<div class="projects-band">
+  <div class="about-bridge">
+    <section class="about-section" [class.is-expanded]="aboutExpanded()">
+      <p class="about-title">Cybersecurity Professional&nbsp;&nbsp;|&nbsp;&nbsp;GRC &amp; RMF&nbsp;&nbsp;|&nbsp;&nbsp;Security Architecture&nbsp;&nbsp;|&nbsp;&nbsp;U.S. Air Force Veteran</p>
+      <p class="about-bio-lead">Retired U.S. Air Force information technology and knowledge-management professional with 21 years of experience supporting secure, regulated environments and a completed M.S. in Cybersecurity &amp; Information Assurance. Graduate work applies current cybersecurity frameworks and technologies across GRC, penetration testing, cloud security, incident response, identity and access management, zero-trust architecture, and security operations.</p>
+
+      <button class="about-toggle" (click)="toggleAbout()" [attr.aria-label]="aboutExpanded() ? 'Collapse bio' : 'Expand bio'">
+        <svg class="toggle-chevron" [class.is-expanded]="aboutExpanded()" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+      </button>
+
+      <div class="about-bio-wrapper" [class.is-expanded]="aboutExpanded()">
+        <div class="about-bio-inner">
+          <p>Professional experience includes information-security responsibilities, COMSEC, inspection preparation, POA&amp;M creation and management, security documentation, SOP development, and support to protected environments. Graduate projects extend that foundation through applied security analysis, architecture design, risk assessment, and technical documentation.</p>
+          <p>Recognized with multiple Dean's Excellence Awards. M.S. in Cybersecurity &amp; Information Assurance, Western Governors University, completed May 2026. Active CompTIA Security+, CySA+, and PenTest+ certifications and (ISC)&sup2; Certified in Cybersecurity. Previously held TS/SCI.</p>
+        </div>
+      </div>
+
+      <div class="about-stats">
+        <div class="stat-item"><span class="stat-number">10</span><span class="stat-label">Projects</span></div>
+        <div class="stat-divider"></div>
+        <div class="stat-item"><span class="stat-number">4</span><span class="stat-label">Certifications</span></div>
+        <div class="stat-divider"></div>
+        <div class="stat-item"><span class="stat-number">MS</span><span class="stat-label">Degree</span></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="projects-inner">
+    <section class="search-section">
+      <div class="search-box">
+        <input type="text" placeholder="Search projects, skills, frameworks..." [ngModel]="searchTerm()" (ngModelChange)="onSearch($event)">
+      </div>
+      @if (isSearchActive()) {
+        <p class="result-count">Showing <strong>{{ filteredProjects().length }}</strong> of <strong>{{ totalProjects() }}</strong> projects</p>
+      }
+    </section>
+
+    <div class="section-label">
+      <span class="section-label-text">// PROJECTS</span>
+      <span class="section-label-sub">Select a project to expand its case study</span>
+    </div>
+
+    <main class="project-grid prioritized-grid" [class.is-filtering]="isFiltering()" [class.search-active]="isSearchActive()">
+      @for (project of filteredProjects(); track project.title) {
+        <article class="project-tile expandable-project"
+          [class.is-expanded]="isExpanded(project.title)"
+          [class.capstone-project]="project.title === 'Cybersecurity Graduate Capstone'"
+          [class.management-project]="project.title === 'Cybersecurity Management'"
+          [class.architecture-project]="project.title === 'Cybersecurity Architecture & Engineering'"
+          [class.grc-project]="project.title === 'Governance, Risk, & Compliance'"
+          [class.operations-project]="project.title === 'Security Operations'"
+          [class.pentest-project]="project.title === 'Penetration Testing'"
+          [class.cloud-project]="project.title === 'Cloud Security'"
+          [class.network-project]="project.title === 'Secure Network Design'"
+          [class.software-project]="project.title === 'Secure Software Design'"
+          [class.foundations-project]="project.title === 'Security Foundations'"
+          [style.--project-color]="project.color">
+          <div class="tile-accent-bar" [style.background]="project.color"></div>
+
+          <button class="project-summary" type="button" (click)="toggleProject(project.title)" [attr.aria-expanded]="isExpanded(project.title)">
+            <h3>{{ project.title }}</h3>
+            <p class="role-preview" [style.color]="project.color">{{ project.role }}</p>
+            <div class="tag-list">
+              @for (tag of project.tags; track tag) {
+                <span class="tag">{{ tag }}</span>
+              }
+            </div>
+            <span class="view-label">
+              {{ isExpanded(project.title) ? 'Close Case Study' : 'View Case Study' }}
+              <svg class="project-chevron" [class.is-expanded]="isExpanded(project.title)" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </span>
+          </button>
+
+          <div class="project-detail-wrapper" [class.is-expanded]="isExpanded(project.title)">
+            <div class="project-detail-inner">
+              <div class="academic-project-note"><strong>Academic project:</strong> {{ project.academicNote }}</div>
+
+              <section class="case-section">
+                <h4>Context</h4>
+                <p>{{ project.context }}</p>
+              </section>
+
+              <section class="case-section">
+                <h4>Approach</h4>
+                <ul>
+                  @for (item of project.approach; track item) {
+                    <li>{{ item }}</li>
+                  }
+                </ul>
+              </section>
+
+              <section class="case-section">
+                <h4>Frameworks &amp; Technologies</h4>
+                <div class="framework-list">
+                  @for (framework of project.frameworks; track framework) {
+                    <span class="framework-pill">{{ framework }}</span>
+                  }
+                </div>
+              </section>
+
+              <section class="case-section">
+                <h4>Key Deliverables</h4>
+                <div class="deliverable-grid">
+                  @for (deliverable of project.deliverables; track deliverable) {
+                    <div class="deliverable-card">{{ deliverable }}</div>
+                  }
+                </div>
+              </section>
+
+              <section class="case-section demonstrates-section">
+                <h4>What This Demonstrates</h4>
+                <p>{{ project.demonstrates }}</p>
+              </section>
+            </div>
+          </div>
+        </article>
+      }
+
+      @if (filteredProjects().length === 0) {
+        <div class="no-results">
+          <span class="no-results-icon">⌀</span>
+          <p>No projects match "<strong>{{ searchTerm() }}</strong>"</p>
+        </div>
+      }
+    </main>
+  </div>
+</div>
+
+<div class="container">
+  <footer class="site-footer">
+    <div class="footer-name">Matthew Howard</div>
+    <div class="footer-title">M.S. Cybersecurity &amp; Information Assurance</div>
+    <div class="footer-links">
+      <a href="https://github.com/mhoward14" target="_blank" rel="noopener" aria-label="GitHub">GitHub</a>
+      <a href="https://www.linkedin.com/in/mhowardcybersecurity" target="_blank" rel="noopener" aria-label="LinkedIn">LinkedIn</a>
+      <a href="mailto:mhoward14@icloud.com" aria-label="Email">Email</a>
+    </div>
+    <div class="copyright">Cybersecurity Portfolio</div>
+  </footer>
+</div>

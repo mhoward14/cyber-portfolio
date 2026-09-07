@@ -101,6 +101,13 @@
   box-shadow: 0 8px 20px -4px rgba(0, 188, 212, 0.45);
 }
 
+/* RMF Control Tracker pill — dedicated violet accent, same pattern */
+.rmf-nav-btn:hover {
+  background: #a855f7;
+  border-color: #a855f7;
+  box-shadow: 0 8px 20px -4px rgba(168, 85, 247, 0.45);
+}
+
 .github-btn {
   background-color: var(--color-surface);
   color: white !important;

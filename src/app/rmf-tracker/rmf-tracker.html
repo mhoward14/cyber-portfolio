@@ -1,0 +1,131 @@
+<div class="container rmf-page">
+  <a routerLink="/" class="back-link">
+    <svg class="back-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="15 18 9 12 15 6"></polyline>
+    </svg>
+    Back to Portfolio
+  </a>
+
+  <header class="rmf-header">
+    <h1 class="rmf-title">NIST 800-53 / RMF Control Tracker</h1>
+    <p class="rmf-intro">Select a FIPS 199 impact level to pull its applicable control baseline, then track implementation status and notes per control — the same workflow behind an SSP or a POA&amp;M, minus the paperwork.</p>
+  </header>
+
+  <div class="tier-picker">
+    @for (t of tiers; track t.key) {
+      <button type="button" class="tier-card" [class.active]="tier() === t.key" [attr.data-tier]="t.key" (click)="selectTier(t.key)">
+        <span class="tier-label">{{ t.label }}</span>
+        <p class="tier-name">{{ t.name }}</p>
+        <p class="tier-desc">{{ t.desc }}</p>
+      </button>
+    }
+  </div>
+
+  @if (tier() && sample()) {
+    <p class="sample-note">Sample assessment data shown for demo purposes — every status and note below is editable.</p>
+  }
+
+  @if (tier()) {
+    <div class="summary">
+      <div class="ring-wrap">
+        <svg width="84" height="84" viewBox="0 0 84 84">
+          <circle cx="42" cy="42" r="36" fill="none" stroke="var(--color-border)" stroke-width="8"/>
+          <circle cx="42" cy="42" r="36" fill="none" stroke="var(--color-success)" stroke-width="8" stroke-linecap="round"
+                  stroke-dasharray="226" [attr.stroke-dashoffset]="summary().ringOffset" style="transform: rotate(-90deg); transform-origin: 42px 42px;"/>
+        </svg>
+        <div class="ring-pct"><div>{{ summary().pct }}%</div><span>DONE</span></div>
+      </div>
+      <div class="stat-row">
+        <div class="stat-chip total"><b>{{ summary().total }}</b>&nbsp;controls in baseline</div>
+        <div class="stat-chip impl"><b>{{ summary().counts.implemented }}</b>&nbsp;implemented</div>
+        <div class="stat-chip partial"><b>{{ summary().counts.partial }}</b>&nbsp;partial</div>
+        <div class="stat-chip none"><b>{{ summary().counts['not-implemented'] }}</b>&nbsp;not implemented</div>
+        <div class="stat-chip na"><b>{{ summary().counts.na }}</b>&nbsp;N/A</div>
+      </div>
+    </div>
+
+    <div class="filters">
+      <div class="search-box rmf-search">
+        <input type="text" placeholder="Search control ID or title..." [ngModel]="query()" (ngModelChange)="query.set($event)">
+      </div>
+      <select [ngModel]="familyFilter()" (ngModelChange)="familyFilter.set($event)">
+        <option value="all">All Families</option>
+        @for (f of families(); track f) {
+          <option [value]="f">{{ f }}</option>
+        }
+      </select>
+      <select [ngModel]="statusFilter()" (ngModelChange)="statusFilter.set($event)">
+        <option value="all">All Statuses</option>
+        @for (s of statusKeys; track s) {
+          <option [value]="s">{{ statusLabel[s] }}</option>
+        }
+      </select>
+      <button class="poam-btn" type="button" (click)="togglePoam()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+        Generate POA&amp;M
+      </button>
+    </div>
+
+    @if (poamOpen()) {
+      <div class="poam-panel">
+        <h2>Draft POA&amp;M — open items</h2>
+        <p class="hint">Every control marked Partial or Not Implemented, with its note, in a format you can paste into a real POA&amp;M tracker.</p>
+        <textarea readonly [value]="poamText()"></textarea>
+        <button class="copy-btn" type="button" (click)="copyPoam()">Copy to clipboard</button>
+      </div>
+    }
+
+    @if (groupedByFamily().length === 0) {
+      <div class="empty-state">No controls match the current filters.</div>
+    }
+
+    @for (group of groupedByFamily(); track group.family) {
+      <div class="family-group">
+        <div class="family-head">
+          <span class="fam-name">{{ group.family }}</span>
+          <span class="fam-count">{{ group.controls.length }} control{{ group.controls.length === 1 ? '' : 's' }}</span>
+        </div>
+
+        @for (c of group.controls; track c.id) {
+          <div class="control-row" [class.expanded]="expandedId() === c.id">
+            <div class="control-main" (click)="toggleExpand(c.id)">
+              <div class="control-id">{{ c.id }}</div>
+              <div class="control-text">
+                <p class="control-title">{{ c.title }}</p>
+                <p class="control-discussion">{{ c.discussion }}</p>
+              </div>
+              <div class="control-meta">
+                <select class="status-select" [attr.data-status]="statusOf(c.id)" [ngModel]="statusOf(c.id)" (ngModelChange)="setStatus(c.id, $event)" (click)="$event.stopPropagation()">
+                  @for (s of statusKeys; track s) {
+                    <option [value]="s">{{ statusLabel[s] }}</option>
+                  }
+                </select>
+                <svg class="expand-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+            </div>
+            <div class="control-detail">
+              <div class="control-detail-inner">
+                <label>Implementation Notes</label>
+                <textarea
+                  placeholder="How is this control implemented, or why is it N/A?"
+                  [ngModel]="notes()[c.id] || ''"
+                  (ngModelChange)="setNote(c.id, $event)"
+                  (click)="$event.stopPropagation()"
+                ></textarea>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  } @else {
+    <div class="empty-state">Pick an impact level above to load its control baseline.</div>
+  }
+
+  <footer class="rmf-disclaimer">
+    This baseline is a curated subset (~140 base controls across all 20 NIST SP 800-53 Rev 5 families, no control enhancements) for demonstration
+    purposes, not the complete official tailoring. For the authoritative Low/Moderate/High baselines, see
+    <a href="https://csrc.nist.gov/pubs/sp/800/53/b/upd1/final" target="_blank" rel="noopener">NIST SP 800-53B</a>.
+    Status and notes are stored only in your browser (localStorage) — nothing is sent anywhere.
+  </footer>
+</div>

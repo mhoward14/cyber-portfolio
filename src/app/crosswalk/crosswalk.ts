@@ -2,7 +2,7 @@ import { Component, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { CROSSWALK_DATA, FRAMEWORK_LABELS, FrameworkKey } from './crosswalk-data';
+import { CROSSWALK_DATA, CrosswalkEntry, FRAMEWORK_LABELS, FRAMEWORK_SOURCE_NAMES, FrameworkKey } from './crosswalk-data';
 
 @Component({
   selector: 'app-crosswalk',
@@ -14,11 +14,15 @@ import { CROSSWALK_DATA, FRAMEWORK_LABELS, FrameworkKey } from './crosswalk-data
 export class Crosswalk {
   readonly data = CROSSWALK_DATA;
   readonly frameworkLabels = FRAMEWORK_LABELS;
+  readonly frameworkSourceNames = FRAMEWORK_SOURCE_NAMES;
   readonly frameworkKeys: FrameworkKey[] = ['nist', 'cis', 'iso'];
 
   query = signal('');
   family = signal('all');
   anchor = signal<FrameworkKey>('nist');
+
+  selectedEntry = signal<CrosswalkEntry | null>(null);
+  selectedFramework = signal<FrameworkKey>('nist');
 
   families = computed(() => Array.from(new Set(this.data.map((d) => d.family))).sort());
 
@@ -55,5 +59,19 @@ export class Crosswalk {
 
   strengthLabel(strength: 'strong' | 'partial'): string {
     return strength === 'strong' ? 'Strong Match' : 'Partial Match';
+  }
+
+  openDetail(entry: CrosswalkEntry, framework: FrameworkKey) {
+    this.selectedEntry.set(entry);
+    this.selectedFramework.set(framework);
+  }
+
+  closeDetail() {
+    this.selectedEntry.set(null);
+  }
+
+  detailOrderedKeys(): FrameworkKey[] {
+    const primary = this.selectedFramework();
+    return [primary, ...this.frameworkKeys.filter((k) => k !== primary)];
   }
 }

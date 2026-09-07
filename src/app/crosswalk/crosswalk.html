@@ -1,14 +1,20 @@
 <div class="container crosswalk-page">
-  <a routerLink="/" class="back-link">&larr; Back to Portfolio</a>
+  <a routerLink="/" class="back-link">
+    <svg class="back-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="15 18 9 12 15 6"></polyline>
+    </svg>
+    Back to Portfolio
+  </a>
 
-  <h1 class="crosswalk-title">Security Framework Crosswalk</h1>
-
-  <div class="crosswalk-intro">
-    <p>A GRC tool for translating between the security frameworks organizations actually get audited
-      against. Pick a control in NIST 800-53, CIS Controls, or ISO 27001 and see how it lines up with the
-      other two &mdash; useful for building an SSP, scoping a dual-framework audit, or just learning how
-      the frameworks relate.</p>
-  </div>
+  <header class="crosswalk-header">
+    <h1 class="crosswalk-title">Security Framework Crosswalk</h1>
+    <div class="crosswalk-intro">
+      <p>A GRC tool for translating between the security frameworks organizations actually get audited
+        against. Pick a control in NIST 800-53, CIS Controls, or ISO 27001 and see how it lines up with the
+        other two &mdash; useful for building an SSP, scoping a dual-framework audit, or just learning how
+        the frameworks relate.</p>
+    </div>
+  </header>
 
   <div class="crosswalk-disclaimer">
     This is a curated set of ~20 high-traffic control topics for demonstration purposes, not an exhaustive
@@ -18,11 +24,11 @@
     or the <a href="https://securecontrolsframework.com/" target="_blank" rel="noopener">Secure Controls Framework (SCF)</a>.
   </div>
 
-  <div class="crosswalk-controls">
-    <div class="crosswalk-search">
+  <section class="crosswalk-controls">
+    <div class="crosswalk-search search-box">
       <input
         type="text"
-        placeholder="Search by control ID, title, or keyword&hellip;"
+        placeholder="Search by control ID, title, or keyword..."
         [ngModel]="query()"
         (ngModelChange)="query.set($event)"
       />
@@ -44,9 +50,12 @@
         </button>
       }
     </div>
-  </div>
+  </section>
 
-  <p class="crosswalk-count">{{ filtered().length }} of {{ data.length }} mapped topics shown</p>
+  <div class="section-label">
+    <span class="section-label-text crosswalk-accent-text">// MAPPED CONTROLS</span>
+    <span class="section-label-sub">{{ filtered().length }} of {{ data.length }} topics shown</span>
+  </div>
 
   <div class="crosswalk-list">
     @for (entry of filtered(); track entry.id) {
@@ -63,18 +72,58 @@
 
         <div class="crosswalk-grid">
           @for (key of orderedKeys(); track key) {
-            <div class="crosswalk-cell" [class.anchor]="key === anchor()">
+            <button type="button" class="crosswalk-cell" [class.anchor]="key === anchor()" (click)="openDetail(entry, key)">
               <div class="crosswalk-cell-framework">{{ frameworkLabels[key] }}</div>
               <div class="crosswalk-cell-id">{{ entry.frameworks[key].id }}</div>
               <div class="crosswalk-cell-title">{{ entry.frameworks[key].title }}</div>
-            </div>
+              <span class="crosswalk-cell-expand">View control &rarr;</span>
+            </button>
           }
         </div>
       </div>
     }
 
     @if (filtered().length === 0) {
-      <div class="crosswalk-empty">No matching controls. Try a different search term or family.</div>
+      <div class="crosswalk-empty">
+        <span class="no-results-icon">&oslash;</span>
+        <p>No controls match "<strong>{{ query() }}</strong>"</p>
+      </div>
     }
   </div>
 </div>
+
+@if (selectedEntry(); as entry) {
+  <div class="modal-overlay" (click)="closeDetail()">
+    <div class="modal-window crosswalk-modal" (click)="$event.stopPropagation()">
+      <div class="modal-accent-bar"></div>
+      <div class="modal-header">
+        <span class="crosswalk-family-tag">{{ entry.family }}</span>
+        <span class="crosswalk-strength" [class.strong]="entry.strength === 'strong'" [class.partial]="entry.strength === 'partial'">
+          {{ strengthLabel(entry.strength) }}
+        </span>
+        <button class="close-btn" type="button" (click)="closeDetail()" aria-label="Close">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        @if (entry.note) {
+          <p class="crosswalk-modal-note">{{ entry.note }}</p>
+        }
+
+        @for (key of detailOrderedKeys(); track key) {
+          <section class="crosswalk-detail" [class.is-primary]="key === selectedFramework()">
+            <div class="crosswalk-detail-head">
+              <span class="crosswalk-detail-framework">{{ frameworkLabels[key] }}</span>
+              <span class="crosswalk-detail-id">{{ entry.frameworks[key].id }}</span>
+            </div>
+            <h3 class="crosswalk-detail-title">{{ entry.frameworks[key].title }}</h3>
+            <p class="crosswalk-detail-summary">{{ entry.frameworks[key].summary }}</p>
+            <div class="crosswalk-detail-footer">
+              <span>Source: {{ frameworkSourceNames[key] }}</span>
+              <a [href]="entry.frameworks[key].sourceUrl" target="_blank" rel="noopener">View official text &rarr;</a>
+            </div>
+          </section>
+        }
+      </div>
+    </div>
+  </div>
+}

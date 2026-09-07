@@ -3,7 +3,7 @@
    Shares the site's terminal-UI building blocks (`.search-box`,
    `.section-label`, `.no-results`, the `hero-enter`/`tile-enter`
    keyframes — all defined in the global src/styles.css) and
-   retints them teal (#00bcd4) as this feature's own dedicated
+   retints them magenta (#ec4899) as this feature's own dedicated
    accent, the same way each project tile on the homepage gets
    its own color. Everything else (surfaces, borders, shadows,
    type scale) reuses the same tokens as home.css so the page
@@ -32,7 +32,7 @@
   animation: hero-enter 0.6s var(--ease-spring) both;
 }
 .back-link:hover {
-  color: #00bcd4;
+  color: #ec4899;
   gap: 0.55rem;
 }
 .back-chevron {
@@ -46,7 +46,7 @@
 }
 
 .crosswalk-title {
-  color: #00bcd4;
+  color: #ec4899;
   font-size: clamp(1.6rem, 4vw, 2.5rem);
   font-weight: 900;
   letter-spacing: 0.04em;
@@ -70,7 +70,7 @@
   margin: 0 auto 2rem;
   padding: 0.875rem 1.125rem;
   border: 1px solid var(--color-border);
-  border-left: 3px solid #00bcd4;
+  border-left: 3px solid #ec4899;
   border-radius: var(--radius-md);
   background-color: var(--color-surface);
   box-shadow: 0 2px 16px rgba(0, 0, 0, 0.35);
@@ -80,7 +80,7 @@
   animation: hero-enter 0.8s var(--ease-spring) 0.25s both;
 }
 .crosswalk-disclaimer a {
-  color: #00bcd4;
+  color: #ec4899;
 }
 
 .crosswalk-controls {
@@ -97,32 +97,32 @@
   box-shadow: 0 2px 16px rgba(0, 0, 0, 0.7);
   animation: hero-enter 0.8s var(--ease-spring) 0.35s both;
 }
-body.light-mode .crosswalk-controls {
+:host-context(.light-mode) .crosswalk-controls {
   background: #ffffff;
   box-shadow:
     0 1px 3px rgba(0, 0, 0, 0.04),
     0 6px 24px rgba(0, 0, 0, 0.09);
 }
 
-/* Retint the shared ">_" search box teal for this page only */
+/* Retint the shared ">_" search box magenta for this page only */
 .crosswalk-search {
   flex: 1 1 260px;
   max-width: none;
   margin: 0;
 }
 .crosswalk-search::before {
-  color: #00bcd4;
+  color: #ec4899;
 }
 .crosswalk-search input:focus {
-  border-color: #00bcd4;
+  border-color: #ec4899;
   box-shadow:
-    0 0 0 3px rgba(0, 188, 212, 0.12),
-    0 0 28px rgba(0, 188, 212, 0.08);
+    0 0 0 3px rgba(236, 72, 153, 0.12),
+    0 0 28px rgba(236, 72, 153, 0.08);
 }
-body.light-mode .crosswalk-search input:focus {
-  border-color: #00bcd4;
+:host-context(.light-mode) .crosswalk-search input:focus {
+  border-color: #ec4899;
   box-shadow:
-    0 0 0 3px rgba(0, 188, 212, 0.14),
+    0 0 0 3px rgba(236, 72, 153, 0.14),
     0 1px 3px rgba(0, 0, 0, 0.06);
 }
 
@@ -135,7 +135,7 @@ body.light-mode .crosswalk-search input:focus {
   font-family: var(--font-sans);
   font-size: 0.85rem;
 }
-body.light-mode .crosswalk-family select {
+:host-context(.light-mode) .crosswalk-family select {
   background-color: #ffffff;
   border-color: #d1d5db;
   color: #0f172a;
@@ -149,7 +149,7 @@ body.light-mode .crosswalk-family select {
   border-radius: var(--radius-md);
   padding: 0.25rem;
 }
-body.light-mode .crosswalk-anchor {
+:host-context(.light-mode) .crosswalk-anchor {
   background-color: #ffffff;
   border-color: #d1d5db;
 }
@@ -168,15 +168,15 @@ body.light-mode .crosswalk-anchor {
   transition: all 0.2s var(--ease-out);
 }
 .crosswalk-anchor button.active {
-  background-color: #00bcd4;
+  background-color: #ec4899;
   color: #ffffff;
 }
 
 /* "// MAPPED CONTROLS" label reuses the shared .section-label
-   styles; this modifier retints the accent text teal to match
+   styles; this modifier retints the accent text magenta to match
    the page instead of the site-wide green/blue. */
 .crosswalk-accent-text {
-  color: #00bcd4 !important;
+  color: #ec4899 !important;
 }
 
 .crosswalk-list {
@@ -201,7 +201,7 @@ body.light-mode .crosswalk-anchor {
 body:not(.light-mode) .crosswalk-row {
   box-shadow: 0 2px 16px rgba(0, 0, 0, 0.7);
 }
-body.light-mode .crosswalk-row {
+:host-context(.light-mode) .crosswalk-row {
   box-shadow:
     0 1px 2px rgba(0, 0, 0, 0.04),
     0 4px 16px rgba(0, 0, 0, 0.09);
@@ -223,7 +223,7 @@ body.light-mode .crosswalk-row {
   left: 0;
   right: 0;
   height: 3px;
-  background: #00bcd4;
+  background: #ec4899;
   opacity: 0.6;
   transition: opacity 0.3s var(--ease-out), height 0.25s var(--ease-out);
 }
@@ -233,18 +233,18 @@ body.light-mode .crosswalk-row {
 }
 
 .crosswalk-row:hover {
-  border-color: rgba(0, 188, 212, 0.5);
+  border-color: rgba(236, 72, 153, 0.5);
   transform: translateY(-4px);
   box-shadow:
     0 20px 48px -10px rgba(255, 255, 255, 0.06),
-    0 0 0 1px rgba(0, 188, 212, 0.22),
-    0 0 22px 4px rgba(0, 188, 212, 0.13);
+    0 0 0 1px rgba(236, 72, 153, 0.22),
+    0 0 22px 4px rgba(236, 72, 153, 0.13);
 }
-body.light-mode .crosswalk-row:hover {
+:host-context(.light-mode) .crosswalk-row:hover {
   box-shadow:
     0 24px 56px -10px rgba(0, 0, 0, 0.18),
-    0 0 0 1px rgba(0, 188, 212, 0.3),
-    0 0 28px 5px rgba(0, 188, 212, 0.14);
+    0 0 0 1px rgba(236, 72, 153, 0.3),
+    0 0 28px 5px rgba(236, 72, 153, 0.14);
 }
 
 .crosswalk-row-head {
@@ -269,9 +269,9 @@ body.light-mode .crosswalk-row:hover {
 }
 
 .crosswalk-family-tag {
-  color: #00bcd4;
-  background: rgba(0, 188, 212, 0.1);
-  border: 1px solid rgba(0, 188, 212, 0.25);
+  color: #ec4899;
+  background: rgba(236, 72, 153, 0.1);
+  border: 1px solid rgba(236, 72, 153, 0.25);
 }
 
 .crosswalk-strength.strong {
@@ -311,15 +311,15 @@ body.light-mode .crosswalk-row:hover {
   cursor: pointer;
   transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s, transform 0.2s var(--ease-spring);
 }
-body.light-mode .crosswalk-cell {
+:host-context(.light-mode) .crosswalk-cell {
   background-color: rgba(241, 245, 249, 0.8);
 }
 .crosswalk-cell.anchor {
-  border-color: #00bcd4;
-  box-shadow: 0 0 0 1px #00bcd4 inset;
+  border-color: #ec4899;
+  box-shadow: 0 0 0 1px #ec4899 inset;
 }
 .crosswalk-cell:hover {
-  border-color: rgba(0, 188, 212, 0.6);
+  border-color: rgba(236, 72, 153, 0.6);
   transform: translateY(-2px);
 }
 
@@ -351,7 +351,7 @@ body.light-mode .crosswalk-cell {
   display: inline-flex;
   align-items: center;
   margin-top: 0.6rem;
-  color: #00bcd4;
+  color: #ec4899;
   font-size: 0.68rem;
   font-weight: 700;
   letter-spacing: 0.04em;
@@ -385,7 +385,7 @@ body.light-mode .crosswalk-cell {
   padding: 1.5rem;
   animation: overlay-enter 0.25s var(--ease-out) both;
 }
-body.light-mode .modal-overlay {
+:host-context(.light-mode) .modal-overlay {
   background: rgba(15, 23, 42, 0.55);
 }
 
@@ -404,20 +404,20 @@ body.light-mode .modal-overlay {
   max-width: 640px;
   max-height: 85vh;
   border-radius: var(--radius-xl);
-  border: 1px solid rgba(0, 188, 212, 0.3);
+  border: 1px solid rgba(236, 72, 153, 0.3);
   position: relative;
   overflow-y: auto;
   animation: modal-enter 0.3s var(--ease-spring) both;
   box-shadow:
     0 48px 96px -24px rgba(0, 0, 0, 0.7),
-    0 0 0 1px rgba(0, 188, 212, 0.08),
-    0 0 64px -24px rgba(0, 188, 212, 0.2);
+    0 0 0 1px rgba(236, 72, 153, 0.08),
+    0 0 64px -24px rgba(236, 72, 153, 0.2);
 }
 
 .modal-accent-bar {
   height: 4px;
   width: 100%;
-  background: #00bcd4;
+  background: #ec4899;
   border-radius: var(--radius-xl) var(--radius-xl) 0 0;
 }
 
@@ -478,13 +478,13 @@ body.light-mode .modal-overlay {
   padding: 1.125rem 1.25rem;
   background: rgba(15, 23, 42, 0.35);
 }
-body.light-mode .crosswalk-detail {
+:host-context(.light-mode) .crosswalk-detail {
   background: rgba(241, 245, 249, 0.6);
 }
 .crosswalk-detail.is-primary {
-  border-color: #00bcd4;
-  background: rgba(0, 188, 212, 0.06);
-  box-shadow: 0 0 0 1px rgba(0, 188, 212, 0.15);
+  border-color: #ec4899;
+  background: rgba(236, 72, 153, 0.06);
+  box-shadow: 0 0 0 1px rgba(236, 72, 153, 0.15);
 }
 
 .crosswalk-detail-head {
@@ -501,7 +501,7 @@ body.light-mode .crosswalk-detail {
   color: var(--color-text-dim);
 }
 .crosswalk-detail.is-primary .crosswalk-detail-framework {
-  color: #00bcd4;
+  color: #ec4899;
 }
 .crosswalk-detail-id {
   font-family: var(--font-mono);
@@ -538,7 +538,7 @@ body.light-mode .crosswalk-detail {
   padding-top: 0.625rem;
 }
 .crosswalk-detail-footer a {
-  color: #00bcd4;
+  color: #ec4899;
   font-weight: 700;
   text-decoration: none;
 }

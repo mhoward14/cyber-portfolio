@@ -1,0 +1,129 @@
+<div class="container cs-page">
+  <a routerLink="/" class="back-link">
+    <svg class="back-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="15 18 9 12 15 6"></polyline>
+    </svg>
+    Back to Portfolio
+  </a>
+
+  <header class="cs-header">
+    <h1 class="cs-title">Cloud Security Configuration Builder</h1>
+    <div class="cs-intro">
+      <p>Configure a simple cloud architecture's security settings across Azure, AWS, and Google Cloud, and watch your
+        posture score respond live &mdash; each setting maps to a practice from that provider's CIS Foundations Benchmark.</p>
+    </div>
+  </header>
+
+  <div class="cs-disclaimer">
+    Original, illustrative resource configurations applying general practices from the
+    <a [href]="currentProvider().benchmarkUrl" target="_blank" rel="noopener">{{ currentProvider().benchmarkName }}</a>
+    &mdash; not an official CIS or provider assessment tool.
+  </div>
+
+  <div class="cs-provider-tabs">
+    @for (provider of providers; track provider.id) {
+      <button
+        type="button"
+        class="cs-provider-tab"
+        [class.is-active]="provider.id === selectedProviderId()"
+        (click)="selectProvider(provider.id)"
+      >
+        {{ provider.shortName }}
+      </button>
+    }
+  </div>
+
+  <div class="section-label">
+    <span class="section-label-text cs-accent-text">// YOUR ARCHITECTURE</span>
+    <span class="section-label-sub">{{ currentProvider().name }}</span>
+  </div>
+
+  <div class="cs-layout">
+    <div class="cs-resource-grid">
+      @for (resource of currentResources(); track resource.id) {
+        <button
+          type="button"
+          class="cs-resource-card"
+          [class.is-selected]="resource.id === selectedResourceId()"
+          [class.is-secure]="resource.isSecure"
+          [class.is-insecure]="!resource.isSecure"
+          (click)="selectResource(resource.id)"
+        >
+          <div class="cs-resource-card-head">
+            <span class="cs-resource-icon">
+              @switch (resource.category) {
+                @case ('storage') {
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="18" height="13" rx="2"></rect><path d="M7 7V5a2 2 0 012-2h6a2 2 0 012 2v2"></path></svg>
+                }
+                @case ('compute') {
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="3" width="16" height="18" rx="2"></rect><line x1="9" y1="8" x2="15" y2="8"></line><line x1="9" y1="12" x2="15" y2="12"></line></svg>
+                }
+                @case ('network') {
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="9" width="20" height="7" rx="2"></rect><line x1="6" y1="12.5" x2="6.01" y2="12.5"></line></svg>
+                }
+                @case ('identity') {
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="3.2"></circle><path d="M5.5 20c0-3.6 3-6 6.5-6s6.5 2.4 6.5 6"></path></svg>
+                }
+                @case ('secrets') {
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="10" width="14" height="10" rx="2"></rect><path d="M8 10V7a4 4 0 018 0v3"></path></svg>
+                }
+              }
+            </span>
+            <span class="cs-resource-name">{{ resource.name }}</span>
+            <span class="cs-status-dot"></span>
+          </div>
+          <div class="cs-resource-setting">
+            {{ resource.settingLabel }}: <strong>{{ resource.isSecure ? resource.secureValue : resource.insecureValue }}</strong>
+          </div>
+
+          @if (resource.id === selectedResourceId()) {
+            <div class="cs-resource-panel" (click)="$event.stopPropagation()">
+              <div class="cs-toggle-row">
+                <button
+                  type="button"
+                  class="cs-toggle-option"
+                  [class.is-chosen]="!resource.isSecure"
+                  (click)="setSecure(resource.id, false)"
+                >
+                  {{ resource.insecureValue }}
+                </button>
+                <button
+                  type="button"
+                  class="cs-toggle-option"
+                  [class.is-chosen]="resource.isSecure"
+                  (click)="setSecure(resource.id, true)"
+                >
+                  {{ resource.secureValue }}
+                </button>
+              </div>
+              <p class="cs-resource-explanation">{{ resource.explanation }}</p>
+            </div>
+          }
+        </button>
+      }
+    </div>
+
+    <aside class="cs-score-panel">
+      <div class="cs-score-card" [class]="'tier-' + ratingTier()">
+        <div class="cs-score-label">Posture Score</div>
+        <div class="cs-score-value">{{ score() }}<span>/100</span></div>
+        <div class="cs-score-rating">{{ ratingLabel() }}</div>
+      </div>
+
+      <div class="cs-findings-card">
+        <div class="cs-findings-label">// Findings ({{ findings().length }})</div>
+        @if (findings().length === 0) {
+          <p class="cs-findings-empty">No findings &mdash; every resource matches the secure setting. Try flipping one to see the score react.</p>
+        } @else {
+          <div class="cs-findings-list">
+            @for (finding of findings(); track finding.id) {
+              <button type="button" class="cs-finding-item" (click)="selectResource(finding.id)">
+                {{ finding.name }}: {{ finding.settingLabel.toLowerCase() }} is {{ finding.insecureValue.toLowerCase() }}
+              </button>
+            }
+          </div>
+        }
+      </div>
+    </aside>
+  </div>
+</div>

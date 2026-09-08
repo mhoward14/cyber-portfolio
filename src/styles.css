@@ -229,7 +229,7 @@ body.light-mode {
   --color-text-muted:   #374151;
   --color-text-dim:     #6b7280;
 
-  background-color: #ffffff;
+  background-color: var(--color-bg);
   color: #0f172a;
 }
 

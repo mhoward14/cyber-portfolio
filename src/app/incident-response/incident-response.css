@@ -3,10 +3,23 @@
    Shares the site's terminal-UI building blocks (`.section-label`,
    the `hero-enter`/`tile-enter` keyframes — defined in the global
    src/styles.css). Page chrome (title, disclaimer, section labels,
-   scenario-card glow, stepper "current" state) uses rose (#f43f5e)
-   as this tool's own dedicated identity color — distinct from the
-   site's blue, Crosswalk's indigo, RMF Tracker's violet, and Zero
-   Trust's cyan.
+   stepper "current" state, narrative/feedback accents, buttons) uses
+   rose (#f43f5e) as this tool's own dedicated identity color —
+   distinct from the site's blue, Crosswalk's indigo, RMF Tracker's
+   violet, and Zero Trust's cyan.
+
+   Each scenario CARD additionally gets its OWN color, applied via a
+   `.scenario-ransomware` / `.scenario-phishing` / `.scenario-insider-
+   threat` / `.scenario-ddos` class (set in the template) that defines
+   a local `--sc` custom property — used for that card's icon, hover
+   border/glow, and Start button — mirroring the `--fw`/`--pv` pattern
+   already used in Crosswalk/Zero Trust. Ransomware keeps the page's
+   own rose so the two intentionally coincide; the other three each
+   get a distinct hue, chosen clear of the grade colors below (so a
+   scenario's identity color is never confused with an Optimal/
+   Suboptimal/Poor badge) and clear of every other nav-pill color.
+   Once a scenario is started, the run itself stays in the page's
+   rose identity — only the selection cards are multi-color.
 
    Decision grading (option cards, feedback panel, debrief badges)
    keys off a `--grade` custom property set via `.grade-optimal` /
@@ -14,6 +27,11 @@
    success/amber/danger tokens, mirroring the `--fw`/`--pv`/`--resp`
    pattern already used in Crosswalk/Zero Trust. No new colors.
    ============================================================ */
+
+.scenario-ransomware     { --sc: #f43f5e; }
+.scenario-phishing       { --sc: #3b82f6; }
+.scenario-insider-threat { --sc: #8b5cf6; }
+.scenario-ddos           { --sc: #06b6d4; }
 
 .grade-optimal    { --grade: var(--color-success); }
 .grade-suboptimal { --grade: #f59e0b; }
@@ -116,15 +134,15 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 6px 24px rgba(0, 0, 0, 0.09);
 }
 .ir-scenario-card:hover {
-  border-color: #f43f5e;
+  border-color: var(--sc);
   transform: translateY(-3px);
   box-shadow:
-    0 0 0 1px rgba(244, 63, 94, 0.25),
-    0 14px 34px -10px rgba(244, 63, 94, 0.35);
+    0 0 0 1px color-mix(in srgb, var(--sc) 25%, transparent),
+    0 14px 34px -10px color-mix(in srgb, var(--sc) 35%, transparent);
 }
 
 .ir-scenario-icon {
-  color: #f43f5e;
+  color: var(--sc);
   margin-bottom: 0.875rem;
 }
 
@@ -143,9 +161,9 @@
 }
 
 .ir-start-btn {
-  border: 1px solid #f43f5e;
+  border: 1px solid var(--sc);
   background: transparent;
-  color: #f43f5e;
+  color: var(--sc);
   font-family: var(--font-mono);
   font-size: 0.75rem;
   font-weight: 700;
@@ -156,7 +174,7 @@
   transition: all 0.2s var(--ease-out);
 }
 .ir-start-btn:hover {
-  background: #f43f5e;
+  background: var(--sc);
   color: #fff1f2;
 }
 

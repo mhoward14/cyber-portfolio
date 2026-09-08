@@ -1,0 +1,535 @@
+/* ============================================================
+   INCIDENT-RESPONSE.CSS — INCIDENT RESPONSE PLAYBOOK SIMULATOR
+   Shares the site's terminal-UI building blocks (`.section-label`,
+   the `hero-enter`/`tile-enter` keyframes — defined in the global
+   src/styles.css). Page chrome (title, disclaimer, section labels,
+   scenario-card glow, stepper "current" state) uses rose (#f43f5e)
+   as this tool's own dedicated identity color — distinct from the
+   site's blue, Crosswalk's indigo, RMF Tracker's violet, and Zero
+   Trust's cyan.
+
+   Decision grading (option cards, feedback panel, debrief badges)
+   keys off a `--grade` custom property set via `.grade-optimal` /
+   `.grade-suboptimal` / `.grade-poor` — reusing the site's existing
+   success/amber/danger tokens, mirroring the `--fw`/`--pv`/`--resp`
+   pattern already used in Crosswalk/Zero Trust. No new colors.
+   ============================================================ */
+
+.grade-optimal    { --grade: var(--color-success); }
+.grade-suboptimal { --grade: #f59e0b; }
+.grade-poor       { --grade: var(--color-danger); }
+
+.ir-page {
+  padding-top: 5rem;
+  padding-bottom: 3rem;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-bottom: 2rem;
+  color: var(--color-text-dim);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: color 0.2s, gap 0.25s var(--ease-spring);
+  animation: hero-enter 0.6s var(--ease-spring) both;
+}
+.back-link:hover {
+  color: #f43f5e;
+  gap: 0.55rem;
+}
+.back-chevron {
+  width: 14px;
+  height: 14px;
+}
+
+.ir-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.ir-title {
+  color: #f43f5e;
+  font-size: clamp(1.6rem, 4vw, 2.5rem);
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  margin: 0 0 0.75rem;
+  animation: hero-enter 0.8s var(--ease-spring) 0.05s both;
+}
+
+.ir-intro {
+  max-width: 720px;
+  margin: 0 auto;
+  animation: hero-enter 0.8s var(--ease-spring) 0.15s both;
+}
+.ir-intro p {
+  color: var(--color-text-muted);
+  line-height: 1.75;
+  font-size: 0.95rem;
+}
+
+.ir-disclaimer {
+  max-width: 720px;
+  margin: 0 auto 2rem;
+  padding: 0.875rem 1.125rem;
+  border: 1px solid var(--color-border);
+  border-left: 3px solid #f43f5e;
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface);
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.35);
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  animation: hero-enter 0.8s var(--ease-spring) 0.25s both;
+}
+.ir-disclaimer a {
+  color: #f43f5e;
+}
+
+.ir-accent-text {
+  color: #f43f5e !important;
+}
+
+/* ============================================================
+   SCENARIO SELECTION
+   ============================================================ */
+
+.ir-scenario-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  animation: tile-enter 0.5s var(--ease-spring) both;
+}
+
+.ir-scenario-card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  transition: border-color 0.2s, box-shadow 0.25s, transform 0.25s var(--ease-spring);
+}
+:host-context(.light-mode) .ir-scenario-card {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 6px 24px rgba(0, 0, 0, 0.09);
+}
+.ir-scenario-card:hover {
+  border-color: #f43f5e;
+  transform: translateY(-3px);
+  box-shadow:
+    0 0 0 1px rgba(244, 63, 94, 0.25),
+    0 14px 34px -10px rgba(244, 63, 94, 0.35);
+}
+
+.ir-scenario-icon {
+  color: #f43f5e;
+  margin-bottom: 0.875rem;
+}
+
+.ir-scenario-name {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--color-text);
+  margin-bottom: 0.4rem;
+}
+
+.ir-scenario-teaser {
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
+  line-height: 1.55;
+  margin: 0 0 1.1rem;
+}
+
+.ir-start-btn {
+  border: 1px solid #f43f5e;
+  background: transparent;
+  color: #f43f5e;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  padding: 0.6rem 1.25rem;
+  border-radius: 2rem;
+  cursor: pointer;
+  transition: all 0.2s var(--ease-out);
+}
+.ir-start-btn:hover {
+  background: #f43f5e;
+  color: #fff1f2;
+}
+
+/* ============================================================
+   RUN HEADER + PHASE STEPPER
+   ============================================================ */
+
+.ir-scenario-tag {
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--color-text-dim);
+  margin-bottom: 0.4rem;
+}
+
+.ir-run-title {
+  text-align: center;
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--color-text);
+  margin: 0 0 2rem;
+}
+
+.ir-stepper {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+  animation: hero-enter 0.8s var(--ease-spring) 0.15s both;
+}
+
+.ir-step {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.ir-step-connector {
+  flex: 0 0 32px;
+  height: 1px;
+  background: var(--color-border);
+  margin-top: 15px;
+}
+
+.ir-step-circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(30, 41, 59, 0.5);
+  border: 1.5px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-dim);
+  font-weight: 700;
+  font-size: 0.75rem;
+  flex-shrink: 0;
+}
+
+.ir-step-label {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: var(--color-text-dim);
+  text-align: center;
+  line-height: 1.35;
+}
+
+.ir-step-done .ir-step-circle {
+  background: rgba(16, 185, 129, 0.16);
+  border-color: var(--color-success);
+  color: var(--color-success);
+}
+.ir-step-done .ir-step-label {
+  color: var(--color-success);
+}
+
+.ir-step-current .ir-step-circle {
+  width: 36px;
+  height: 36px;
+  background: #f43f5e;
+  border-color: #f43f5e;
+  color: #fff1f2;
+  box-shadow: 0 0 0 5px rgba(244, 63, 94, 0.16);
+}
+.ir-step-current .ir-step-label {
+  color: #f43f5e;
+  font-weight: 800;
+}
+
+/* ============================================================
+   NARRATIVE + DECISION OPTIONS
+   ============================================================ */
+
+.ir-narrative {
+  border: 1px solid var(--color-border);
+  border-left: 3px solid #f43f5e;
+  border-radius: var(--radius-lg);
+  background-color: var(--color-surface);
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.35);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.5rem;
+}
+.ir-narrative p {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: var(--color-text);
+}
+
+.ir-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.ir-option {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface);
+  padding: 1rem 1.25rem;
+  cursor: pointer;
+  transition: border-color 0.2s, transform 0.15s var(--ease-out);
+}
+button.ir-option:hover {
+  border-color: color-mix(in srgb, #f43f5e 50%, var(--color-border));
+  transform: translateY(-1px);
+}
+
+.ir-option-id {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--color-text-dim);
+  flex-shrink: 0;
+}
+
+.ir-option-text {
+  font-size: 0.88rem;
+  color: var(--color-text);
+  line-height: 1.5;
+}
+
+.ir-options-dimmed {
+  opacity: 0.4;
+  margin-top: 0.625rem;
+  margin-bottom: 1.25rem;
+}
+.ir-options-dimmed .ir-option {
+  cursor: default;
+  padding: 0.75rem 1.25rem;
+}
+
+.ir-option-picked {
+  border: 1.5px solid var(--grade);
+  background: color-mix(in srgb, var(--grade) 10%, transparent);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--grade) 20%, transparent),
+    0 8px 24px -8px color-mix(in srgb, var(--grade) 35%, transparent);
+  margin-bottom: 0.625rem;
+}
+.ir-option-picked .ir-option-text {
+  font-weight: 600;
+}
+
+.ir-option-check {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--grade);
+  color: var(--color-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   FEEDBACK PANEL
+   ============================================================ */
+
+.ir-feedback {
+  border: 1px solid color-mix(in srgb, var(--grade) 35%, transparent);
+  border-left: 3px solid var(--grade);
+  border-radius: var(--radius-lg);
+  background: color-mix(in srgb, var(--grade) 8%, transparent);
+  padding: 1.125rem 1.375rem;
+  margin-bottom: 1.75rem;
+}
+.ir-feedback-label {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--grade);
+  margin-bottom: 0.5rem;
+}
+.ir-feedback p {
+  margin: 0;
+  font-size: 0.88rem;
+  line-height: 1.7;
+  color: var(--color-text-muted);
+}
+
+.ir-continue-row {
+  text-align: right;
+}
+
+.ir-continue-btn {
+  border: none;
+  background: #f43f5e;
+  color: #fff1f2;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  padding: 0.85rem 1.5rem;
+  border-radius: 2rem;
+  cursor: pointer;
+  transition: all 0.2s var(--ease-out);
+}
+.ir-continue-btn:hover {
+  background: #fb7185;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px -6px rgba(244, 63, 94, 0.5);
+}
+
+.ir-secondary-btn {
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  padding: 0.85rem 1.5rem;
+  border-radius: 2rem;
+  cursor: pointer;
+  transition: all 0.2s var(--ease-out);
+}
+.ir-secondary-btn:hover {
+  border-color: #f43f5e;
+  color: #f43f5e;
+}
+
+/* ============================================================
+   DEBRIEF
+   ============================================================ */
+
+.ir-rating-card {
+  text-align: center;
+  border: 1px solid color-mix(in srgb, var(--grade) 35%, transparent);
+  border-radius: var(--radius-xl);
+  background: color-mix(in srgb, var(--grade) 8%, transparent);
+  box-shadow: 0 8px 28px -10px color-mix(in srgb, var(--grade) 35%, transparent);
+  padding: 1.75rem;
+  margin-bottom: 2rem;
+  animation: tile-enter 0.5s var(--ease-spring) both;
+}
+.ir-rating-label {
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: var(--grade);
+  margin-bottom: 0.4rem;
+}
+.ir-rating-sub {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.ir-recap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  margin-bottom: 2.25rem;
+}
+.ir-recap-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface);
+  padding: 1rem 1.25rem;
+}
+.ir-recap-phase {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-text-dim);
+  margin-bottom: 0.25rem;
+}
+.ir-recap-choice {
+  font-size: 0.88rem;
+  color: var(--color-text);
+}
+
+.ir-grade-badge {
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.3rem 0.7rem;
+  border-radius: 2rem;
+  color: var(--grade);
+  background: color-mix(in srgb, var(--grade) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--grade) 30%, transparent);
+}
+
+.ir-lessons {
+  margin-bottom: 2rem;
+}
+.ir-lesson-card {
+  border: 1px solid var(--color-border);
+  border-left: 3px solid #f43f5e;
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface);
+  padding: 0.9rem 1.125rem;
+  margin-top: 0.625rem;
+}
+.ir-lesson-card p {
+  margin: 0;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--color-text-muted);
+}
+
+.ir-debrief-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+@media (max-width: 768px) {
+  .ir-scenario-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ir-step-label {
+    font-size: 0.56rem;
+  }
+  .ir-step-connector {
+    flex: 0 0 16px;
+  }
+
+  .ir-continue-row {
+    text-align: center;
+  }
+  .ir-continue-btn {
+    width: 100%;
+  }
+
+  .ir-debrief-actions {
+    flex-direction: column;
+  }
+  .ir-secondary-btn,
+  .ir-debrief-actions .ir-continue-btn {
+    width: 100%;
+  }
+}

@@ -24,5 +24,10 @@
     "url": "https://dodcio.defense.gov/Zero-Trust/",
     "versionHint": "DoD Zero Trust Strategy, Oct 2022",
     "pageTitle": ""
+  },
+  "nist80161": {
+    "url": "https://csrc.nist.gov/pubs/sp/800/61/r2/final",
+    "versionHint": "SP 800-61 Rev. 2",
+    "pageTitle": ""
   }
 }

@@ -1,5 +1,5 @@
 {
-  "_comment": "Baseline 'last seen' state for each framework source, used by check-framework-updates.yml to detect a possible new publication. Update this file's pageTitle/versionHint by hand only after you've reviewed a flagged change and updated the crosswalk data in src/app/crosswalk/crosswalk-data.ts to match — that's what closes the loop and stops the biannual check from re-flagging the same change.",
+  "_comment": "Baseline 'last seen' state for each watched source, used by check-framework-updates.yml to detect a possible new publication. Update this file's pageTitle/versionHint by hand only after you've reviewed a flagged change and updated the matching data file (see check-framework-updates.mjs's FRAMEWORKS map for which file goes with which key) — that's what closes the loop and stops the biannual check from re-flagging the same change.",
   "nist": {
     "url": "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final",
     "versionHint": "Rev. 5",
@@ -13,6 +13,16 @@
   "iso": {
     "url": "https://www.iso.org/standard/27001.html",
     "versionHint": "2022",
+    "pageTitle": ""
+  },
+  "nist80207": {
+    "url": "https://csrc.nist.gov/pubs/sp/800/207/final",
+    "versionHint": "SP 800-207 (Aug 2020)",
+    "pageTitle": ""
+  },
+  "dod": {
+    "url": "https://dodcio.defense.gov/Zero-Trust/",
+    "versionHint": "DoD Zero Trust Strategy, Oct 2022",
     "pageTitle": ""
   }
 }

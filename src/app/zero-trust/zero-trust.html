@@ -9,64 +9,232 @@
   <header class="zt-header">
     <h1 class="zt-title">Zero Trust Cloud Architecture Explorer</h1>
     <div class="zt-intro">
-      <p>Walk a single request through a Zero Trust flow grounded in NIST SP 800-207, and see how
-        responsibility for each control point shifts depending on your cloud provider and deployment model.</p>
+      <p>Walk a request through a Zero Trust flow, see the blast-radius impact of a breach, and score your
+        own environment's maturity.</p>
     </div>
   </header>
 
-  <div class="zt-disclaimer">
-    This is an illustrative, simplified model of a Zero Trust request flow &mdash; not a prescriptive or
-    exhaustive implementation guide. Real architectures vary by organization, and the responsibility split
-    shown here reflects the general shared-responsibility pattern, not a contractual boundary for any specific
-    provider. For authoritative guidance, see <a [href]="nistZtUrl" target="_blank" rel="noopener">NIST's Zero
-    Trust Architecture (SP 800-207)</a> and each provider's own Zero Trust documentation.
+  <div class="zt-tabs" role="tablist" aria-label="Zero Trust Explorer sections">
+    <button type="button" role="tab" [attr.aria-selected]="activeTab() === 'flow'" [class.active]="activeTab() === 'flow'" (click)="setTab('flow')">Request Flow</button>
+    <button type="button" role="tab" [attr.aria-selected]="activeTab() === 'attack-path'" [class.active]="activeTab() === 'attack-path'" (click)="setTab('attack-path')">Attack Path</button>
+    <button type="button" role="tab" [attr.aria-selected]="activeTab() === 'maturity'" [class.active]="activeTab() === 'maturity'" (click)="setTab('maturity')">Maturity Assessment</button>
   </div>
 
-  <section class="zt-controls">
-    <div class="zt-toggle-group">
-      <span class="zt-toggle-label">Cloud Provider</span>
-      <div class="zt-toggle" role="group" aria-label="Cloud provider">
-        @for (p of providers; track p) {
-          <button type="button" [class]="'provider-' + p" [class.active]="provider() === p" (click)="setProvider(p)">
-            {{ providerLabels[p] }}
-          </button>
-        }
-      </div>
+  @if (activeTab() === 'flow') {
+    <div class="zt-disclaimer">
+      This is an illustrative, simplified model of a Zero Trust request flow &mdash; not a prescriptive or
+      exhaustive implementation guide. Real architectures vary by organization, and the responsibility split
+      shown here reflects the general shared-responsibility pattern, not a contractual boundary for any specific
+      provider. For authoritative guidance, see <a [href]="nistZtUrl" target="_blank" rel="noopener">NIST's Zero
+      Trust Architecture (SP 800-207)</a> and each provider's own Zero Trust documentation.
     </div>
 
-    <div class="zt-toggle-group">
-      <span class="zt-toggle-label">Deployment Model</span>
-      <div class="zt-toggle" role="group" aria-label="Deployment model">
-        @for (m of models; track m) {
-          <button type="button" class="zt-model-btn" [class.active]="model() === m" (click)="setModel(m)">
-            {{ modelLabels[m] }}
-          </button>
-        }
+    <section class="zt-controls">
+      <div class="zt-toggle-group">
+        <span class="zt-toggle-label">Cloud Provider</span>
+        <div class="zt-toggle" role="group" aria-label="Cloud provider">
+          @for (p of providers; track p) {
+            <button type="button" [class]="'provider-' + p" [class.active]="provider() === p" (click)="setProvider(p)">
+              {{ providerLabels[p] }}
+            </button>
+          }
+        </div>
       </div>
+
+      <div class="zt-toggle-group">
+        <span class="zt-toggle-label">Deployment Model</span>
+        <div class="zt-toggle" role="group" aria-label="Deployment model">
+          @for (m of models; track m) {
+            <button type="button" class="zt-model-btn" [class.active]="model() === m" (click)="setModel(m)">
+              {{ modelLabels[m] }}
+            </button>
+          }
+        </div>
+      </div>
+    </section>
+
+    <div class="section-label">
+      <span class="section-label-text zt-accent-text">// REQUEST FLOW</span>
+      <span class="section-label-sub">{{ providerLabels[provider()] }} &middot; {{ modelLabels[model()] }}</span>
     </div>
-  </section>
 
-  <div class="section-label">
-    <span class="section-label-text zt-accent-text">// REQUEST FLOW</span>
-    <span class="section-label-sub">{{ providerLabels[provider()] }} &middot; {{ modelLabels[model()] }}</span>
-  </div>
+    <div class="zt-flow" role="list">
+      @for (node of nodes; track node.id; let last = $last) {
+        <button type="button" class="zt-node" [class]="'zt-resp-' + responsibilityOf(node)" (click)="openNode(node)" role="listitem">
+          <span class="zt-node-name">{{ node.name }}</span>
+          <span class="zt-node-badge">{{ responsibilityLabels[responsibilityOf(node)] }}</span>
+          <span class="zt-node-expand">View details &rarr;</span>
+        </button>
+        @if (!last) {
+          <div class="zt-connector" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 6 15 12 9 18"></polyline>
+            </svg>
+          </div>
+        }
+      }
+    </div>
+  }
 
-  <div class="zt-flow" role="list">
-    @for (node of nodes; track node.id; let last = $last) {
-      <button type="button" class="zt-node" [class]="'zt-resp-' + responsibilityOf(node)" (click)="openNode(node)" role="listitem">
-        <span class="zt-node-name">{{ node.name }}</span>
-        <span class="zt-node-badge">{{ responsibilityLabels[responsibilityOf(node)] }}</span>
-        <span class="zt-node-expand">View details &rarr;</span>
-      </button>
-      @if (!last) {
-        <div class="zt-connector" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="9 6 15 12 9 18"></polyline>
+  @if (activeTab() === 'attack-path') {
+    <div class="zt-disclaimer">
+      This is a simplified, illustrative comparison &mdash; not a simulation of any specific attack technique
+      or environment. Real blast radius depends on your actual segmentation, credential scope, and detection
+      controls.
+    </div>
+
+    <div class="section-label">
+      <span class="section-label-text zt-accent-text">// ATTACK PATH SIMULATION</span>
+      <span class="section-label-sub">One compromised laptop, two architectures</span>
+    </div>
+
+    <div class="zt-attack-grid">
+      <div class="zt-attack-col">
+        <div class="zt-attack-col-title zt-attack-title-danger">Traditional Perimeter</div>
+
+        <div class="zt-attack-graph">
+          <svg class="zt-attack-lines" viewBox="0 0 280 270">
+            <line x1="140" y1="60" x2="140" y2="110" class="zt-line-danger"></line>
+            <line x1="140" y1="160" x2="50" y2="210" class="zt-line-danger"></line>
+            <line x1="140" y1="160" x2="140" y2="210" class="zt-line-danger"></line>
+            <line x1="140" y1="160" x2="230" y2="210" class="zt-line-danger"></line>
           </svg>
+
+          <div class="zt-attack-node zt-attack-node-entry zt-attack-node-danger">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"></path>
+              <line x1="12" y1="9" x2="12" y2="13"></line>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+            Compromised Laptop
+          </div>
+          <div class="zt-attack-node zt-attack-node-hop zt-attack-node-danger">Workload A</div>
+          @for (system of attackPathDownstream; track system) {
+            <div class="zt-attack-node zt-attack-node-leaf zt-attack-node-danger" [class]="'zt-leaf-' + $index">{{ system }}</div>
+          }
+        </div>
+
+        <div class="zt-blast-stat">
+          <div class="zt-blast-figure zt-blast-danger">Blast Radius: 5 of 5 systems exposed</div>
+          <div class="zt-blast-bar"><div class="zt-blast-bar-fill zt-blast-danger-fill" style="width: 100%"></div></div>
+        </div>
+      </div>
+
+      <div class="zt-attack-col">
+        <div class="zt-attack-col-title zt-attack-title-success">Zero Trust</div>
+
+        <div class="zt-attack-graph">
+          <svg class="zt-attack-lines" viewBox="0 0 280 270">
+            <line x1="140" y1="60" x2="140" y2="110" class="zt-line-danger"></line>
+            <line x1="140" y1="160" x2="50" y2="210" class="zt-line-blocked"></line>
+            <line x1="140" y1="160" x2="140" y2="210" class="zt-line-blocked"></line>
+            <line x1="140" y1="160" x2="230" y2="210" class="zt-line-blocked"></line>
+            <g class="zt-lock-icon" transform="translate(89,178)">
+              <circle cx="0" cy="0" r="10"></circle>
+              <rect x="-5" y="-1" width="10" height="8" rx="1.5"></rect>
+              <path d="M-3 -1 v-3 a3 3 0 0 1 6 0 v3"></path>
+            </g>
+            <g class="zt-lock-icon" transform="translate(140,184)">
+              <circle cx="0" cy="0" r="10"></circle>
+              <rect x="-5" y="-1" width="10" height="8" rx="1.5"></rect>
+              <path d="M-3 -1 v-3 a3 3 0 0 1 6 0 v3"></path>
+            </g>
+            <g class="zt-lock-icon" transform="translate(191,178)">
+              <circle cx="0" cy="0" r="10"></circle>
+              <rect x="-5" y="-1" width="10" height="8" rx="1.5"></rect>
+              <path d="M-3 -1 v-3 a3 3 0 0 1 6 0 v3"></path>
+            </g>
+          </svg>
+
+          <div class="zt-attack-node zt-attack-node-entry zt-attack-node-danger">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"></path>
+              <line x1="12" y1="9" x2="12" y2="13"></line>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+            Compromised Laptop
+          </div>
+          <div class="zt-attack-node zt-attack-node-hop zt-attack-node-danger">Workload A</div>
+          @for (system of attackPathDownstream; track system) {
+            <div class="zt-attack-node zt-attack-node-leaf zt-attack-node-blocked" [class]="'zt-leaf-' + $index">{{ system }}</div>
+          }
+        </div>
+
+        <div class="zt-blast-stat">
+          <div class="zt-blast-figure zt-blast-success">Blast Radius: 1 of 5 systems exposed</div>
+          <div class="zt-blast-bar"><div class="zt-blast-bar-fill zt-blast-success-fill" style="width: 20%"></div></div>
+        </div>
+      </div>
+    </div>
+  }
+
+  @if (activeTab() === 'maturity') {
+    <div class="zt-disclaimer">
+      This is a simplified self-assessment against the DoD Zero Trust Strategy (2022) &mdash; not an official
+      DoD assessment tool or compliance determination. For the authoritative source, see the
+      <a [href]="dodZtStrategyUrl" target="_blank" rel="noopener">DoD Zero Trust Strategy</a> and Reference
+      Architecture.
+    </div>
+
+    <div class="section-label">
+      <span class="section-label-text zt-accent-text">// ZERO TRUST MATURITY ASSESSMENT</span>
+      <span class="section-label-sub">7 DoD Zero Trust pillars</span>
+    </div>
+
+    <div class="zt-pillar-rows">
+      @for (pillar of pillars; track pillar.id) {
+        <div class="zt-pillar-row">
+          <span class="zt-pillar-name">{{ pillar.name }}</span>
+          <div class="zt-stage-picker" role="group" [attr.aria-label]="pillar.name + ' maturity stage'">
+            @for (stage of stages; track stage) {
+              <button type="button" [class]="'zt-stage-' + stage" [class.active]="stageOf(pillar) === stage" (click)="setStage(pillar, stage)">
+                {{ stageLabels[stage] }}
+              </button>
+            }
+          </div>
         </div>
       }
-    }
-  </div>
+    </div>
+
+    <div class="zt-radar-card">
+      <svg class="zt-radar" width="300" height="300" viewBox="-70 -25 440 350">
+        <polygon [attr.points]="targetRingPoints" class="zt-radar-grid"></polygon>
+        <polygon [attr.points]="outerRingPoints" class="zt-radar-grid zt-radar-grid-outer"></polygon>
+        @for (v of axisGrid; track $index) {
+          <line x1="150" y1="150" [attr.x2]="v.x" [attr.y2]="v.y" class="zt-radar-grid"></line>
+        }
+        <polygon [attr.points]="radarPolygonPoints()" class="zt-radar-data"></polygon>
+        @for (lbl of labelPositions; track lbl.pillar.id) {
+          <text [attr.x]="lbl.x" [attr.y]="lbl.y" class="zt-radar-label" text-anchor="middle">{{ lbl.pillar.name }}</text>
+        }
+      </svg>
+
+      <div class="zt-radar-summary">
+        <div class="zt-radar-summary-label">Maturity Profile</div>
+        <div class="zt-radar-summary-value">
+          {{ maturityProfileSummary().advanced }} Advanced &middot;
+          {{ maturityProfileSummary().target }} Target &middot;
+          {{ maturityProfileSummary()['not-started'] }} Not Started
+        </div>
+        <div class="zt-radar-summary-sub">of 7 DoD Zero Trust pillars</div>
+      </div>
+    </div>
+
+    <div class="zt-next-steps">
+      <div class="section-label">
+        <span class="section-label-text zt-accent-text">// RECOMMENDED NEXT STEPS</span>
+      </div>
+      @if (nextSteps().length === 0) {
+        <p class="zt-all-advanced">All 7 pillars are at Advanced Level &mdash; focus on maintaining them as your environment changes.</p>
+      }
+      @for (step of nextSteps(); track step.pillar.id) {
+        <div class="zt-recommendation" [class]="'zt-stage-tint-' + step.stage">
+          <span class="zt-recommendation-pillar">{{ step.pillar.name }} ({{ stageLabels[step.stage] }})</span>
+          <span class="zt-recommendation-text"> &mdash; {{ step.text }}</span>
+        </div>
+      }
+    </div>
+  }
 </div>
 
 @if (selectedNode(); as node) {
@@ -90,6 +258,18 @@
         <section class="zt-section">
           <h4>{{ modelLabels[model()] }} Responsibility</h4>
           <p>{{ node.rationaleByModel[model()] }}</p>
+        </section>
+
+        <section class="zt-pitfall">
+          <div class="zt-pitfall-head">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"></path>
+              <line x1="12" y1="9" x2="12" y2="13"></line>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+            <h4>Common Pitfall</h4>
+          </div>
+          <p>{{ node.pitfall }}</p>
         </section>
 
         <div class="zt-service-grid">

@@ -1,0 +1,232 @@
+<div class="container ir-page">
+  <a routerLink="/" class="back-link">
+    <svg class="back-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="15 18 9 12 15 6"></polyline>
+    </svg>
+    Back to Portfolio
+  </a>
+
+  <header class="ir-header">
+    <h1 class="ir-title">Incident Response Playbook Simulator</h1>
+    <div class="ir-intro">
+      <p>Grounded in NIST SP 800-61 (Computer Security Incident Handling Guide). Pick a scenario, make the
+        calls a real responder would make, and get immediate feedback on whether each move was optimal.</p>
+    </div>
+  </header>
+
+  <div class="ir-disclaimer">
+    This simulator presents original scenarios, graded against general incident-response principles from
+    <a [href]="nistIrUrl" target="_blank" rel="noopener">NIST SP 800-61</a> &mdash; it is not an official NIST
+    assessment tool, and there is no single official answer key for real-world incident response. Use it to
+    practice the reasoning, not as a certified rubric.
+  </div>
+
+  @switch (view()) {
+
+    @case ('select') {
+      <div class="section-label">
+        <span class="section-label-text ir-accent-text">// CHOOSE A SCENARIO</span>
+      </div>
+
+      <div class="ir-scenario-grid">
+        @for (scenario of scenarios; track scenario.id) {
+          <div class="ir-scenario-card">
+            <div class="ir-scenario-icon">
+              @switch (scenario.iconKey) {
+                @case ('ransomware') {
+                  <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="5" y="11" width="14" height="9" rx="2"></rect>
+                    <path d="M8 11V7a4 4 0 0 1 8 0v4"></path>
+                    <line x1="12" y1="14.5" x2="12" y2="16.5"></line>
+                  </svg>
+                }
+                @case ('phishing') {
+                  <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="6" width="18" height="13" rx="2"></rect>
+                    <path d="M3 7l9 6 9-6"></path>
+                    <path d="M14 13.5c1.2-1.4 3-1.7 4.2-0.5"></path>
+                    <circle cx="19.5" cy="14.5" r="1"></circle>
+                  </svg>
+                }
+                @case ('insider-threat') {
+                  <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="8" r="3.2"></circle>
+                    <path d="M5.5 20c0-3.6 3-6 6.5-6s6.5 2.4 6.5 6"></path>
+                    <line x1="19" y1="6" x2="19" y2="9.5"></line>
+                    <circle cx="19" cy="12" r="0.6" fill="currentColor"></circle>
+                  </svg>
+                }
+                @case ('ddos') {
+                  <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="2.4"></circle>
+                    <path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"></path>
+                  </svg>
+                }
+              }
+            </div>
+            <div class="ir-scenario-name">{{ scenario.name }}</div>
+            <p class="ir-scenario-teaser">{{ scenario.teaser }}</p>
+            <button type="button" class="ir-start-btn" (click)="startScenario(scenario)">Start Simulation</button>
+          </div>
+        }
+      </div>
+    }
+
+    @case ('decision') {
+      @if (selectedScenario(); as scenario) {
+        <div class="ir-scenario-tag">{{ scenario.name }}</div>
+        <h2 class="ir-run-title">Incident Response Simulation</h2>
+
+        <div class="ir-stepper">
+          <div class="ir-step ir-step-done">
+            <div class="ir-step-circle">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </div>
+            <span class="ir-step-label">{{ phaseLabels.preparation }}</span>
+          </div>
+          @for (phase of phaseOrder; track phase; let last = $last) {
+            <div class="ir-step-connector"></div>
+            <div class="ir-step" [class]="'ir-step-' + stepStatus(phase)">
+              <div class="ir-step-circle">
+                @if (stepStatus(phase) === 'done') {
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                } @else {
+                  <span>{{ $index + 2 }}</span>
+                }
+              </div>
+              <span class="ir-step-label">{{ phaseLabels[phase] }}</span>
+            </div>
+          }
+        </div>
+
+        @if (currentDecision(); as decision) {
+          <div class="ir-narrative">
+            <p>{{ decision.narrative }}</p>
+          </div>
+
+          <div class="ir-options">
+            @for (option of decision.options; track option.id) {
+              <button type="button" class="ir-option" (click)="pickOption(option)">
+                <span class="ir-option-id">{{ option.id.toUpperCase() }}</span>
+                <span class="ir-option-text">{{ option.text }}</span>
+              </button>
+            }
+          </div>
+        }
+      }
+    }
+
+    @case ('feedback') {
+      @if (selectedScenario(); as scenario) {
+        <div class="ir-scenario-tag">{{ scenario.name }}</div>
+        <h2 class="ir-run-title">Incident Response Simulation</h2>
+
+        <div class="ir-stepper">
+          <div class="ir-step ir-step-done">
+            <div class="ir-step-circle">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </div>
+            <span class="ir-step-label">{{ phaseLabels.preparation }}</span>
+          </div>
+          @for (phase of phaseOrder; track phase) {
+            <div class="ir-step-connector"></div>
+            <div class="ir-step" [class]="'ir-step-' + stepStatus(phase)">
+              <div class="ir-step-circle">
+                @if (stepStatus(phase) === 'done') {
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                } @else {
+                  <span>{{ $index + 2 }}</span>
+                }
+              </div>
+              <span class="ir-step-label">{{ phaseLabels[phase] }}</span>
+            </div>
+          }
+        </div>
+
+        @if (currentDecision(); as decision) {
+          <div class="ir-narrative">
+            <p>{{ decision.narrative }}</p>
+          </div>
+
+          @if (selectedOption(); as picked) {
+            <div class="ir-option ir-option-picked" [class]="'grade-' + picked.grade">
+              <span class="ir-option-check">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              </span>
+              <span class="ir-option-text">{{ picked.text }}</span>
+            </div>
+
+            <div class="ir-options ir-options-dimmed">
+              @for (option of decision.options; track option.id) {
+                @if (option.id !== picked.id) {
+                  <div class="ir-option">
+                    <span class="ir-option-id">{{ option.id.toUpperCase() }}</span>
+                    <span class="ir-option-text">{{ option.text }}</span>
+                  </div>
+                }
+              }
+            </div>
+
+            <div class="ir-feedback" [class]="'grade-' + picked.grade">
+              <div class="ir-feedback-label">{{ gradeLabels[picked.grade] }} Response</div>
+              <p>{{ picked.feedback }}</p>
+            </div>
+
+            <div class="ir-continue-row">
+              <button type="button" class="ir-continue-btn" (click)="continueSimulation()">
+                @if (isLastPhase()) {
+                  See Debrief &rarr;
+                } @else {
+                  Continue to {{ phaseLabels[phaseOrder[phaseIndex() + 1]] }} &rarr;
+                }
+              </button>
+            </div>
+          }
+        }
+      }
+    }
+
+    @case ('debrief') {
+      @if (selectedScenario(); as scenario) {
+        <div class="section-label">
+          <span class="section-label-text ir-accent-text">// SIMULATION DEBRIEF</span>
+        </div>
+        <h2 class="ir-run-title">{{ scenario.name }} &mdash; Complete</h2>
+
+        <div class="ir-rating-card" [class]="'grade-' + ratingGrade()">
+          <div class="ir-rating-label">{{ ratingLabel() }}</div>
+          <div class="ir-rating-sub">{{ optimalCount() }} of {{ history().length }} decisions were optimal.</div>
+        </div>
+
+        <div class="ir-recap">
+          @for (entry of history(); track entry.phase) {
+            <div class="ir-recap-row">
+              <div>
+                <div class="ir-recap-phase">{{ phaseLabels[entry.phase] }}</div>
+                <div class="ir-recap-choice">{{ entry.option.text }}</div>
+              </div>
+              <span class="ir-grade-badge" [class]="'grade-' + entry.option.grade">{{ gradeLabels[entry.option.grade] }}</span>
+            </div>
+          }
+        </div>
+
+        <div class="ir-lessons">
+          <div class="section-label">
+            <span class="section-label-text ir-accent-text">// KEY LESSONS</span>
+          </div>
+          @for (entry of keyLessons(); track entry.phase) {
+            <div class="ir-lesson-card">
+              <p>{{ entry.option.feedback }}</p>
+            </div>
+          }
+        </div>
+
+        <div class="ir-debrief-actions">
+          <button type="button" class="ir-secondary-btn" (click)="downloadResults()">Download Results (CSV)</button>
+          <button type="button" class="ir-continue-btn" (click)="restart()">Try Another Scenario</button>
+        </div>
+      }
+    }
+
+  }
+</div>

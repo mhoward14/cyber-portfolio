@@ -101,7 +101,7 @@ Pushes to the `master` branch trigger the GitHub Pages workflow. The workflow:
 
 1. Checks out the repository using commit-pinned actions.
 2. Installs dependencies with `npm ci`.
-3. creates the production build.
+3. Builds the production site.
 4. Uploads the static browser output as a Pages artifact.
 5. Deploys the artifact using narrowly scoped job permissions and GitHub's OIDC-based Pages deployment.
 

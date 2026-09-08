@@ -108,6 +108,13 @@
   box-shadow: 0 8px 20px -4px rgba(168, 85, 247, 0.45);
 }
 
+/* Zero Trust Cloud Architecture Explorer pill — dedicated cyan accent, same pattern */
+.zt-nav-btn:hover {
+  background: #06b6d4;
+  border-color: #06b6d4;
+  box-shadow: 0 8px 20px -4px rgba(6, 182, 212, 0.45);
+}
+
 .github-btn {
   background-color: var(--color-surface);
   color: white !important;

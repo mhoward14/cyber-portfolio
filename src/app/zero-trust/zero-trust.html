@@ -1,0 +1,107 @@
+<div class="container zt-page">
+  <a routerLink="/" class="back-link">
+    <svg class="back-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="15 18 9 12 15 6"></polyline>
+    </svg>
+    Back to Portfolio
+  </a>
+
+  <header class="zt-header">
+    <h1 class="zt-title">Zero Trust Cloud Architecture Explorer</h1>
+    <div class="zt-intro">
+      <p>Walk a single request through a Zero Trust flow grounded in NIST SP 800-207, and see how
+        responsibility for each control point shifts depending on your cloud provider and deployment model.</p>
+    </div>
+  </header>
+
+  <div class="zt-disclaimer">
+    This is an illustrative, simplified model of a Zero Trust request flow &mdash; not a prescriptive or
+    exhaustive implementation guide. Real architectures vary by organization, and the responsibility split
+    shown here reflects the general shared-responsibility pattern, not a contractual boundary for any specific
+    provider. For authoritative guidance, see <a [href]="nistZtUrl" target="_blank" rel="noopener">NIST's Zero
+    Trust Architecture (SP 800-207)</a> and each provider's own Zero Trust documentation.
+  </div>
+
+  <section class="zt-controls">
+    <div class="zt-toggle-group">
+      <span class="zt-toggle-label">Cloud Provider</span>
+      <div class="zt-toggle" role="group" aria-label="Cloud provider">
+        @for (p of providers; track p) {
+          <button type="button" [class]="'provider-' + p" [class.active]="provider() === p" (click)="setProvider(p)">
+            {{ providerLabels[p] }}
+          </button>
+        }
+      </div>
+    </div>
+
+    <div class="zt-toggle-group">
+      <span class="zt-toggle-label">Deployment Model</span>
+      <div class="zt-toggle" role="group" aria-label="Deployment model">
+        @for (m of models; track m) {
+          <button type="button" class="zt-model-btn" [class.active]="model() === m" (click)="setModel(m)">
+            {{ modelLabels[m] }}
+          </button>
+        }
+      </div>
+    </div>
+  </section>
+
+  <div class="section-label">
+    <span class="section-label-text zt-accent-text">// REQUEST FLOW</span>
+    <span class="section-label-sub">{{ providerLabels[provider()] }} &middot; {{ modelLabels[model()] }}</span>
+  </div>
+
+  <div class="zt-flow" role="list">
+    @for (node of nodes; track node.id; let last = $last) {
+      <button type="button" class="zt-node" [class]="'zt-resp-' + responsibilityOf(node)" (click)="openNode(node)" role="listitem">
+        <span class="zt-node-name">{{ node.name }}</span>
+        <span class="zt-node-badge">{{ responsibilityLabels[responsibilityOf(node)] }}</span>
+        <span class="zt-node-expand">View details &rarr;</span>
+      </button>
+      @if (!last) {
+        <div class="zt-connector" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 6 15 12 9 18"></polyline>
+          </svg>
+        </div>
+      }
+    }
+  </div>
+</div>
+
+@if (selectedNode(); as node) {
+  <div class="modal-overlay" (click)="closeNode()">
+    <div class="modal-window zt-modal" [class]="'provider-' + provider()" (click)="$event.stopPropagation()">
+      <div class="modal-accent-bar"></div>
+      <div class="modal-header">
+        <span class="zt-modal-name">{{ node.name }}</span>
+        <span class="zt-resp-badge" [class]="'zt-resp-' + responsibilityOf(node)">
+          {{ responsibilityLabels[responsibilityOf(node)] }}
+        </span>
+        <button class="close-btn" type="button" (click)="closeNode()" aria-label="Close">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <section class="zt-section">
+          <h4>Zero Trust Principle &middot; NIST SP 800-207</h4>
+          <p>{{ node.principle }}</p>
+        </section>
+
+        <section class="zt-section">
+          <h4>{{ modelLabels[model()] }} Responsibility</h4>
+          <p>{{ node.rationaleByModel[model()] }}</p>
+        </section>
+
+        <div class="zt-service-grid">
+          @for (p of orderedProviders(); track p) {
+            <div class="zt-service-card" [class]="'provider-' + p" [class.is-primary]="p === provider()">
+              <span class="zt-service-provider">{{ providerLabels[p] }}</span>
+              <span class="zt-service-name">{{ node.services[p] }}</span>
+              <a [href]="providerDocUrls[p]" target="_blank" rel="noopener">{{ providerLabels[p] }} Zero Trust docs &rarr;</a>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+}

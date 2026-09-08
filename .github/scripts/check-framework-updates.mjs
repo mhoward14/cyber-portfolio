@@ -1,17 +1,20 @@
 #!/usr/bin/env node
 /**
- * Framework publication watcher.
+ * Framework & reference publication watcher.
  *
  * Runs biannually (see .github/workflows/check-framework-updates.yml) to
- * check whether NIST SP 800-53, CIS Controls, or ISO/IEC 27001 appear to
- * have published a new revision, and opens a GitHub issue if so.
+ * check whether NIST SP 800-53, CIS Controls, ISO/IEC 27001, NIST SP 800-207,
+ * or the DoD Zero Trust Strategy appear to have published a new revision, and
+ * opens a GitHub issue if so. Covers both the Crosswalk tool's frameworks and
+ * the Zero Trust Explorer's sources with one unified check.
  *
- * Design intent: NOTIFY, never auto-rewrite. A new revision can renumber
- * or split controls, and CIS/ISO's control text is copyrighted, so any
- * update to src/app/crosswalk/crosswalk-data.ts needs a human to read the
- * actual change and rewrite the (original, non-infringing) summaries
- * themselves. This script's only job is to make sure that review happens
- * instead of the data silently going stale.
+ * Design intent: NOTIFY, never auto-rewrite. A new revision can renumber or
+ * split controls/pillars, and CIS/ISO's control text is copyrighted, so any
+ * update to the affected data file (see the FRAMEWORKS map below for which
+ * file goes with which source) needs a human to read the actual change and
+ * rewrite the (original, non-infringing) content themselves. This script's
+ * only job is to make sure that review happens instead of the data silently
+ * going stale.
  *
  * Detection strategy: each publisher's page can be redesigned at any time,
  * so rather than depending on a fragile per-site regex against page markup
@@ -80,15 +83,22 @@ async function findOpenWatchIssue() {
   return issues.find((issue) => !issue.pull_request) || null;
 }
 
+const FRAMEWORKS = {
+  nist: { name: 'NIST SP 800-53', dataFile: 'src/app/crosswalk/crosswalk-data.ts' },
+  cis: { name: 'CIS Controls', dataFile: 'src/app/crosswalk/crosswalk-data.ts' },
+  iso: { name: 'ISO/IEC 27001', dataFile: 'src/app/crosswalk/crosswalk-data.ts' },
+  nist80207: { name: 'NIST SP 800-207 (Zero Trust Architecture)', dataFile: 'src/app/zero-trust/zero-trust-data.ts' },
+  dod: { name: 'DoD Zero Trust Strategy', dataFile: 'src/app/zero-trust/zero-trust-data.ts' }
+};
+
 async function main() {
   const baseline = JSON.parse(readFileSync(BASELINE_PATH, 'utf8'));
-  const frameworkNames = { nist: 'NIST SP 800-53', cis: 'CIS Controls', iso: 'ISO/IEC 27001' };
 
   const changed = [];
   const firstRun = [];
   const failed = [];
 
-  for (const key of Object.keys(frameworkNames)) {
+  for (const key of Object.keys(FRAMEWORKS)) {
     const entry = baseline[key];
     try {
       const title = await fetchTitle(entry.url);
@@ -111,7 +121,7 @@ async function main() {
   }
 
   if (changed.length === 0 && firstRun.length === 0 && failed.length === 0) {
-    console.log('No changes detected. All three framework page titles match the stored baseline.');
+    console.log('No changes detected. All watched page titles match the stored baseline.');
     return;
   }
 
@@ -123,8 +133,9 @@ async function main() {
         changed
           .map(
             (c) =>
-              `### ${frameworkNames[c.key]}\n` +
+              `### ${FRAMEWORKS[c.key].name}\n` +
               `- Source: ${c.url}\n` +
+              `- Data file to review: \`${FRAMEWORKS[c.key].dataFile}\`\n` +
               `- Previously seen title: "${c.oldTitle}"\n` +
               `- Currently seen title: "${c.newTitle}"\n` +
               `- Extracted version token: ${c.versionToken}\n`
@@ -136,14 +147,14 @@ async function main() {
   if (firstRun.length > 0) {
     sections.push(
       '## Baseline not yet established\n\n' +
-        'These frameworks have no stored baseline title yet (first run of this check, ' +
+        'These sources have no stored baseline title yet (first run of this check, ' +
         'or the baseline file was reset). Nothing to compare against, so no action is ' +
         'required — this is informational only. To establish a baseline, copy the title ' +
         'shown below into the matching `pageTitle` field in `.github/framework-versions.json`.\n\n' +
         firstRun
           .map(
             (f) =>
-              `### ${frameworkNames[f.key]}\n` +
+              `### ${FRAMEWORKS[f.key].name}\n` +
               `- Source: ${f.url}\n` +
               `- Current title: "${f.title}"\n` +
               `- Extracted version token: ${f.versionToken}\n`
@@ -159,21 +170,20 @@ async function main() {
         'publisher redesigned their page and the detection logic in ' +
         '`.github/scripts/check-framework-updates.mjs` needs a small update, or the ' +
         'page moved. Worth a manual look either way.\n\n' +
-        failed.map((f) => `### ${frameworkNames[f.key]}\n- Source: ${f.url}\n- Error: ${f.error}\n`).join('\n')
+        failed.map((f) => `### ${FRAMEWORKS[f.key].name}\n- Source: ${f.url}\n- Error: ${f.error}\n`).join('\n')
     );
   }
 
   sections.push(
     '---\n' +
-      'This issue was opened automatically by the biannual framework-watch workflow. ' +
-      'Once you\'ve reviewed the change (and updated `src/app/crosswalk/crosswalk-data.ts` ' +
-      'if the crosswalk mappings need it), update `.github/framework-versions.json` with the ' +
-      'new title(s) and close this issue — that resets the baseline so the next run only ' +
-      'flags genuinely new changes.'
+      'This issue was opened automatically by the biannual publication-watch workflow. ' +
+      'Once you\'ve reviewed the change and updated the relevant data file (linked above) if ' +
+      'needed, update `.github/framework-versions.json` with the new title(s) and close this ' +
+      'issue — that resets the baseline so the next run only flags genuinely new changes.'
   );
 
   const body = sections.join('\n\n');
-  const title = `Framework watch: ${[...changed, ...failed].map((x) => frameworkNames[x.key]).join(', ') || 'baseline update'}`;
+  const title = `Framework watch: ${[...changed, ...failed].map((x) => FRAMEWORKS[x.key].name).join(', ') || 'baseline update'}`;
 
   const existing = await findOpenWatchIssue();
   if (existing) {

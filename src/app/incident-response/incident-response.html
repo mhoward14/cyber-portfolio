@@ -30,7 +30,7 @@
 
       <div class="ir-scenario-grid">
         @for (scenario of scenarios; track scenario.id) {
-          <div class="ir-scenario-card">
+          <div class="ir-scenario-card" [class]="'scenario-' + scenario.id">
             <div class="ir-scenario-icon">
               @switch (scenario.iconKey) {
                 @case ('ransomware') {

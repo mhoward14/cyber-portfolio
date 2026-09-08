@@ -17,5 +17,9 @@ export const routes: Routes = [
     path: 'zero-trust',
     loadComponent: () => import('./zero-trust/zero-trust').then((m) => m.ZeroTrust),
   },
+  {
+    path: 'incident-response',
+    loadComponent: () => import('./incident-response/incident-response').then((m) => m.IncidentResponse),
+  },
   { path: '**', redirectTo: '' },
 ];

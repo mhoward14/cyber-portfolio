@@ -1,0 +1,372 @@
+/* ============================================================
+   CLOUD-SECURITY.CSS — CLOUD SECURITY CONFIGURATION BUILDER
+   Shares the site's terminal-UI building blocks (`.section-label`,
+   the `hero-enter`/`tile-enter` keyframes — defined in the global
+   src/styles.css). Page chrome uses amber (#f59e0b) as this tool's
+   own dedicated identity color — distinct from the site's blue,
+   Crosswalk's indigo, RMF Tracker's violet, Zero Trust's cyan, and
+   IR Simulator's rose.
+
+   Resource-card status (secure/insecure) reuses the site's existing
+   success/danger tokens via a `--rs` custom property set per card
+   state, mirroring the `--grade` pattern in incident-response.css.
+   No new colors beyond the tool's own amber identity.
+   ============================================================ */
+
+.cs-page {
+  padding-top: 5rem;
+  padding-bottom: 3rem;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-bottom: 2rem;
+  color: var(--color-text-dim);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: color 0.2s, gap 0.25s var(--ease-spring);
+  animation: hero-enter 0.6s var(--ease-spring) both;
+}
+.back-link:hover {
+  color: #f59e0b;
+  gap: 0.55rem;
+}
+.back-chevron {
+  width: 14px;
+  height: 14px;
+}
+
+.cs-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.cs-title {
+  color: #f59e0b;
+  font-size: clamp(1.6rem, 4vw, 2.5rem);
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  margin: 0 0 0.75rem;
+  animation: hero-enter 0.8s var(--ease-spring) 0.05s both;
+}
+
+.cs-intro {
+  max-width: 760px;
+  margin: 0 auto;
+  animation: hero-enter 0.8s var(--ease-spring) 0.15s both;
+}
+.cs-intro p {
+  color: var(--color-text-muted);
+  line-height: 1.75;
+  font-size: 0.95rem;
+}
+
+.cs-disclaimer {
+  max-width: 760px;
+  margin: 0 auto 1.75rem;
+  padding: 0.875rem 1.125rem;
+  border: 1px solid var(--color-border);
+  border-left: 3px solid #f59e0b;
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface);
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.35);
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  text-align: center;
+  animation: hero-enter 0.8s var(--ease-spring) 0.25s both;
+}
+.cs-disclaimer a {
+  color: #f59e0b;
+}
+:host-context(.light-mode) .cs-disclaimer {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 6px 24px rgba(0, 0, 0, 0.09);
+}
+
+.cs-accent-text {
+  color: #f59e0b !important;
+}
+
+/* ============================================================
+   PROVIDER TABS
+   ============================================================ */
+
+.cs-provider-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 0.6rem;
+  margin-bottom: 2rem;
+  animation: hero-enter 0.8s var(--ease-spring) 0.3s both;
+}
+
+.cs-provider-tab {
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  padding: 0.6rem 1.5rem;
+  border-radius: 2rem;
+  cursor: pointer;
+  transition: all 0.2s var(--ease-out);
+}
+.cs-provider-tab:hover {
+  border-color: #f59e0b;
+  color: #f59e0b;
+}
+.cs-provider-tab.is-active {
+  background: #f59e0b;
+  border-color: #f59e0b;
+  color: #1c1305;
+}
+
+/* ============================================================
+   RESOURCE GRID
+   ============================================================ */
+
+.cs-layout {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 1.5rem;
+  align-items: start;
+  animation: tile-enter 0.5s var(--ease-spring) both;
+}
+
+.cs-resource-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.cs-resource-card {
+  --rs: var(--color-danger);
+  grid-column: span 1;
+  text-align: left;
+  font: inherit;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-surface);
+  padding: 0;
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.2s, transform 0.15s var(--ease-out), box-shadow 0.2s;
+}
+:host-context(.light-mode) .cs-resource-card {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 6px 24px rgba(0, 0, 0, 0.09);
+}
+.cs-resource-card.is-secure {
+  --rs: var(--color-success);
+}
+.cs-resource-card:hover {
+  transform: translateY(-2px);
+}
+.cs-resource-card.is-selected {
+  border-color: var(--rs);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--rs) 25%, transparent),
+    0 14px 34px -10px color-mix(in srgb, var(--rs) 35%, transparent);
+  grid-column: span 3;
+}
+
+.cs-resource-card-head {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.85rem 1rem;
+  background: color-mix(in srgb, var(--rs) 8%, transparent);
+  border-bottom: 1px solid var(--color-border);
+}
+.cs-resource-icon {
+  color: var(--color-text-muted);
+  display: flex;
+  flex-shrink: 0;
+}
+.cs-resource-name {
+  flex: 1;
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--color-text);
+}
+.cs-status-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--rs);
+  flex-shrink: 0;
+}
+
+.cs-resource-setting {
+  padding: 0.85rem 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--color-text-muted);
+  line-height: 1.7;
+}
+.cs-resource-setting strong {
+  color: var(--rs);
+}
+
+.cs-resource-panel {
+  padding: 0 1rem 1rem;
+  cursor: default;
+}
+
+.cs-toggle-row {
+  display: flex;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  margin-bottom: 0.75rem;
+}
+.cs-toggle-option {
+  flex: 1;
+  text-align: center;
+  padding: 0.55rem 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--color-text-dim);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.cs-toggle-option:first-child {
+  border-right: 1px solid var(--color-border);
+}
+.cs-toggle-option.is-chosen {
+  background: var(--rs);
+  color: var(--color-bg);
+}
+
+.cs-resource-explanation {
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ============================================================
+   SCORE + FINDINGS PANEL
+   ============================================================ */
+
+.cs-score-panel {
+  position: sticky;
+  top: 5.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.cs-score-card {
+  --tier: var(--color-danger);
+  text-align: center;
+  border: 1px solid color-mix(in srgb, var(--tier) 35%, transparent);
+  border-radius: var(--radius-xl);
+  background: color-mix(in srgb, var(--tier) 8%, transparent);
+  box-shadow: 0 8px 28px -10px color-mix(in srgb, var(--tier) 35%, transparent);
+  padding: 1.5rem;
+}
+.cs-score-card.tier-moderate {
+  --tier: #f59e0b;
+}
+.cs-score-card.tier-strong {
+  --tier: var(--color-success);
+}
+.cs-score-label {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-text-dim);
+  margin-bottom: 0.5rem;
+}
+.cs-score-value {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: var(--tier);
+  line-height: 1;
+}
+.cs-score-value span {
+  font-size: 1.1rem;
+  color: var(--color-text-dim);
+  font-weight: 700;
+}
+.cs-score-rating {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--tier);
+  margin-top: 0.5rem;
+}
+
+.cs-findings-card {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-surface);
+  padding: 1.125rem;
+}
+:host-context(.light-mode) .cs-findings-card {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 6px 24px rgba(0, 0, 0, 0.09);
+}
+.cs-findings-label {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #f59e0b;
+  margin-bottom: 0.75rem;
+}
+.cs-findings-empty {
+  font-size: 0.8rem;
+  color: var(--color-success);
+  line-height: 1.6;
+  margin: 0;
+}
+.cs-findings-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.cs-finding-item {
+  text-align: left;
+  font: inherit;
+  border: none;
+  border-left: 2px solid var(--color-danger);
+  background: color-mix(in srgb, var(--color-danger) 6%, transparent);
+  padding: 0.5rem 0.75rem;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: 0.76rem;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.cs-finding-item:hover {
+  background: color-mix(in srgb, var(--color-danger) 12%, transparent);
+  color: var(--color-text);
+}
+
+@media (max-width: 768px) {
+  .cs-layout {
+    grid-template-columns: 1fr;
+  }
+  .cs-resource-grid {
+    grid-template-columns: 1fr;
+  }
+  .cs-resource-card.is-selected {
+    grid-column: span 1;
+  }
+  .cs-score-panel {
+    position: static;
+  }
+  .cs-provider-tabs {
+    flex-wrap: wrap;
+  }
+}

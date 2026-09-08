@@ -50,6 +50,13 @@
     <span class="sidebar-link-label">IR Simulator</span>
   </a>
 
+  <a routerLink="/cloud-security" routerLinkActive="is-active" class="sidebar-link sidebar-link-cloud" aria-label="Cloud Security Configuration Builder tool">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+      <path d="M17.5 19a4.5 4.5 0 0 0 0-9h-1.26A8 8 0 1 0 4 16.25"></path>
+    </svg>
+    <span class="sidebar-link-label">Cloud Security</span>
+  </a>
+
   <div class="sidebar-spacer"></div>
 
   <button type="button" class="sidebar-collapse-btn" (click)="toggleSidebar()" [attr.aria-label]="sidebarCollapsed() ? 'Expand navigation' : 'Collapse navigation'">

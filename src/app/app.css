@@ -115,6 +115,13 @@
   box-shadow: 0 8px 20px -4px rgba(6, 182, 212, 0.45);
 }
 
+/* Incident Response Playbook Simulator pill — dedicated rose accent, same pattern */
+.ir-nav-btn:hover {
+  background: #f43f5e;
+  border-color: #f43f5e;
+  box-shadow: 0 8px 20px -4px rgba(244, 63, 94, 0.45);
+}
+
 .github-btn {
   background-color: var(--color-surface);
   color: white !important;

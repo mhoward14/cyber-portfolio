@@ -1,20 +1,22 @@
 # ============================================================
-# Framework Publication Watch
+# Framework & Reference Publication Watch
 #
-# Checks twice a year whether NIST SP 800-53, CIS Controls, or
-# ISO/IEC 27001 appear to have published a new revision, and opens
-# a GitHub issue (labeled "framework-watch") if so. It never edits
-# the Framework Crosswalk data itself — a new revision needs a
-# human to read the actual change and update
-# src/app/crosswalk/crosswalk-data.ts accordingly.
+# Checks twice a year whether NIST SP 800-53, CIS Controls, ISO/IEC
+# 27001, NIST SP 800-207, or the DoD Zero Trust Strategy appear to
+# have published a new revision, and opens a GitHub issue (labeled
+# "framework-watch") if so. Covers both the Framework Crosswalk tool
+# and the Zero Trust Explorer with one unified check. It never edits
+# either tool's data itself — a new revision needs a human to read
+# the actual change and update the relevant data file accordingly.
 #
 # See .github/scripts/check-framework-updates.mjs for the detection
-# logic and .github/framework-versions.json for the stored baseline
-# (update that file's pageTitle fields after resolving a flagged
-# issue, so future runs only flag genuinely new changes).
+# logic (including which data file goes with which source) and
+# .github/framework-versions.json for the stored baseline (update
+# that file's pageTitle fields after resolving a flagged issue, so
+# future runs only flag genuinely new changes).
 # ============================================================
 
-name: Framework Publication Watch
+name: Framework & Reference Publication Watch
 
 on:
   schedule:

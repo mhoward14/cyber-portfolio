@@ -21,5 +21,9 @@ export const routes: Routes = [
     path: 'incident-response',
     loadComponent: () => import('./incident-response/incident-response').then((m) => m.IncidentResponse),
   },
+  {
+    path: 'cloud-security',
+    loadComponent: () => import('./cloud-security/cloud-security').then((m) => m.CloudSecurity),
+  },
   { path: '**', redirectTo: '' },
 ];

@@ -319,18 +319,15 @@ body.light-mode .search-box input:focus {
    The about card is the first child of .projects-band.
    A child always paints above its parent's background,
    so no z-index tricks are needed.
-   margin-top on .about-bridge pulls the card up into the
-   white section above; the gray band shows behind the
-   card's lower portion automatically.
+   No background of its own — it sits on the same body
+   background as the hero above it, in both themes. Only the
+   cards (white in light mode, near-black in dark) provide
+   contrast.
    ======================================== */
 .projects-band {
   width: 100%;
   position: relative;
   z-index: 2;
-}
-
-body.light-mode .projects-band {
-  background: rgba(229, 231, 235, 0.82);
 }
 
 .about-bridge {

@@ -269,6 +269,13 @@
   transform: rotate(180deg);
 }
 
+.sidebar-link-academic:hover,
+.sidebar-link-academic.is-active {
+  background: rgba(59, 130, 246, 0.1);
+  border-left-color: #3b82f6;
+  color: #3b82f6;
+}
+
 /* Per-tool accent — dedicated color per pill, consistent with every other
    project-tile/nav color in the app */
 .sidebar-link-crosswalk:hover,

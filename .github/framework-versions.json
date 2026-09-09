@@ -44,5 +44,10 @@
     "url": "https://www.cisecurity.org/benchmark/google_cloud_computing_platform",
     "versionHint": "CIS Google Cloud Platform Foundation Benchmark",
     "pageTitle": ""
+  },
+  "mitreattack": {
+    "url": "https://attack.mitre.org/matrices/enterprise/",
+    "versionHint": "ATT&CK Enterprise Matrix",
+    "pageTitle": ""
   }
 }

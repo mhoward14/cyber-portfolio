@@ -1,0 +1,167 @@
+<div class="container ap-page">
+  <a routerLink="/" class="back-link">
+    <svg class="back-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="15 18 9 12 15 6"></polyline>
+    </svg>
+    Back to Portfolio
+  </a>
+
+  <header class="ap-header">
+    <h1 class="ap-title">Attack Path Builder</h1>
+    <div class="ap-intro">
+      <p>Chain together MITRE ATT&amp;CK&reg; techniques, one per kill-chain stage, and see how each move would be caught &mdash; mapped straight back to the controls modeled elsewhere in this portfolio.</p>
+    </div>
+  </header>
+
+  <div class="ap-disclaimer">
+    Original, illustrative attack chains applying tactics and techniques from the <a [href]="mitreUrl" target="_blank" rel="noopener">MITRE ATT&amp;CK&reg; Enterprise Matrix</a>. Stealth ratings and defense mappings are this tool's own original content, not official ATT&amp;CK mitigation guidance &mdash; and this is not a penetration-testing tool.
+  </div>
+
+  <div class="ap-stepper">
+    @for (stage of stages; track stage.id; let i = $index) {
+      <div class="ap-step" [class.ap-step-done]="i < stageIndex()" [class.ap-step-current]="i === stageIndex()">
+        <div class="ap-step-circle">
+          @if (i < stageIndex()) {
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          } @else {
+            {{ i + 1 }}
+          }
+        </div>
+        <div class="ap-step-label">{{ stage.name }}</div>
+      </div>
+      @if (i < stages.length - 1) {
+        <div class="ap-step-connector"></div>
+      }
+    }
+  </div>
+
+  @if (!isComplete()) {
+    <div class="section-label">
+      <span class="section-label-text ap-accent-text">// STAGE {{ stageIndex() + 1 }} &middot; {{ currentStage()!.name.toUpperCase() }}</span>
+      <span class="section-label-sub">{{ currentStage()!.attackTacticId }} &middot; pick one technique to continue the chain</span>
+    </div>
+
+    <div class="ap-layout">
+      <div class="ap-options">
+        @for (technique of currentStage()!.techniques; track technique.id) {
+          <button type="button" class="ap-option" [class]="'stealth-' + technique.stealth" (click)="selectTechnique(technique)">
+            <div class="ap-option-head">
+              <span class="ap-option-icon">
+                @switch (technique.icon) {
+                  @case ('mail') { <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M3 7l9 6 9-6"></path></svg> }
+                  @case ('globe') { <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"></path></svg> }
+                  @case ('key') { <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="15" r="4"></circle><path d="M10.5 12.5 20 3M16 7l3 3M13 10l2.5 2.5"></path></svg> }
+                  @case ('terminal') { <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"></rect><polyline points="7 9 11 12 7 15"></polyline><line x1="12" y1="15" x2="17" y2="15"></line></svg> }
+                  @case ('cursor') { <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3l14 8-6 2-2 6-6-16Z"></path></svg> }
+                  @case ('clock') { <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><polyline points="12 7 12 12 15.5 14"></polyline></svg> }
+                  @case ('folder') { <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"></path></svg> }
+                  @case ('syringe') { <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 3l3 3M4 20l4.5-4.5M7 17l10-10 3 3L10 20l-3-3Z"></path><path d="M14 6l3 3M11 9l3 3"></path></svg> }
+                  @case ('arrow-up') { <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 16V8M8 12l4-4 4 4"></path></svg> }
+                  @case ('copy') { <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg> }
+                  @case ('lock') { <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg> }
+                  @case ('undo') { <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10h9a5 5 0 0 1 0 10H8"></path><polyline points="8 5 4 10 8 15"></polyline></svg> }
+                  @case ('power') { <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="2" x2="12" y2="12"></line><path d="M18.4 6.6a9 9 0 1 1-12.8 0"></path></svg> }
+                }
+              </span>
+              <span class="ap-option-titles">
+                <span class="ap-option-name">{{ technique.name }}</span>
+                <span class="ap-option-id">{{ technique.attackId }}</span>
+              </span>
+              <span class="ap-stealth-tag">Stealth: {{ technique.stealth === 'low' ? 'Low' : technique.stealth === 'medium' ? 'Medium' : 'High' }}</span>
+            </div>
+            <div class="ap-option-desc">{{ technique.description }}</div>
+            <div class="ap-option-foot"><span class="ap-choose-btn">Choose Technique</span></div>
+          </button>
+        }
+      </div>
+
+      <aside class="ap-side-panel">
+        <div class="ap-panel-card">
+          <div class="ap-panel-label">// PATH SO FAR</div>
+          <div class="ap-path-list">
+            @for (pick of picks(); track pick.stage.id) {
+              <div class="ap-path-item">
+                <div class="ap-path-dot">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                </div>
+                <div>
+                  <div class="ap-path-tactic">{{ pick.stage.name }}</div>
+                  <div class="ap-path-technique">{{ pick.technique.name }} <span class="ap-path-technique-id">&middot; {{ pick.technique.attackId }}</span></div>
+                </div>
+              </div>
+            }
+            <div class="ap-path-item is-next">
+              <div class="ap-path-dot">{{ stageIndex() + 1 }}</div>
+              <div>
+                <div class="ap-path-tactic">{{ currentStage()!.name }}</div>
+                <div class="ap-path-technique">Choose above&hellip;</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ap-panel-card" [class]="picks().length ? 'tier-' + detectionTier() : ''">
+          <div class="ap-panel-label">// DETECTION LIKELIHOOD</div>
+          @if (picks().length === 0) {
+            <p class="ap-meter-empty">Choose a technique to see how detectable this path would be.</p>
+          } @else {
+            <div class="ap-meter-value">{{ detectionScore() }}<span>/100</span></div>
+            <div class="ap-meter-tier">{{ detectionTierLabel() }}</div>
+            <div class="ap-meter-track"><div class="ap-meter-fill" [style.width.%]="detectionScore()"></div></div>
+            <div class="ap-meter-help">Higher = easier for a defender to catch this chain.</div>
+          }
+        </div>
+
+        <div class="ap-panel-card">
+          <div class="ap-panel-label">// MAPPED DEFENSES ({{ mappedDefenses().length }})</div>
+          @if (mappedDefenses().length === 0) {
+            <p class="ap-meter-empty">Defenses that would catch each move appear here as you build the path.</p>
+          } @else {
+            @for (defense of mappedDefenses(); track defense.technique.id) {
+              <div class="ap-defense-item"><strong>{{ defense.tool }}</strong> &mdash; {{ defense.note }}</div>
+            }
+          }
+        </div>
+      </aside>
+    </div>
+  } @else {
+    <div class="ap-summary">
+      <div class="ap-rating-card" [class]="'tier-' + detectionTier()">
+        <div class="ap-rating-label">{{ detectionTierLabel() }}</div>
+        <div class="ap-rating-sub">Overall Detection Likelihood: {{ detectionScore() }}/100</div>
+      </div>
+
+      <div class="section-label">
+        <span class="section-label-text ap-accent-text">// FULL PATH</span>
+        <span class="section-label-sub">Every stage, in order</span>
+      </div>
+
+      <div class="ap-recap">
+        @for (pick of picks(); track pick.stage.id) {
+          <div class="ap-recap-row">
+            <div>
+              <div class="ap-recap-tactic">{{ pick.stage.name }} &middot; {{ pick.stage.attackTacticId }}</div>
+              <div class="ap-recap-technique">{{ pick.technique.name }}</div>
+            </div>
+            <span class="ap-recap-badge" [class]="'stealth-' + pick.technique.stealth">{{ pick.technique.attackId }}</span>
+          </div>
+        }
+      </div>
+
+      <div class="section-label">
+        <span class="section-label-text ap-accent-text">// RECOMMENDED DEFENSES</span>
+        <span class="section-label-sub">Where this chain would have been caught</span>
+      </div>
+
+      <div class="ap-defenses-recap">
+        @for (defense of mappedDefenses(); track defense.technique.id) {
+          <a class="ap-defense-item ap-defense-link" [routerLink]="defense.route"><strong>{{ defense.tool }}</strong> &mdash; {{ defense.note }}</a>
+        }
+      </div>
+
+      <div class="ap-summary-actions">
+        <button type="button" class="ap-restart-btn" (click)="restart()">Build Another Path</button>
+      </div>
+    </div>
+  }
+</div>

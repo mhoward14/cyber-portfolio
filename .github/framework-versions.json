@@ -29,5 +29,20 @@
     "url": "https://csrc.nist.gov/pubs/sp/800/61/r2/final",
     "versionHint": "SP 800-61 Rev. 2",
     "pageTitle": ""
+  },
+  "cisazure": {
+    "url": "https://www.cisecurity.org/benchmark/azure",
+    "versionHint": "CIS Microsoft Azure Foundations Benchmark",
+    "pageTitle": ""
+  },
+  "cisaws": {
+    "url": "https://www.cisecurity.org/benchmark/amazon_web_services",
+    "versionHint": "CIS Amazon Web Services Foundations Benchmark",
+    "pageTitle": ""
+  },
+  "cisgcp": {
+    "url": "https://www.cisecurity.org/benchmark/google_cloud_computing_platform",
+    "versionHint": "CIS Google Cloud Platform Foundation Benchmark",
+    "pageTitle": ""
   }
 }

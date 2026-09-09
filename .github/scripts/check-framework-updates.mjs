@@ -89,7 +89,10 @@ const FRAMEWORKS = {
   iso: { name: 'ISO/IEC 27001', dataFile: 'src/app/crosswalk/crosswalk-data.ts' },
   nist80207: { name: 'NIST SP 800-207 (Zero Trust Architecture)', dataFile: 'src/app/zero-trust/zero-trust-data.ts' },
   dod: { name: 'DoD Zero Trust Strategy', dataFile: 'src/app/zero-trust/zero-trust-data.ts' },
-  nist80161: { name: 'NIST SP 800-61 (Incident Handling Guide)', dataFile: 'src/app/incident-response/incident-response-data.ts' }
+  nist80161: { name: 'NIST SP 800-61 (Incident Handling Guide)', dataFile: 'src/app/incident-response/incident-response-data.ts' },
+  cisazure: { name: 'CIS Microsoft Azure Foundations Benchmark', dataFile: 'src/app/cloud-security/cloud-security-data.ts' },
+  cisaws: { name: 'CIS Amazon Web Services Foundations Benchmark', dataFile: 'src/app/cloud-security/cloud-security-data.ts' },
+  cisgcp: { name: 'CIS Google Cloud Platform Foundation Benchmark', dataFile: 'src/app/cloud-security/cloud-security-data.ts' }
 };
 
 async function main() {

@@ -308,6 +308,12 @@
   border-left-color: #f59e0b;
   color: #f59e0b;
 }
+.sidebar-link-attack:hover,
+.sidebar-link-attack.is-active {
+  background: rgba(10, 132, 255, 0.1);
+  border-left-color: #0a84ff;
+  color: #0a84ff;
+}
 
 
 /* ============================================================

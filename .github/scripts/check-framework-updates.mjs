@@ -92,7 +92,8 @@ const FRAMEWORKS = {
   nist80161: { name: 'NIST SP 800-61 (Incident Handling Guide)', dataFile: 'src/app/incident-response/incident-response-data.ts' },
   cisazure: { name: 'CIS Microsoft Azure Foundations Benchmark', dataFile: 'src/app/cloud-security/cloud-security-data.ts' },
   cisaws: { name: 'CIS Amazon Web Services Foundations Benchmark', dataFile: 'src/app/cloud-security/cloud-security-data.ts' },
-  cisgcp: { name: 'CIS Google Cloud Platform Foundation Benchmark', dataFile: 'src/app/cloud-security/cloud-security-data.ts' }
+  cisgcp: { name: 'CIS Google Cloud Platform Foundation Benchmark', dataFile: 'src/app/cloud-security/cloud-security-data.ts' },
+  mitreattack: { name: 'MITRE ATT&CK Enterprise Matrix', dataFile: 'src/app/attack-path/attack-path-data.ts' }
 };
 
 async function main() {

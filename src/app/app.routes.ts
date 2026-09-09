@@ -25,5 +25,9 @@ export const routes: Routes = [
     path: 'cloud-security',
     loadComponent: () => import('./cloud-security/cloud-security').then((m) => m.CloudSecurity),
   },
+  {
+    path: 'attack-path',
+    loadComponent: () => import('./attack-path/attack-path').then((m) => m.AttackPath),
+  },
   { path: '**', redirectTo: '' },
 ];

@@ -130,7 +130,7 @@ body.light-mode .expandable-project.is-expanded {
   margin-bottom: 0;
 }
 
-.case-section h4 {
+.case-section h3 {
   margin: 0 0 0.8rem;
   color: var(--color-accent);
   font-family: var(--font-mono);
@@ -211,7 +211,7 @@ body.light-mode .deliverable-card {
   background: var(--color-accent-dim);
 }
 
-.demonstrates-section h4 {
+.demonstrates-section h3 {
   margin-bottom: 0.55rem;
 }
 

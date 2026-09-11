@@ -35,7 +35,7 @@
     </div>
 
     <div class="crosswalk-family">
-      <select [ngModel]="family()" (ngModelChange)="family.set($event)">
+      <select [ngModel]="family()" (ngModelChange)="family.set($event)" aria-label="Filter by control family">
         <option value="all">All Families</option>
         @for (fam of families(); track fam) {
           <option [value]="fam">{{ fam }}</option>

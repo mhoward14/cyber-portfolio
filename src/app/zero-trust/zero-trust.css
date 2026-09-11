@@ -22,9 +22,17 @@
 .provider-azure { --pv: #d946ef; }
 .provider-gcp   { --pv: #65a30d; }
 
+/* Light-mode variants — the base hues above are tuned for dark
+   backgrounds and fall short of 4.5:1 as text/white-on-fill against
+   light-mode's near-white surfaces (verified against WCAG AA). */
+:host-context(.light-mode) .provider-aws   { --pv: #b94e05; }
+:host-context(.light-mode) .provider-azure { --pv: #bc12d5; }
+:host-context(.light-mode) .provider-gcp   { --pv: #4c7b0a; }
+
 .zt-resp-customer { --resp: var(--color-success); }
 .zt-resp-shared   { --resp: #f59e0b; }
 .zt-resp-provider { --resp: var(--color-text-dim); }
+:host-context(.light-mode) .zt-resp-shared { --resp: #905d06; }
 
 .zt-page {
   padding-top: 5rem;
@@ -95,6 +103,11 @@
 }
 .zt-disclaimer a {
   color: #06b6d4;
+  text-decoration: underline;
+}
+:host-context(.light-mode) .zt-title,
+:host-context(.light-mode) .zt-disclaimer a {
+  color: #047386;
 }
 
 .zt-controls {
@@ -169,6 +182,9 @@
 
 .zt-accent-text {
   color: #06b6d4 !important;
+}
+:host-context(.light-mode) .zt-accent-text {
+  color: #047386 !important;
 }
 
 /* ============================================================

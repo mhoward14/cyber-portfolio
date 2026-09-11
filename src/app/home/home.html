@@ -74,7 +74,7 @@
           <div class="tile-accent-bar" [style.background]="project.color"></div>
 
           <button class="project-summary" type="button" (click)="toggleProject(project.title)" [attr.aria-expanded]="isExpanded(project.title)">
-            <h3>{{ project.title }}</h3>
+            <h2>{{ project.title }}</h2>
             <p class="role-preview" [style.color]="project.color">{{ project.role }}</p>
             <div class="tag-list">
               @for (tag of project.tags; track tag) {
@@ -94,12 +94,12 @@
               <div class="academic-project-note"><strong>Academic project:</strong> {{ project.academicNote }}</div>
 
               <section class="case-section">
-                <h4>Context</h4>
+                <h3>Context</h3>
                 <p>{{ project.context }}</p>
               </section>
 
               <section class="case-section">
-                <h4>Approach</h4>
+                <h3>Approach</h3>
                 <ul>
                   @for (item of project.approach; track item) {
                     <li>{{ item }}</li>
@@ -108,7 +108,7 @@
               </section>
 
               <section class="case-section">
-                <h4>Frameworks &amp; Technologies</h4>
+                <h3>Frameworks &amp; Technologies</h3>
                 <div class="framework-list">
                   @for (framework of project.frameworks; track framework) {
                     <span class="framework-pill">{{ framework }}</span>
@@ -117,7 +117,7 @@
               </section>
 
               <section class="case-section">
-                <h4>Key Deliverables</h4>
+                <h3>Key Deliverables</h3>
                 <div class="deliverable-grid">
                   @for (deliverable of project.deliverables; track deliverable) {
                     <div class="deliverable-card">{{ deliverable }}</div>
@@ -126,7 +126,7 @@
               </section>
 
               <section class="case-section demonstrates-section">
-                <h4>What This Demonstrates</h4>
+                <h3>What This Demonstrates</h3>
                 <p>{{ project.demonstrates }}</p>
               </section>
             </div>

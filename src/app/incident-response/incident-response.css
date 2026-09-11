@@ -33,6 +33,14 @@
 .scenario-insider-threat { --sc: #8b5cf6; }
 .scenario-ddos           { --sc: #06b6d4; }
 
+/* Light-mode variants — the base hues above are tuned for dark
+   backgrounds and fall short of 4.5:1 as text/white-on-fill against
+   light-mode's near-white surfaces (verified against WCAG AA). */
+:host-context(.light-mode) .scenario-ransomware     { --sc: #cd0c2d; }
+:host-context(.light-mode) .scenario-phishing       { --sc: #0e65f4; }
+:host-context(.light-mode) .scenario-insider-threat { --sc: #7e4af5; }
+:host-context(.light-mode) .scenario-ddos           { --sc: #047386; }
+
 .grade-optimal    { --grade: var(--color-success); }
 .grade-suboptimal { --grade: #f59e0b; }
 .grade-poor       { --grade: var(--color-danger); }
@@ -106,10 +114,17 @@
 }
 .ir-disclaimer a {
   color: #f43f5e;
+  text-decoration: underline;
+}
+:host-context(.light-mode) .ir-disclaimer a {
+  color: #cd0c2d;
 }
 
 .ir-accent-text {
   color: #f43f5e !important;
+}
+:host-context(.light-mode) .ir-accent-text {
+  color: #cd0c2d !important;
 }
 
 /* ============================================================

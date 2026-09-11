@@ -83,13 +83,21 @@
 }
 .cs-disclaimer a {
   color: #f59e0b;
+  text-decoration: underline;
 }
 :host-context(.light-mode) .cs-disclaimer {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 6px 24px rgba(0, 0, 0, 0.09);
 }
+:host-context(.light-mode) .cs-title,
+:host-context(.light-mode) .cs-disclaimer a {
+  color: #905d06;
+}
 
 .cs-accent-text {
   color: #f59e0b !important;
+}
+:host-context(.light-mode) .cs-accent-text {
+  color: #905d06 !important;
 }
 
 /* ============================================================
@@ -280,6 +288,9 @@
 .cs-score-card.tier-strong {
   --tier: var(--color-success);
 }
+:host-context(.light-mode) .cs-score-card.tier-moderate {
+  --tier: #905d06;
+}
 .cs-score-label {
   font-family: var(--font-mono);
   font-size: 0.68rem;
@@ -323,6 +334,9 @@
   letter-spacing: 0.05em;
   color: #f59e0b;
   margin-bottom: 0.75rem;
+}
+:host-context(.light-mode) .cs-findings-label {
+  color: #905d06;
 }
 .cs-findings-empty {
   font-size: 0.8rem;

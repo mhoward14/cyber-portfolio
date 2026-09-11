@@ -20,10 +20,12 @@
 .stealth-low     { --stealth: var(--color-danger); }
 .stealth-medium  { --stealth: #f59e0b; }
 .stealth-high    { --stealth: var(--color-success); }
+:host-context(.light-mode) .stealth-medium { --stealth: #905d06; }
 
 .tier-stealthy { --tier: var(--color-success); }
 .tier-moderate { --tier: #f59e0b; }
 .tier-noisy    { --tier: var(--color-danger); }
+:host-context(.light-mode) .tier-moderate { --tier: #905d06; }
 
 .ap-page {
   padding-top: 5rem;
@@ -94,13 +96,20 @@
 }
 .ap-disclaimer a {
   color: #0a84ff;
+  text-decoration: underline;
 }
 :host-context(.light-mode) .ap-disclaimer {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 6px 24px rgba(0, 0, 0, 0.09);
 }
+:host-context(.light-mode) .ap-disclaimer a {
+  color: #0065cb;
+}
 
 .ap-accent-text {
   color: #0a84ff !important;
+}
+:host-context(.light-mode) .ap-accent-text {
+  color: #0065cb !important;
 }
 
 /* ============================================================
@@ -174,6 +183,13 @@
 .ap-step-current .ap-step-label {
   color: #0a84ff;
   font-weight: 800;
+}
+:host-context(.light-mode) .ap-step-current .ap-step-circle {
+  background: #0065cb;
+  border-color: #0065cb;
+}
+:host-context(.light-mode) .ap-step-current .ap-step-label {
+  color: #0065cb;
 }
 
 /* ============================================================
@@ -290,6 +306,13 @@
   background: #0a84ff;
   color: #fff;
 }
+:host-context(.light-mode) .ap-choose-btn {
+  border-color: #0065cb;
+  color: #0065cb;
+}
+:host-context(.light-mode) .ap-option:hover .ap-choose-btn {
+  background: #0065cb;
+}
 
 /* ---- sticky side panel ---- */
 .ap-side-panel {
@@ -316,6 +339,9 @@
   letter-spacing: 0.05em;
   color: #0a84ff;
   margin-bottom: 0.875rem;
+}
+:host-context(.light-mode) .ap-panel-label {
+  color: #0065cb;
 }
 .ap-meter-empty {
   font-size: 0.78rem;

@@ -48,13 +48,13 @@
       <div class="search-box rmf-search">
         <input type="text" placeholder="Search control ID or title..." [ngModel]="query()" (ngModelChange)="query.set($event)">
       </div>
-      <select [ngModel]="familyFilter()" (ngModelChange)="familyFilter.set($event)">
+      <select [ngModel]="familyFilter()" (ngModelChange)="familyFilter.set($event)" aria-label="Filter by control family">
         <option value="all">All Families</option>
         @for (f of families(); track f) {
           <option [value]="f">{{ f }}</option>
         }
       </select>
-      <select [ngModel]="statusFilter()" (ngModelChange)="statusFilter.set($event)">
+      <select [ngModel]="statusFilter()" (ngModelChange)="statusFilter.set($event)" aria-label="Filter by status">
         <option value="all">All Statuses</option>
         @for (s of statusKeys; track s) {
           <option [value]="s">{{ statusLabel[s] }}</option>
@@ -95,7 +95,7 @@
                 <p class="control-discussion">{{ c.discussion }}</p>
               </div>
               <div class="control-meta">
-                <select class="status-select" [attr.data-status]="statusOf(c.id)" [ngModel]="statusOf(c.id)" (ngModelChange)="setStatus(c.id, $event)" (click)="$event.stopPropagation()">
+                <select class="status-select" [attr.data-status]="statusOf(c.id)" [ngModel]="statusOf(c.id)" (ngModelChange)="setStatus(c.id, $event)" (click)="$event.stopPropagation()" [attr.aria-label]="'Status for ' + c.id">
                   @for (s of statusKeys; track s) {
                     <option [value]="s">{{ statusLabel[s] }}</option>
                   }

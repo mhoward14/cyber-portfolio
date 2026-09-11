@@ -118,6 +118,7 @@
 .tier-card[data-tier="low"] { --tier-color: var(--color-success); }
 .tier-card[data-tier="moderate"] { --tier-color: #f59e0b; }
 .tier-card[data-tier="high"] { --tier-color: var(--color-danger); }
+:host-context(.light-mode) .tier-card[data-tier="moderate"] { --tier-color: #905d06; }
 
 .sample-note {
   font-family: var(--font-mono);
@@ -441,6 +442,27 @@
 }
 .rmf-disclaimer a {
   color: #a855f7;
+  text-decoration: underline;
+}
+
+/* Light-mode variants — the violet/amber hexes above are tuned for dark
+   backgrounds and fall short of 4.5:1 against light-mode's near-white
+   surfaces (verified against WCAG AA). --color-success/--color-danger
+   are already retinted globally in styles.css. */
+:host-context(.light-mode) .rmf-disclaimer a,
+:host-context(.light-mode) .sample-note,
+:host-context(.light-mode) .rmf-search::before,
+:host-context(.light-mode) .poam-btn,
+:host-context(.light-mode) .family-head .fam-name,
+:host-context(.light-mode) .stat-chip.total {
+  color: #8d1ff4;
+}
+:host-context(.light-mode) .rmf-search input:focus {
+  border-color: #8d1ff4;
+}
+:host-context(.light-mode) .stat-chip.partial,
+:host-context(.light-mode) .status-select[data-status="partial"] {
+  color: #905d06;
 }
 
 @media (max-width: 640px) {

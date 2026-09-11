@@ -16,14 +16,6 @@ export class Home implements AfterViewInit {
   expandedProject = signal<string | null>(null);
 
   ngAfterViewInit() {
-    if (!document.querySelector('link[data-expandable-case-studies]')) {
-      const stylesheet = document.createElement('link');
-      stylesheet.rel = 'stylesheet';
-      stylesheet.href = 'expandable-case-studies.css';
-      stylesheet.setAttribute('data-expandable-case-studies', 'true');
-      document.head.appendChild(stylesheet);
-    }
-
     if (!document.querySelector('script[data-credly-embed]')) {
       const script = document.createElement('script');
       script.src = 'https://cdn.credly.com/assets/utilities/embed.js';

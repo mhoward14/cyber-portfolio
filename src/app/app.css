@@ -275,6 +275,11 @@
   border-left-color: #3b82f6;
   color: #3b82f6;
 }
+:host-context(.light-mode) .sidebar-link-academic:hover,
+:host-context(.light-mode) .sidebar-link-academic.is-active {
+  border-left-color: #1d4ed8;
+  color: #1d4ed8;
+}
 
 /* Per-tool accent — dedicated color per pill, consistent with every other
    project-tile/nav color in the app */
@@ -313,6 +318,41 @@
   background: rgba(10, 132, 255, 0.1);
   border-left-color: #0a84ff;
   color: #0a84ff;
+}
+
+/* Light-mode text/border variants of the tool accents above — the base
+   hex values are tuned for dark backgrounds and fall short of 4.5:1
+   against the sidebar's near-white light-mode background, so each gets
+   a darkened equivalent here (same hue, verified against WCAG AA). */
+:host-context(.light-mode) .sidebar-link-crosswalk:hover,
+:host-context(.light-mode) .sidebar-link-crosswalk.is-active {
+  border-left-color: #4d50ef;
+  color: #4d50ef;
+}
+:host-context(.light-mode) .sidebar-link-rmf:hover,
+:host-context(.light-mode) .sidebar-link-rmf.is-active {
+  border-left-color: #8d1ff4;
+  color: #8d1ff4;
+}
+:host-context(.light-mode) .sidebar-link-zt:hover,
+:host-context(.light-mode) .sidebar-link-zt.is-active {
+  border-left-color: #047386;
+  color: #047386;
+}
+:host-context(.light-mode) .sidebar-link-ir:hover,
+:host-context(.light-mode) .sidebar-link-ir.is-active {
+  border-left-color: #cd0c2d;
+  color: #cd0c2d;
+}
+:host-context(.light-mode) .sidebar-link-cloud:hover,
+:host-context(.light-mode) .sidebar-link-cloud.is-active {
+  border-left-color: #905d06;
+  color: #905d06;
+}
+:host-context(.light-mode) .sidebar-link-attack:hover,
+:host-context(.light-mode) .sidebar-link-attack.is-active {
+  border-left-color: #0065cb;
+  color: #0065cb;
 }
 
 

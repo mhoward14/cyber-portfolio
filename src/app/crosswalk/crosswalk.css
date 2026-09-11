@@ -22,6 +22,13 @@
 .fw-cis  { --fw: #14b8a6; }
 .fw-iso  { --fw: #eab308; }
 
+/* Light-mode variants — the base hues above are tuned for dark
+   backgrounds and fall short of 4.5:1 as text/white-on-fill against
+   light-mode's near-white surfaces (verified against WCAG AA). */
+:host-context(.light-mode) .fw-nist { --fw: #d51674; }
+:host-context(.light-mode) .fw-cis  { --fw: #0e7d71; }
+:host-context(.light-mode) .fw-iso  { --fw: #8b6a05; }
+
 .crosswalk-page {
   padding-top: 5rem;
   padding-bottom: 3rem;
@@ -93,6 +100,10 @@
 }
 .crosswalk-disclaimer a {
   color: #6366f1;
+  text-decoration: underline;
+}
+:host-context(.light-mode) .crosswalk-disclaimer a {
+  color: #4d50ef;
 }
 
 .crosswalk-controls {
@@ -192,6 +203,9 @@
    the page instead of the site-wide green/blue. */
 .crosswalk-accent-text {
   color: #6366f1 !important;
+}
+:host-context(.light-mode) .crosswalk-accent-text {
+  color: #4d50ef !important;
 }
 
 .crosswalk-list {

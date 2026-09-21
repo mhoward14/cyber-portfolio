@@ -1,0 +1,113 @@
+<div class="container ts-page">
+  <a routerLink="/" class="back-link">
+    <svg class="back-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="15 18 9 12 15 6"></polyline>
+    </svg>
+    Back to Portfolio
+  </a>
+
+  <header class="ts-header">
+    <h1 class="ts-title">Digital Transaction Security Explorer</h1>
+    <div class="ts-intro">
+      <p>Follow a payment through its lifecycle &mdash; capture, transmission, storage, authorization, and
+        monitoring &mdash; for card-present, card-not-present, and ACH transfers. Toggle each stage and watch the
+        posture score respond live.</p>
+    </div>
+  </header>
+
+  <div class="ts-disclaimer">
+    Original, illustrative transaction flows applying general practices from the
+    <a [href]="currentType().standardUrl" target="_blank" rel="noopener">{{ currentType().standardName }}</a>
+    &mdash; not an official PCI SSC, NACHA, or payment-processor assessment tool.
+  </div>
+
+  <div class="ts-type-tabs">
+    @for (type of types; track type.id) {
+      <button
+        type="button"
+        class="ts-type-tab"
+        [class.is-active]="type.id === selectedTypeId()"
+        (click)="selectType(type.id)"
+      >
+        {{ type.shortName }}
+      </button>
+    }
+  </div>
+
+  <div class="section-label">
+    <span class="section-label-text ts-accent-text">// TRANSACTION FLOW</span>
+    <span class="section-label-sub">{{ currentType().description }}</span>
+  </div>
+
+  <div class="ts-layout">
+    <div class="ts-stage-grid">
+      @for (stage of currentStages(); track stage.id; let i = $index) {
+        <button
+          type="button"
+          class="ts-stage-card"
+          [class.is-selected]="stage.id === selectedStageId()"
+          [class.is-secure]="stage.isSecure"
+          [class.is-insecure]="!stage.isSecure"
+          (click)="selectStage(stage.id)"
+        >
+          <div class="ts-stage-card-head">
+            <span class="ts-stage-step">{{ i + 1 }}</span>
+            <span class="ts-stage-name">{{ stage.name }}</span>
+            <span class="ts-status-dot"></span>
+          </div>
+          <div class="ts-stage-setting">
+            {{ stage.settingLabel }}: <strong>{{ stage.isSecure ? stage.secureValue : stage.insecureValue }}</strong>
+          </div>
+
+          @if (stage.id === selectedStageId()) {
+            <div class="ts-stage-panel" (click)="$event.stopPropagation()">
+              <div class="ts-toggle-row">
+                <button
+                  type="button"
+                  class="ts-toggle-option"
+                  [class.is-chosen]="!stage.isSecure"
+                  (click)="setSecure(stage.id, false)"
+                >
+                  {{ stage.insecureValue }}
+                </button>
+                <button
+                  type="button"
+                  class="ts-toggle-option"
+                  [class.is-chosen]="stage.isSecure"
+                  (click)="setSecure(stage.id, true)"
+                >
+                  {{ stage.secureValue }}
+                </button>
+              </div>
+              <p class="ts-stage-explanation">{{ stage.explanation }}</p>
+              <p class="ts-stage-control">{{ stage.controlReference }}</p>
+            </div>
+          }
+        </button>
+      }
+    </div>
+
+    <aside class="ts-score-panel">
+      <div class="ts-score-card" [class]="'tier-' + ratingTier()">
+        <div class="ts-score-label">Posture Score</div>
+        <div class="ts-score-value">{{ score() }}<span>/100</span></div>
+        <div class="ts-score-rating">{{ ratingLabel() }}</div>
+      </div>
+
+      <div class="ts-findings-card">
+        <div class="ts-findings-label">// Findings ({{ findings().length }})</div>
+        @if (findings().length === 0) {
+          <p class="ts-findings-empty">No findings &mdash; every stage matches the secure setting. Try flipping one to see the score react.</p>
+        } @else {
+          <div class="ts-findings-list">
+            @for (finding of findings(); track finding.id) {
+              <button type="button" class="ts-finding-item" (click)="selectStage(finding.id)">
+                {{ finding.name }}: {{ finding.settingLabel.toLowerCase() }} is {{ finding.insecureValue.toLowerCase() }}
+              </button>
+            }
+          </div>
+        }
+      </div>
+    </aside>
+  </div>
+</div>

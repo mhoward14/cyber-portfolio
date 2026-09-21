@@ -29,5 +29,9 @@ export const routes: Routes = [
     path: 'attack-path',
     loadComponent: () => import('./attack-path/attack-path').then((m) => m.AttackPath),
   },
+  {
+    path: 'transaction-security',
+    loadComponent: () => import('./transaction-security/transaction-security').then((m) => m.TransactionSecurity),
+  },
   { path: '**', redirectTo: '' },
 ];

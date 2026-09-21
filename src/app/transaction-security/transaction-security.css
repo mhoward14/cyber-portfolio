@@ -1,0 +1,406 @@
+/* ============================================================
+   TRANSACTION-SECURITY.CSS — DIGITAL TRANSACTION SECURITY EXPLORER
+   Shares the site's terminal-UI building blocks (`.section-label`,
+   the `hero-enter`/`tile-enter` keyframes — defined in the global
+   src/styles.css). Page chrome uses teal (#14b8a6) as this tool's
+   own dedicated identity color — distinct from the site's blue,
+   Crosswalk's indigo, RMF Tracker's violet, Zero Trust's cyan,
+   IR Simulator's rose, Cloud Security's amber, and Attack Path's
+   sky blue.
+
+   Stage-card status (secure/insecure) reuses the site's existing
+   success/danger tokens via a `--rs` custom property set per card
+   state, mirroring the `--grade`/`--rs` pattern in
+   incident-response.css and cloud-security.css. No new colors
+   beyond the tool's own teal identity.
+   ============================================================ */
+
+.ts-page {
+  padding-top: 5rem;
+  padding-bottom: 3rem;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-bottom: 2rem;
+  color: var(--color-text-dim);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: color 0.2s, gap 0.25s var(--ease-spring);
+  animation: hero-enter 0.6s var(--ease-spring) both;
+}
+.back-link:hover {
+  color: #14b8a6;
+  gap: 0.55rem;
+}
+.back-chevron {
+  width: 14px;
+  height: 14px;
+}
+
+.ts-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.ts-title {
+  color: #14b8a6;
+  font-size: clamp(1.6rem, 4vw, 2.5rem);
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  margin: 0 0 0.75rem;
+  animation: hero-enter 0.8s var(--ease-spring) 0.05s both;
+}
+
+.ts-intro {
+  max-width: 760px;
+  margin: 0 auto;
+  animation: hero-enter 0.8s var(--ease-spring) 0.15s both;
+}
+.ts-intro p {
+  color: var(--color-text-muted);
+  line-height: 1.75;
+  font-size: 0.95rem;
+}
+
+.ts-disclaimer {
+  max-width: 760px;
+  margin: 0 auto 1.75rem;
+  padding: 0.875rem 1.125rem;
+  border: 1px solid var(--color-border);
+  border-left: 3px solid #14b8a6;
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface);
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.35);
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  text-align: center;
+  animation: hero-enter 0.8s var(--ease-spring) 0.25s both;
+}
+.ts-disclaimer a {
+  color: #14b8a6;
+  text-decoration: underline;
+}
+:host-context(.light-mode) .ts-disclaimer {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 6px 24px rgba(0, 0, 0, 0.09);
+}
+:host-context(.light-mode) .ts-title,
+:host-context(.light-mode) .ts-disclaimer a {
+  color: #0f766e;
+}
+
+.ts-accent-text {
+  color: #14b8a6 !important;
+}
+:host-context(.light-mode) .ts-accent-text {
+  color: #0f766e !important;
+}
+
+/* ============================================================
+   TRANSACTION TYPE TABS
+   ============================================================ */
+
+.ts-type-tabs {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-bottom: 2rem;
+  animation: hero-enter 0.8s var(--ease-spring) 0.3s both;
+}
+
+.ts-type-tab {
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  padding: 0.6rem 1.5rem;
+  border-radius: 2rem;
+  cursor: pointer;
+  transition: all 0.2s var(--ease-out);
+}
+.ts-type-tab:hover {
+  border-color: #14b8a6;
+  color: #14b8a6;
+}
+.ts-type-tab.is-active {
+  background: #14b8a6;
+  border-color: #14b8a6;
+  color: #06231f;
+}
+
+/* ============================================================
+   STAGE GRID
+   ============================================================ */
+
+.ts-layout {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 1.5rem;
+  align-items: start;
+  animation: tile-enter 0.5s var(--ease-spring) both;
+}
+
+.ts-stage-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.ts-stage-card {
+  --rs: var(--color-danger);
+  grid-column: span 1;
+  text-align: left;
+  font: inherit;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-surface);
+  padding: 0;
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.2s, transform 0.15s var(--ease-out), box-shadow 0.2s;
+}
+:host-context(.light-mode) .ts-stage-card {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 6px 24px rgba(0, 0, 0, 0.09);
+}
+.ts-stage-card.is-secure {
+  --rs: var(--color-success);
+}
+.ts-stage-card:hover {
+  transform: translateY(-2px);
+}
+.ts-stage-card.is-selected {
+  border-color: var(--rs);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--rs) 25%, transparent),
+    0 14px 34px -10px color-mix(in srgb, var(--rs) 35%, transparent);
+  grid-column: span 3;
+}
+
+.ts-stage-card-head {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.85rem 1rem;
+  background: color-mix(in srgb, var(--rs) 8%, transparent);
+  border-bottom: 1px solid var(--color-border);
+}
+.ts-stage-step {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1.5px solid var(--rs);
+  color: var(--rs);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 800;
+}
+.ts-stage-name {
+  flex: 1;
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--color-text);
+}
+.ts-status-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--rs);
+  flex-shrink: 0;
+}
+
+.ts-stage-setting {
+  padding: 0.85rem 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--color-text-muted);
+  line-height: 1.7;
+}
+.ts-stage-setting strong {
+  color: var(--rs);
+}
+
+.ts-stage-panel {
+  padding: 0 1rem 1rem;
+  cursor: default;
+}
+
+.ts-toggle-row {
+  display: flex;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  margin-bottom: 0.75rem;
+}
+.ts-toggle-option {
+  flex: 1;
+  text-align: center;
+  padding: 0.55rem 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--color-text-dim);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.ts-toggle-option:first-child {
+  border-right: 1px solid var(--color-border);
+}
+.ts-toggle-option.is-chosen {
+  background: var(--rs);
+  color: var(--color-bg);
+}
+
+.ts-stage-explanation {
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  margin: 0 0 0.5rem;
+}
+
+.ts-stage-control {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--color-text-dim);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* ============================================================
+   SCORE + FINDINGS PANEL
+   ============================================================ */
+
+.ts-score-panel {
+  position: sticky;
+  top: 5.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.ts-score-card {
+  --tier: var(--color-danger);
+  text-align: center;
+  border: 1px solid color-mix(in srgb, var(--tier) 35%, transparent);
+  border-radius: var(--radius-xl);
+  background: color-mix(in srgb, var(--tier) 8%, transparent);
+  box-shadow: 0 8px 28px -10px color-mix(in srgb, var(--tier) 35%, transparent);
+  padding: 1.5rem;
+}
+.ts-score-card.tier-moderate {
+  --tier: #14b8a6;
+}
+.ts-score-card.tier-strong {
+  --tier: var(--color-success);
+}
+:host-context(.light-mode) .ts-score-card.tier-moderate {
+  --tier: #0f766e;
+}
+.ts-score-label {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-text-dim);
+  margin-bottom: 0.5rem;
+}
+.ts-score-value {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: var(--tier);
+  line-height: 1;
+}
+.ts-score-value span {
+  font-size: 1.1rem;
+  color: var(--color-text-dim);
+  font-weight: 700;
+}
+.ts-score-rating {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--tier);
+  margin-top: 0.5rem;
+}
+
+.ts-findings-card {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-surface);
+  padding: 1.125rem;
+}
+:host-context(.light-mode) .ts-findings-card {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 6px 24px rgba(0, 0, 0, 0.09);
+}
+.ts-findings-label {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #14b8a6;
+  margin-bottom: 0.75rem;
+}
+:host-context(.light-mode) .ts-findings-label {
+  color: #0f766e;
+}
+.ts-findings-empty {
+  font-size: 0.8rem;
+  color: var(--color-success);
+  line-height: 1.6;
+  margin: 0;
+}
+.ts-findings-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.ts-finding-item {
+  text-align: left;
+  font: inherit;
+  border: none;
+  border-left: 2px solid var(--color-danger);
+  background: color-mix(in srgb, var(--color-danger) 6%, transparent);
+  padding: 0.5rem 0.75rem;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: 0.76rem;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.ts-finding-item:hover {
+  background: color-mix(in srgb, var(--color-danger) 12%, transparent);
+  color: var(--color-text);
+}
+
+@media (max-width: 768px) {
+  .ts-layout {
+    grid-template-columns: 1fr;
+  }
+  .ts-stage-grid {
+    grid-template-columns: 1fr;
+  }
+  .ts-stage-card.is-selected {
+    grid-column: span 1;
+  }
+  .ts-score-panel {
+    position: static;
+  }
+  .ts-type-tabs {
+    flex-wrap: wrap;
+  }
+}

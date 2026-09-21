@@ -112,7 +112,10 @@
   animation: hero-enter 0.8s var(--ease-spring) 0.2s both;
 }
 
-/* Wrapper around the .badge pill */
+/* Wrapper around the remaining Credly iframe embed (ISC2 CC — no
+   standalone badge image available yet). The other three certs use
+   .cert-badge-img instead, which needs no clipping since the PNGs
+   already have a transparent background. */
 .badge-clip {
   width: 128px;
   height: 124px;
@@ -123,11 +126,31 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   gap: 0.85rem;
   margin-top: 1.25rem;
   margin-bottom: 3rem;
   animation: hero-enter 0.8s var(--ease-spring) 0.35s both;
+}
+
+.cert-badge-link {
+  display: block;
+  line-height: 0;
+  border-radius: 50%;
+  transition: transform 0.2s var(--ease-out);
+}
+.cert-badge-link:hover,
+.cert-badge-link:focus-visible {
+  transform: translateY(-3px);
+}
+
+.cert-badge-img {
+  width: 96px;
+  height: 96px;
+  filter: drop-shadow(0 3px 10px rgba(0, 0, 0, 0.35));
+}
+:host-context(.light-mode) .cert-badge-img {
+  filter: drop-shadow(0 3px 10px rgba(0, 0, 0, 0.13));
 }
 
 /* Cert badge pill with slow pulsing blue glow */
@@ -634,7 +657,8 @@
   color: #1e3a8a;
 }
 
-/* Cert badges: drop-shadow so they lift off the white background */
+/* Remaining Credly iframe badge (ISC2 CC): drop-shadow so its white
+   card lifts off the white light-mode background */
 :host-context(.light-mode) .badge-clip {
   filter: drop-shadow(0 3px 10px rgba(0, 0, 0, 0.13));
 }

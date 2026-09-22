@@ -10,9 +10,12 @@
 
    The kill chain is curated to 6 of ATT&CK's 14 Enterprise tactics
    (Initial Access, Execution, Persistence, Privilege Escalation,
-   Lateral Movement, Impact) with 2-3 techniques each — illustrative
+   Lateral Movement, Impact) with 2-4 techniques each — illustrative
    breadth, not exhaustive coverage, same convention as Crosswalk's
-   ~20 topics or IR Simulator's 4 scenarios.
+   ~20 topics or IR Simulator's 4 scenarios. Impact's fourth option,
+   Financial Theft (T1657), is the one technique whose mapped defense
+   points at the Transaction Security tool rather than Zero Trust,
+   Cloud Security, IR Simulator, or RMF Tracker.
 
    Each technique carries an original "Stealth" rating (Low/Medium/
    High) and a "defense" mapping that cross-references one of the
@@ -46,7 +49,8 @@ export type TechniqueIcon =
   | 'copy'
   | 'lock'
   | 'undo'
-  | 'power';
+  | 'power'
+  | 'credit-card';
 
 export interface DefenseMapping {
   tool: string;
@@ -332,6 +336,19 @@ export const TACTIC_STAGES: TacticStage[] = [
           tool: 'IR Simulator',
           route: '/incident-response',
           note: 'the Containment, Eradication & Recovery phase is built around exactly this kind of business-impacting failure.',
+        },
+      },
+      {
+        id: 'financial-theft',
+        attackId: 'T1657',
+        name: 'Financial Theft',
+        icon: 'credit-card',
+        stealth: 'medium',
+        description: 'Use a compromised account or impersonation to redirect an outbound payment or transfer to an attacker-controlled destination.',
+        defense: {
+          tool: 'Transaction Security',
+          route: '/transaction-security',
+          note: 'dual-control approval and real-time anomaly detection on outbound transfers catch a fraudulent request before funds settle.',
         },
       },
     ],

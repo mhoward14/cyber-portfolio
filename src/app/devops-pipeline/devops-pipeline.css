@@ -2,11 +2,14 @@
    DEVOPS-PIPELINE.CSS — SECURE CI/CD PIPELINE BUILDER
    Shares the site's terminal-UI building blocks (`.section-label`,
    the `hero-enter`/`tile-enter` keyframes — defined in the global
-   src/styles.css). Page chrome uses emerald (#10b981) as this
+   src/styles.css). Page chrome uses fuchsia (#d946ef) as this
    tool's own dedicated identity color — distinct from the site's
    blue, Crosswalk's indigo, RMF Tracker's violet, Zero Trust's
-   cyan, IR Simulator's rose, Cloud Security's amber, and
-   Transaction Security's teal.
+   cyan, IR Simulator's rose, Cloud Security's amber, Transaction
+   Security's teal, and every case-study tile color on the home
+   page (several of which already reuse each other's hues, so this
+   was picked to not add another repeat — not even the emerald
+   used by the "Cybersecurity Architecture & Engineering" tile).
 
    Gate-card status (secure/insecure) reuses the site's existing
    success/danger tokens via a `--gt` custom property set per card
@@ -38,7 +41,7 @@
   animation: hero-enter 0.6s var(--ease-spring) both;
 }
 .back-link:hover {
-  color: #10b981;
+  color: #d946ef;
   gap: 0.55rem;
 }
 .back-chevron {
@@ -52,7 +55,7 @@
 }
 
 .dp-title {
-  color: #10b981;
+  color: #d946ef;
   font-size: clamp(1.6rem, 4vw, 2.5rem);
   font-weight: 900;
   letter-spacing: 0.02em;
@@ -76,7 +79,7 @@
   margin: 0 auto 1.75rem;
   padding: 0.875rem 1.125rem;
   border: 1px solid var(--color-border);
-  border-left: 3px solid #10b981;
+  border-left: 3px solid #d946ef;
   border-radius: var(--radius-md);
   background-color: var(--color-surface);
   box-shadow: 0 2px 16px rgba(0, 0, 0, 0.35);
@@ -87,7 +90,7 @@
   animation: hero-enter 0.8s var(--ease-spring) 0.25s both;
 }
 .dp-disclaimer a {
-  color: #10b981;
+  color: #d946ef;
   text-decoration: underline;
 }
 :host-context(.light-mode) .dp-disclaimer {
@@ -95,14 +98,14 @@
 }
 :host-context(.light-mode) .dp-title,
 :host-context(.light-mode) .dp-disclaimer a {
-  color: #047a57;
+  color: #a21caf;
 }
 
 .dp-accent-text {
-  color: #10b981 !important;
+  color: #d946ef !important;
 }
 :host-context(.light-mode) .dp-accent-text {
-  color: #047a57 !important;
+  color: #a21caf !important;
 }
 
 /* ============================================================
@@ -394,11 +397,11 @@
   font-size: 0.68rem;
   font-weight: 700;
   letter-spacing: 0.05em;
-  color: #10b981;
+  color: #d946ef;
   margin-bottom: 0.75rem;
 }
 :host-context(.light-mode) .dp-findings-label {
-  color: #047a57;
+  color: #a21caf;
 }
 .dp-findings-empty {
   font-size: 0.8rem;

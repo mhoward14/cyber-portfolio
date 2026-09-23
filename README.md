@@ -1,6 +1,6 @@
 # Matthew Howard Cybersecurity Portfolio
 
-An interactive cybersecurity portfolio spanning **GRC/RMF, cloud and Zero Trust architecture, security operations, vulnerability analysis, and penetration-testing methodology**. It combines seven browser-based security tools with ten graduate case-study areas and supporting application-security work.
+An interactive cybersecurity portfolio spanning **GRC/RMF, cloud and Zero Trust architecture, security operations, vulnerability analysis, and penetration-testing methodology**. It combines seven browser-based security tools with eleven case-study areas and supporting application-security work.
 
 **Live site:** [mhoward14.github.io/cyber-portfolio](https://mhoward14.github.io/cyber-portfolio/)
 
@@ -29,9 +29,9 @@ For a short recruiter or hiring-manager review:
 
 Together, the tools show a connected workflow: model an attack, identify likely detection and control opportunities, evaluate cloud and Zero Trust design choices, practice incident-response decisions, track RMF implementation, translate requirements across major frameworks, and secure a payment transaction end to end.
 
-## Graduate case studies
+## Case studies
 
-The portfolio also contains ten searchable, expandable project areas:
+The portfolio also contains eleven searchable, expandable project areas:
 
 - Cybersecurity graduate capstone
 - Governance, risk, and compliance
@@ -43,8 +43,9 @@ The portfolio also contains ten searchable, expandable project areas:
 - Cybersecurity management
 - Secure software design
 - Security foundations
+- Digital transaction & payment security
 
-Each case study describes its context, approach, frameworks and technologies, key deliverables, and demonstrated capabilities. Visible qualification notes identify academic, simulated, or credential-based work as applicable.
+Each case study describes its context, approach, frameworks and technologies, key deliverables, and demonstrated capabilities. Visible qualification notes identify academic, simulated, credential-based, or independent-portfolio-development work as applicable.
 
 ## Professional context
 

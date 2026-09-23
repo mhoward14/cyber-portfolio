@@ -40,7 +40,7 @@
       </div>
 
       <div class="about-stats">
-        <div class="stat-item"><span class="stat-number">10</span><span class="stat-label">Projects</span></div>
+        <div class="stat-item"><span class="stat-number">{{ totalProjects() }}</span><span class="stat-label">Projects</span></div>
         <div class="stat-divider"></div>
         <div class="stat-item"><span class="stat-number">4</span><span class="stat-label">Certifications</span></div>
         <div class="stat-divider"></div>
@@ -78,6 +78,7 @@
           [class.network-project]="project.title === 'Secure Network Design'"
           [class.software-project]="project.title === 'Secure Software Design'"
           [class.foundations-project]="project.title === 'Security Foundations'"
+          [class.payment-project]="project.title === 'Digital Transaction & Payment Security'"
           [style.--project-color]="project.color">
           <div class="tile-accent-bar" [style.background]="project.color"></div>
 

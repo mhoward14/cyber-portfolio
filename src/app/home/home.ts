@@ -218,6 +218,24 @@ export class Home implements AfterViewInit {
       frameworks: ['(ISC)² CC', 'CIA Triad', 'Risk Management', 'RBAC', 'BCP / DR', 'Incident Response', 'Network Security', 'Zero Trust', 'Security Operations'],
       deliverables: ['Foundational security competency', 'Risk-management knowledge', 'Access-control knowledge', 'Network-security knowledge', 'Security-operations knowledge'],
       demonstrates: 'A broad security foundation that supports the more specialized GRC, architecture, penetration-testing, cloud, and operations work shown elsewhere in the portfolio.'
+    },
+    {
+      title: 'Digital Transaction & Payment Security',
+      role: 'Independent Portfolio Development',
+      color: '#14b8a6',
+      tags: ['PCI DSS', 'NACHA', 'Payment Security', 'Tokenization', 'Fraud Prevention', 'MITRE ATT&CK'],
+      academicNote: 'Independent portfolio development, not a graduate course assignment. Built as one of this portfolio\'s interactive tools rather than a classroom deliverable; content and design decisions are original.',
+      context: 'Modeled how a payment moves through its full lifecycle — capture, transmission, tokenization, authorization, and settlement — across card-present, card-not-present, and ACH transfers, and applied the relevant security standard\'s controls at each stage.',
+      approach: [
+        'Modeled three transaction types across a shared six-stage payment lifecycle, each stage carrying a secure and an insecure configuration.',
+        'Mapped every stage to a specific PCI DSS v4.0 requirement for card transactions, or the NACHA Operating Rules for ACH transfers.',
+        'Designed a live posture-scoring model and findings panel so a chosen configuration\'s real-world consequence — a Magecart-style skimming path, an unauthorized ACH transfer — is visible immediately rather than left abstract.',
+        'Cross-linked the tool into the Attack Path Builder\'s MITRE ATT&CK kill chain (Financial Theft, T1657), connecting an offensive technique to a payment-specific defensive control.',
+        'Built and unit-tested the tool\'s scoring and state logic as a standalone Angular component.'
+      ],
+      frameworks: ['PCI DSS v4.0', 'NACHA Operating Rules', 'Tokenization', 'EMV / 3-D Secure', 'MITRE ATT&CK', 'Fraud Monitoring'],
+      deliverables: ['Digital Transaction Security Explorer (interactive tool)', 'Card-present, card-not-present, and ACH transaction-flow models', 'PCI DSS / NACHA control mapping', 'Live posture-scoring model', 'Cross-linked MITRE ATT&CK technique'],
+      demonstrates: 'Ability to reason about payment-system security end to end — cardholder-data-environment scope, tokenization and encryption tradeoffs, authentication and fraud controls, and applicable compliance requirements — and to translate that reasoning into a working, tested tool rather than a written analysis alone.'
     }
   ]);
 

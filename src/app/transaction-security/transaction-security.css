@@ -159,15 +159,27 @@
 .ts-stage-card {
   --rs: var(--color-danger);
   grid-column: span 1;
-  text-align: left;
-  font: inherit;
   border: 1.5px solid var(--color-border);
   border-radius: var(--radius-lg);
   background-color: var(--color-surface);
-  padding: 0;
   overflow: hidden;
-  cursor: pointer;
   transition: border-color 0.2s, transform 0.15s var(--ease-out), box-shadow 0.2s;
+}
+
+/* The card itself is a plain div (not a button) so the toggle buttons in
+   its expanded panel are never nested inside another interactive element —
+   only this header/summary control is a real <button>. */
+.ts-stage-select {
+  display: block;
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
 }
 :host-context(.light-mode) .ts-stage-card {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 6px 24px rgba(0, 0, 0, 0.09);

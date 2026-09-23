@@ -42,25 +42,30 @@
   <div class="ts-layout">
     <div class="ts-stage-grid">
       @for (stage of currentStages(); track stage.id; let i = $index) {
-        <button
-          type="button"
+        <div
           class="ts-stage-card"
           [class.is-selected]="stage.id === selectedStageId()"
           [class.is-secure]="stage.isSecure"
           [class.is-insecure]="!stage.isSecure"
-          (click)="selectStage(stage.id)"
         >
-          <div class="ts-stage-card-head">
-            <span class="ts-stage-step">{{ i + 1 }}</span>
-            <span class="ts-stage-name">{{ stage.name }}</span>
-            <span class="ts-status-dot"></span>
-          </div>
-          <div class="ts-stage-setting">
-            {{ stage.settingLabel }}: <strong>{{ stage.isSecure ? stage.secureValue : stage.insecureValue }}</strong>
-          </div>
+          <button
+            type="button"
+            class="ts-stage-select"
+            [attr.aria-expanded]="stage.id === selectedStageId()"
+            (click)="selectStage(stage.id)"
+          >
+            <div class="ts-stage-card-head">
+              <span class="ts-stage-step">{{ i + 1 }}</span>
+              <span class="ts-stage-name">{{ stage.name }}</span>
+              <span class="ts-status-dot"></span>
+            </div>
+            <div class="ts-stage-setting">
+              {{ stage.settingLabel }}: <strong>{{ stage.isSecure ? stage.secureValue : stage.insecureValue }}</strong>
+            </div>
+          </button>
 
           @if (stage.id === selectedStageId()) {
-            <div class="ts-stage-panel" (click)="$event.stopPropagation()">
+            <div class="ts-stage-panel">
               <div class="ts-toggle-row">
                 <button
                   type="button"
@@ -83,11 +88,11 @@
               <p class="ts-stage-control">{{ stage.controlReference }}</p>
             </div>
           }
-        </button>
+        </div>
       }
     </div>
 
-    <aside class="ts-score-panel">
+    <aside class="ts-score-panel" aria-label="Posture score and findings">
       <div class="ts-score-card" [class]="'tier-' + ratingTier()">
         <div class="ts-score-label">Posture Score</div>
         <div class="ts-score-value">{{ score() }}<span>/100</span></div>

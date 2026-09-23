@@ -143,7 +143,7 @@
    shrunk. Nudge the crop window up so it starts further into the
    badge art instead of at the very top of the iframe. */
 .badge-scale > * {
-  margin-top: -12px;
+  margin-top: -15px;
 }
 
 .cert-badges {

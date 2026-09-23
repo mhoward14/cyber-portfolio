@@ -132,8 +132,18 @@
 .badge-scale {
   width: 128px;
   height: 124px;
+  overflow: hidden;
   transform: scale(0.75);
   transform-origin: top left;
+}
+
+/* Credly's embed appears to leave blank space above the actual badge
+   glyph before its descriptive text starts, which left the badge
+   sitting visibly lower than the other (edge-to-edge) cert badges once
+   shrunk. Nudge the crop window up so it starts further into the
+   badge art instead of at the very top of the iframe. */
+.badge-scale > * {
+  margin-top: -12px;
 }
 
 .cert-badges {

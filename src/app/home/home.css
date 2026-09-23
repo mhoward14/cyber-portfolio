@@ -115,11 +115,25 @@
 /* Wrapper around the remaining Credly iframe embed (ISC2 CC — no
    standalone badge image available yet). The other three certs use
    .cert-badge-img instead, which needs no clipping since the PNGs
-   already have a transparent background. */
+   already have a transparent background.
+
+   Credly's embed renders its iframe at a fixed internal size regardless
+   of the declared data-iframe-width/height (shrinking those just crops
+   the badge instead of scaling it), so .badge-clip stays sized to the
+   iframe's real 128x230 output and .badge-scale does the resizing via
+   a CSS transform instead — that scales the rendered pixels themselves
+   rather than asking Credly's page to lay out smaller. */
 .badge-clip {
   width: 96px;
   height: 93px;
   overflow: hidden;
+}
+
+.badge-scale {
+  width: 128px;
+  height: 124px;
+  transform: scale(0.75);
+  transform-origin: top left;
 }
 
 .cert-badges {

@@ -117,8 +117,8 @@
    .cert-badge-img instead, which needs no clipping since the PNGs
    already have a transparent background. */
 .badge-clip {
-  width: 128px;
-  height: 124px;
+  width: 96px;
+  height: 93px;
   overflow: hidden;
 }
 

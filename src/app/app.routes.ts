@@ -33,5 +33,9 @@ export const routes: Routes = [
     path: 'transaction-security',
     loadComponent: () => import('./transaction-security/transaction-security').then((m) => m.TransactionSecurity),
   },
+  {
+    path: 'devops-pipeline',
+    loadComponent: () => import('./devops-pipeline/devops-pipeline').then((m) => m.DevopsPipeline),
+  },
   { path: '**', redirectTo: '' },
 ];

@@ -41,43 +41,48 @@
   <div class="cs-layout">
     <div class="cs-resource-grid">
       @for (resource of currentResources(); track resource.id) {
-        <button
-          type="button"
+        <div
           class="cs-resource-card"
           [class.is-selected]="resource.id === selectedResourceId()"
           [class.is-secure]="resource.isSecure"
           [class.is-insecure]="!resource.isSecure"
-          (click)="selectResource(resource.id)"
         >
-          <div class="cs-resource-card-head">
-            <span class="cs-resource-icon">
-              @switch (resource.category) {
-                @case ('storage') {
-                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="18" height="13" rx="2"></rect><path d="M7 7V5a2 2 0 012-2h6a2 2 0 012 2v2"></path></svg>
+          <button
+            type="button"
+            class="cs-resource-select"
+            [attr.aria-expanded]="resource.id === selectedResourceId()"
+            (click)="selectResource(resource.id)"
+          >
+            <div class="cs-resource-card-head">
+              <span class="cs-resource-icon">
+                @switch (resource.category) {
+                  @case ('storage') {
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="18" height="13" rx="2"></rect><path d="M7 7V5a2 2 0 012-2h6a2 2 0 012 2v2"></path></svg>
+                  }
+                  @case ('compute') {
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="3" width="16" height="18" rx="2"></rect><line x1="9" y1="8" x2="15" y2="8"></line><line x1="9" y1="12" x2="15" y2="12"></line></svg>
+                  }
+                  @case ('network') {
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="9" width="20" height="7" rx="2"></rect><line x1="6" y1="12.5" x2="6.01" y2="12.5"></line></svg>
+                  }
+                  @case ('identity') {
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="3.2"></circle><path d="M5.5 20c0-3.6 3-6 6.5-6s6.5 2.4 6.5 6"></path></svg>
+                  }
+                  @case ('secrets') {
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="10" width="14" height="10" rx="2"></rect><path d="M8 10V7a4 4 0 018 0v3"></path></svg>
+                  }
                 }
-                @case ('compute') {
-                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="3" width="16" height="18" rx="2"></rect><line x1="9" y1="8" x2="15" y2="8"></line><line x1="9" y1="12" x2="15" y2="12"></line></svg>
-                }
-                @case ('network') {
-                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="9" width="20" height="7" rx="2"></rect><line x1="6" y1="12.5" x2="6.01" y2="12.5"></line></svg>
-                }
-                @case ('identity') {
-                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="3.2"></circle><path d="M5.5 20c0-3.6 3-6 6.5-6s6.5 2.4 6.5 6"></path></svg>
-                }
-                @case ('secrets') {
-                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="10" width="14" height="10" rx="2"></rect><path d="M8 10V7a4 4 0 018 0v3"></path></svg>
-                }
-              }
-            </span>
-            <span class="cs-resource-name">{{ resource.name }}</span>
-            <span class="cs-status-dot"></span>
-          </div>
-          <div class="cs-resource-setting">
-            {{ resource.settingLabel }}: <strong>{{ resource.isSecure ? resource.secureValue : resource.insecureValue }}</strong>
-          </div>
+              </span>
+              <span class="cs-resource-name">{{ resource.name }}</span>
+              <span class="cs-status-dot"></span>
+            </div>
+            <div class="cs-resource-setting">
+              {{ resource.settingLabel }}: <strong>{{ resource.isSecure ? resource.secureValue : resource.insecureValue }}</strong>
+            </div>
+          </button>
 
           @if (resource.id === selectedResourceId()) {
-            <div class="cs-resource-panel" (click)="$event.stopPropagation()">
+            <div class="cs-resource-panel">
               <div class="cs-toggle-row">
                 <button
                   type="button"
@@ -99,11 +104,11 @@
               <p class="cs-resource-explanation">{{ resource.explanation }}</p>
             </div>
           }
-        </button>
+        </div>
       }
     </div>
 
-    <aside class="cs-score-panel">
+    <aside class="cs-score-panel" aria-label="Posture score and findings">
       <div class="cs-score-card" [class]="'tier-' + ratingTier()">
         <div class="cs-score-label">Posture Score</div>
         <div class="cs-score-value">{{ score() }}<span>/100</span></div>

@@ -1,0 +1,456 @@
+/* ============================================================
+   DEVOPS-PIPELINE.CSS — SECURE CI/CD PIPELINE BUILDER
+   Shares the site's terminal-UI building blocks (`.section-label`,
+   the `hero-enter`/`tile-enter` keyframes — defined in the global
+   src/styles.css). Page chrome uses emerald (#10b981) as this
+   tool's own dedicated identity color — distinct from the site's
+   blue, Crosswalk's indigo, RMF Tracker's violet, Zero Trust's
+   cyan, IR Simulator's rose, Cloud Security's amber, and
+   Transaction Security's teal.
+
+   Gate-card status (secure/insecure) reuses the site's existing
+   success/danger tokens via a `--gt` custom property set per card
+   state, mirroring the `--rs` pattern in cloud-security.css. The
+   pipeline stepper is a clickable, freely-explorable variant of
+   Attack Path Builder's linear `.ap-stepper` — each step shows its
+   own stage score instead of a done/current checkmark, since this
+   tool lets you revisit any stage at any time rather than walking
+   through once.
+   ============================================================ */
+
+.dp-page {
+  padding-top: 5rem;
+  padding-bottom: 3rem;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-bottom: 2rem;
+  color: var(--color-text-dim);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: color 0.2s, gap 0.25s var(--ease-spring);
+  animation: hero-enter 0.6s var(--ease-spring) both;
+}
+.back-link:hover {
+  color: #10b981;
+  gap: 0.55rem;
+}
+.back-chevron {
+  width: 14px;
+  height: 14px;
+}
+
+.dp-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.dp-title {
+  color: #10b981;
+  font-size: clamp(1.6rem, 4vw, 2.5rem);
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  margin: 0 0 0.75rem;
+  animation: hero-enter 0.8s var(--ease-spring) 0.05s both;
+}
+
+.dp-intro {
+  max-width: 760px;
+  margin: 0 auto;
+  animation: hero-enter 0.8s var(--ease-spring) 0.15s both;
+}
+.dp-intro p {
+  color: var(--color-text-muted);
+  line-height: 1.75;
+  font-size: 0.95rem;
+}
+
+.dp-disclaimer {
+  max-width: 760px;
+  margin: 0 auto 1.75rem;
+  padding: 0.875rem 1.125rem;
+  border: 1px solid var(--color-border);
+  border-left: 3px solid #10b981;
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface);
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.35);
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  text-align: center;
+  animation: hero-enter 0.8s var(--ease-spring) 0.25s both;
+}
+.dp-disclaimer a {
+  color: #10b981;
+  text-decoration: underline;
+}
+:host-context(.light-mode) .dp-disclaimer {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 6px 24px rgba(0, 0, 0, 0.09);
+}
+:host-context(.light-mode) .dp-title,
+:host-context(.light-mode) .dp-disclaimer a {
+  color: #047a57;
+}
+
+.dp-accent-text {
+  color: #10b981 !important;
+}
+:host-context(.light-mode) .dp-accent-text {
+  color: #047a57 !important;
+}
+
+/* ============================================================
+   PIPELINE STEPPER
+   ============================================================ */
+
+.dp-stepper {
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+  animation: hero-enter 0.8s var(--ease-spring) 0.3s both;
+}
+
+.dp-step {
+  --gt: var(--color-danger);
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-surface);
+  padding: 0.75rem 0.5rem;
+  cursor: pointer;
+  transition: border-color 0.2s, transform 0.15s var(--ease-out), box-shadow 0.2s;
+}
+.dp-step.tier-moderate { --gt: #f59e0b; }
+.dp-step.tier-strong { --gt: var(--color-success); }
+:host-context(.light-mode) .dp-step.tier-moderate { --gt: #905d06; }
+:host-context(.light-mode) .dp-step {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 6px 24px rgba(0, 0, 0, 0.09);
+}
+.dp-step:hover {
+  transform: translateY(-2px);
+}
+.dp-step.is-current {
+  border-color: var(--gt);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--gt) 25%, transparent),
+    0 14px 34px -10px color-mix(in srgb, var(--gt) 35%, transparent);
+}
+
+.dp-step-index {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: var(--color-text-dim);
+}
+.dp-step-name {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: var(--color-text);
+}
+.dp-step-score {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--gt);
+}
+
+.dp-step-connector {
+  flex: 0 0 20px;
+  height: 1px;
+  background: var(--color-border);
+}
+
+/* ============================================================
+   GATE GRID
+   ============================================================ */
+
+.dp-layout {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 1.5rem;
+  align-items: start;
+  animation: tile-enter 0.5s var(--ease-spring) both;
+}
+
+.dp-gate-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.dp-gate-card {
+  --gt: var(--color-danger);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-surface);
+  overflow: hidden;
+  transition: border-color 0.2s, transform 0.15s var(--ease-out), box-shadow 0.2s;
+}
+:host-context(.light-mode) .dp-gate-card {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 6px 24px rgba(0, 0, 0, 0.09);
+}
+.dp-gate-card.is-secure {
+  --gt: var(--color-success);
+}
+.dp-gate-card:hover {
+  transform: translateY(-2px);
+}
+.dp-gate-card.is-selected {
+  border-color: var(--gt);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--gt) 25%, transparent),
+    0 14px 34px -10px color-mix(in srgb, var(--gt) 35%, transparent);
+  grid-column: 1 / -1;
+}
+
+/* The card itself is a plain div (not a button) so the toggle buttons in
+   its expanded panel are never nested inside another interactive element —
+   only this header/summary control is a real <button>. */
+.dp-gate-select {
+  display: block;
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+.dp-gate-card-head {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.85rem 1rem;
+  background: color-mix(in srgb, var(--gt) 8%, transparent);
+  border-bottom: 1px solid var(--color-border);
+}
+.dp-gate-name {
+  flex: 1;
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--color-text);
+}
+.dp-status-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--gt);
+  flex-shrink: 0;
+}
+
+.dp-gate-setting {
+  padding: 0.85rem 1rem 0.3rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--color-text-muted);
+  line-height: 1.7;
+}
+.dp-gate-setting strong {
+  color: var(--gt);
+}
+.dp-gate-ssdf {
+  padding: 0 1rem 0.85rem;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: var(--color-text-dim);
+}
+
+.dp-gate-panel {
+  padding: 0 1rem 1rem;
+  cursor: default;
+}
+
+.dp-toggle-row {
+  display: flex;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  margin-bottom: 0.75rem;
+}
+.dp-toggle-option {
+  flex: 1;
+  text-align: center;
+  padding: 0.55rem 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--color-text-dim);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.dp-toggle-option:first-child {
+  border-right: 1px solid var(--color-border);
+}
+.dp-toggle-option.is-chosen {
+  background: var(--gt);
+  color: var(--color-bg);
+}
+
+.dp-gate-explanation {
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  margin: 0 0 0.5rem;
+}
+.dp-gate-control {
+  font-size: 0.7rem;
+  color: var(--color-text-dim);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* ============================================================
+   SCORE + FINDINGS PANEL
+   ============================================================ */
+
+.dp-score-panel {
+  position: sticky;
+  top: 5.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.dp-score-card {
+  --tier: var(--color-danger);
+  text-align: center;
+  border: 1px solid color-mix(in srgb, var(--tier) 35%, transparent);
+  border-radius: var(--radius-xl);
+  background: color-mix(in srgb, var(--tier) 8%, transparent);
+  box-shadow: 0 8px 28px -10px color-mix(in srgb, var(--tier) 35%, transparent);
+  padding: 1.5rem;
+}
+.dp-score-card.tier-moderate {
+  --tier: #f59e0b;
+}
+.dp-score-card.tier-strong {
+  --tier: var(--color-success);
+}
+:host-context(.light-mode) .dp-score-card.tier-moderate {
+  --tier: #905d06;
+}
+.dp-score-label {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-text-dim);
+  margin-bottom: 0.5rem;
+}
+.dp-score-value {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: var(--tier);
+  line-height: 1;
+}
+.dp-score-value span {
+  font-size: 1.1rem;
+  color: var(--color-text-dim);
+  font-weight: 700;
+}
+.dp-score-rating {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--tier);
+  margin-top: 0.5rem;
+}
+.dp-score-note {
+  font-size: 0.68rem;
+  color: var(--color-text-dim);
+  margin-top: 0.5rem;
+  line-height: 1.5;
+}
+
+.dp-findings-card {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-surface);
+  padding: 1.125rem;
+}
+:host-context(.light-mode) .dp-findings-card {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 6px 24px rgba(0, 0, 0, 0.09);
+}
+.dp-findings-label {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #10b981;
+  margin-bottom: 0.75rem;
+}
+:host-context(.light-mode) .dp-findings-label {
+  color: #047a57;
+}
+.dp-findings-empty {
+  font-size: 0.8rem;
+  color: var(--color-success);
+  line-height: 1.6;
+  margin: 0;
+}
+.dp-findings-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 380px;
+  overflow-y: auto;
+}
+.dp-finding-item {
+  text-align: left;
+  font: inherit;
+  border: none;
+  border-left: 2px solid var(--color-danger);
+  background: color-mix(in srgb, var(--color-danger) 6%, transparent);
+  padding: 0.5rem 0.75rem;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: 0.76rem;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.dp-finding-item:hover {
+  background: color-mix(in srgb, var(--color-danger) 12%, transparent);
+  color: var(--color-text);
+}
+
+@media (max-width: 768px) {
+  .dp-layout {
+    grid-template-columns: 1fr;
+  }
+  .dp-gate-grid {
+    grid-template-columns: 1fr;
+  }
+  .dp-gate-card.is-selected {
+    grid-column: 1 / -1;
+  }
+  .dp-score-panel {
+    position: static;
+  }
+  .dp-stepper {
+    flex-wrap: wrap;
+  }
+  .dp-step {
+    flex: 1 1 30%;
+  }
+  .dp-step-connector {
+    display: none;
+  }
+}

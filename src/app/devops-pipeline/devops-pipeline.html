@@ -1,0 +1,126 @@
+<div class="container dp-page">
+  <a routerLink="/" class="back-link">
+    <svg class="back-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="15 18 9 12 15 6"></polyline>
+    </svg>
+    Back to Portfolio
+  </a>
+
+  <header class="dp-header">
+    <h1 class="dp-title">Secure CI/CD Pipeline Builder</h1>
+    <div class="dp-intro">
+      <p>Assemble a CI/CD pipeline's security controls stage by stage &mdash; source, build, test, deploy, and operate
+        &mdash; and watch a live shift-left maturity score respond. Every gate maps to a specific practice in the
+        Secure Software Development Framework.</p>
+    </div>
+  </header>
+
+  <div class="dp-disclaimer">
+    Original, illustrative pipeline configuration applying general practices from
+    <a [href]="ssdfUrl" target="_blank" rel="noopener">{{ ssdfName }}</a>
+    &mdash; not an official NIST assessment tool or an exhaustive DevSecOps toolchain.
+  </div>
+
+  <div class="dp-stepper">
+    @for (stage of ratedStages(); track stage.id; let i = $index) {
+      <button
+        type="button"
+        class="dp-step"
+        [class]="'tier-' + (stage.score === 100 ? 'strong' : stage.score >= 50 ? 'moderate' : 'weak')"
+        [class.is-current]="stage.id === selectedStageId()"
+        [attr.aria-current]="stage.id === selectedStageId()"
+        (click)="selectStage(stage.id)"
+      >
+        <span class="dp-step-index">{{ i + 1 }}</span>
+        <span class="dp-step-name">{{ stage.name }}</span>
+        <span class="dp-step-score">{{ stage.score }}%</span>
+      </button>
+      @if (i < ratedStages().length - 1) {
+        <div class="dp-step-connector"></div>
+      }
+    }
+  </div>
+
+  <div class="section-label">
+    <span class="section-label-text dp-accent-text">// {{ currentStage().name.toUpperCase() }}</span>
+    <span class="section-label-sub">{{ currentStage().tagline }}</span>
+  </div>
+
+  <div class="dp-layout">
+    <div class="dp-gate-grid">
+      @for (gate of currentStage().gates; track gate.id) {
+        <div
+          class="dp-gate-card"
+          [class.is-selected]="gate.id === selectedGateId()"
+          [class.is-secure]="gate.isSecure"
+          [class.is-insecure]="!gate.isSecure"
+        >
+          <button
+            type="button"
+            class="dp-gate-select"
+            [attr.aria-expanded]="gate.id === selectedGateId()"
+            (click)="selectGate(gate.id)"
+          >
+            <div class="dp-gate-card-head">
+              <span class="dp-gate-name">{{ gate.name }}</span>
+              <span class="dp-status-dot"></span>
+            </div>
+            <div class="dp-gate-setting">
+              {{ gate.settingLabel }}: <strong>{{ gate.isSecure ? gate.secureValue : gate.insecureValue }}</strong>
+            </div>
+            <div class="dp-gate-ssdf">SSDF {{ gate.ssdfPractice }}</div>
+          </button>
+
+          @if (gate.id === selectedGateId()) {
+            <div class="dp-gate-panel">
+              <div class="dp-toggle-row">
+                <button
+                  type="button"
+                  class="dp-toggle-option"
+                  [class.is-chosen]="!gate.isSecure"
+                  (click)="setSecure(gate.id, false)"
+                >
+                  {{ gate.insecureValue }}
+                </button>
+                <button
+                  type="button"
+                  class="dp-toggle-option"
+                  [class.is-chosen]="gate.isSecure"
+                  (click)="setSecure(gate.id, true)"
+                >
+                  {{ gate.secureValue }}
+                </button>
+              </div>
+              <p class="dp-gate-explanation">{{ gate.explanation }}</p>
+              <p class="dp-gate-control">SSDF {{ gate.ssdfPractice }} &mdash; {{ gate.ssdfPracticeName }}</p>
+            </div>
+          }
+        </div>
+      }
+    </div>
+
+    <aside class="dp-score-panel" aria-label="Pipeline maturity score and findings">
+      <div class="dp-score-card" [class]="'tier-' + ratingTier()">
+        <div class="dp-score-label">Pipeline Maturity</div>
+        <div class="dp-score-value">{{ score() }}<span>/100</span></div>
+        <div class="dp-score-rating">{{ ratingLabel() }}</div>
+        <div class="dp-score-note">Across all five stages, not just this one</div>
+      </div>
+
+      <div class="dp-findings-card">
+        <div class="dp-findings-label">// Findings ({{ findings().length }})</div>
+        @if (findings().length === 0) {
+          <p class="dp-findings-empty">No findings &mdash; every gate in the pipeline is configured securely. Try flipping one to see the score react.</p>
+        } @else {
+          <div class="dp-findings-list">
+            @for (finding of findings(); track finding.id) {
+              <button type="button" class="dp-finding-item" (click)="selectGate(finding.id)">
+                {{ finding.name }}: {{ finding.settingLabel.toLowerCase() }} is {{ finding.insecureValue.toLowerCase() }}
+              </button>
+            }
+          </div>
+        }
+      </div>
+    </aside>
+  </div>
+</div>

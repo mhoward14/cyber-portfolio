@@ -325,6 +325,12 @@
   border-left-color: #14b8a6;
   color: #14b8a6;
 }
+.sidebar-link-devops:hover,
+.sidebar-link-devops.is-active {
+  background: rgba(16, 185, 129, 0.1);
+  border-left-color: #10b981;
+  color: #10b981;
+}
 
 /* Light-mode text/border variants of the tool accents above — the base
    hex values are tuned for dark backgrounds and fall short of 4.5:1
@@ -364,6 +370,11 @@
 :host-context(.light-mode) .sidebar-link-txn.is-active {
   border-left-color: #0f766e;
   color: #0f766e;
+}
+:host-context(.light-mode) .sidebar-link-devops:hover,
+:host-context(.light-mode) .sidebar-link-devops.is-active {
+  border-left-color: #047a57;
+  color: #047a57;
 }
 
 

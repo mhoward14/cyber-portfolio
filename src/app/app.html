@@ -84,6 +84,18 @@
     <span class="sidebar-link-label">Transaction Security</span>
   </a>
 
+  <a routerLink="/devops-pipeline" routerLinkActive="is-active" class="sidebar-link sidebar-link-devops" aria-label="Secure CI/CD Pipeline Builder tool">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+      <circle cx="5" cy="6" r="3"></circle>
+      <circle cx="5" cy="18" r="3"></circle>
+      <circle cx="19" cy="12" r="3"></circle>
+      <path d="M5 9v6"></path>
+      <path d="M8 6h5a3 3 0 0 1 3 3v0"></path>
+      <path d="M8 18h5a3 3 0 0 0 3-3v0"></path>
+    </svg>
+    <span class="sidebar-link-label">CI/CD Pipeline</span>
+  </a>
+
   <div class="sidebar-spacer"></div>
 
   <button type="button" class="sidebar-collapse-btn" (click)="toggleSidebar()" [attr.aria-label]="sidebarCollapsed() ? 'Expand navigation' : 'Collapse navigation'">

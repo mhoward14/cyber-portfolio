@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://mhoward14.github.io/cyber-portfolio/sitemap.xml

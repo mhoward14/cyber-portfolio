@@ -141,9 +141,16 @@
    glyph before its descriptive text starts, which left the badge
    sitting visibly lower than the other (edge-to-edge) cert badges once
    shrunk. Nudge the crop window up so it starts further into the
-   badge art instead of at the very top of the iframe. */
-.badge-scale > * {
-  margin-top: -15px;
+   badge art instead of at the very top of the iframe.
+
+   ::ng-deep is required here: Credly's embed.js inserts its iframe as
+   a plain DOM node with no Angular-generated _ngcontent attribute, so
+   Angular's emulated view encapsulation would otherwise scope a plain
+   `.badge-scale > *` rule right out of ever matching it (confirmed via
+   a local DOM test — two earlier attempts at this offset silently did
+   nothing because of exactly this). */
+.badge-scale ::ng-deep > * {
+  margin-top: -13px;
 }
 
 .cert-badges {

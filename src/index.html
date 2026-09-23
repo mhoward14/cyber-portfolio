@@ -22,6 +22,27 @@
   <!-- Cloudflare Web Analytics -->
   <script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "357df2900302495ba1dfe40791246cc5"}'></script>
   <!-- End Cloudflare Web Analytics -->
+  <!-- Structured data for search engines. type="application/ld+json" is inert
+       (not executable script), so it's unaffected by the script-src CSP above
+       and needs no hash entry. -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Matthew Howard",
+    "url": "https://mhoward14.github.io/cyber-portfolio/",
+    "jobTitle": "Cybersecurity Professional",
+    "description": "U.S. Air Force veteran and M.S. Cybersecurity & Information Assurance graduate focused on GRC/RMF, security architecture, cloud security, penetration testing, and security operations.",
+    "alumniOf": {
+      "@type": "CollegeOrUniversity",
+      "name": "Western Governors University"
+    },
+    "sameAs": [
+      "https://github.com/mhoward14",
+      "https://www.linkedin.com/in/mhowardcybersecurity"
+    ]
+  }
+  </script>
 </head>
 <body>
   <app-root></app-root>

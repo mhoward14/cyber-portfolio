@@ -1,6 +1,7 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MITRE_ATTACK_URL, STEALTH_DETECTION_WEIGHT, TACTIC_STAGES, TacticStage, Technique } from './attack-path-data';
+import { EngagementService } from '../engagement/engagement.service';
 
 export interface PathPick {
   stage: TacticStage;
@@ -23,7 +24,11 @@ const TIER_LABELS: Record<DetectionTier, string> = {
   styleUrl: './attack-path.css',
 })
 export class AttackPath {
+  readonly engagement = inject(EngagementService);
   readonly stages = TACTIC_STAGES;
+
+  /** True once the current chain has been written to the engagement. */
+  addedToEngagement = signal(false);
   readonly mitreUrl = MITRE_ATTACK_URL;
 
   stageIndex = signal(0);
@@ -67,8 +72,26 @@ export class AttackPath {
     this.stageIndex.update((i) => i + 1);
   }
 
+  /** Save the finished chain as the engagement's attack chain, starting an
+   *  engagement if none is active. */
+  addToEngagement() {
+    if (!this.isComplete()) return;
+    this.engagement.setTechniques(
+      this.picks().map((p) => ({
+        attackId: p.technique.attackId,
+        name: p.technique.name,
+        tactic: p.stage.name,
+        stealth: p.technique.stealth,
+        defense: { ...p.technique.defense },
+      })),
+      this.detectionScore(),
+    );
+    this.addedToEngagement.set(true);
+  }
+
   restart() {
     this.stageIndex.set(0);
     this.picks.set([]);
+    this.addedToEngagement.set(false);
   }
 }

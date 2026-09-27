@@ -602,3 +602,42 @@
     gap: 0.5rem;
   }
 }
+
+/* Engagement Mode hand-off on the summary screen */
+.ap-engagement {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 2rem 0 1rem;
+  padding: 1.1rem 1.25rem;
+  border: 1px solid color-mix(in srgb, #0a84ff 45%, var(--color-border));
+  border-radius: var(--radius-lg);
+  background: color-mix(in srgb, #0a84ff 8%, var(--color-surface));
+}
+.ap-engagement-text { flex: 1 1 320px; }
+.ap-engagement-text p {
+  margin: 0.35rem 0 0;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+.ap-engagement-text strong { color: var(--color-text); }
+.ap-engagement-btn {
+  display: inline-block;
+  padding: 0.65rem 1.1rem;
+  border: 1px solid #0a84ff;
+  border-radius: var(--radius-md);
+  background: #0a84ff;
+  color: #fff;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: filter 0.2s;
+}
+.ap-engagement-btn:hover { color: #fff; filter: brightness(1.1); }
+.ap-engagement-btn:focus-visible { outline: 2px solid #0a84ff; outline-offset: 2px; }
+:host-context(.light-mode) .ap-engagement-btn { background: #0065cb; border-color: #0065cb; }

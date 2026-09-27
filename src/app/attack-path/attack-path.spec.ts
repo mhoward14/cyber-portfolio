@@ -1,9 +1,14 @@
+import { TestBed } from '@angular/core/testing';
 import { AttackPath } from './attack-path';
 import { TACTIC_STAGES } from './attack-path-data';
+import { EngagementService } from '../engagement/engagement.service';
+
+// AttackPath injects EngagementService, so build it in an injection context.
+const create = () => TestBed.runInInjectionContext(() => new AttackPath());
 
 describe('AttackPath', () => {
   it('starts at the first stage with an empty path', () => {
-    const cmp = new AttackPath();
+    const cmp = create();
     expect(cmp.stageIndex()).toBe(0);
     expect(cmp.currentStage()?.id).toBe('initial-access');
     expect(cmp.isComplete()).toBe(false);
@@ -11,7 +16,7 @@ describe('AttackPath', () => {
   });
 
   it('advances one stage per selected technique and completes after the last stage', () => {
-    const cmp = new AttackPath();
+    const cmp = create();
     for (const stage of TACTIC_STAGES) {
       expect(cmp.isComplete()).toBe(false);
       cmp.selectTechnique(stage.techniques[0]);
@@ -21,7 +26,7 @@ describe('AttackPath', () => {
   });
 
   it('computes the detection score as the average stealth-detection weight of picks', () => {
-    const cmp = new AttackPath();
+    const cmp = create();
     const stage = TACTIC_STAGES[0];
     const lowStealth = stage.techniques.find((t) => t.stealth === 'low');
     expect(lowStealth).toBeDefined();
@@ -31,7 +36,7 @@ describe('AttackPath', () => {
   });
 
   it('deduplicates repeated tool/note pairs in mappedDefenses', () => {
-    const cmp = new AttackPath();
+    const cmp = create();
     for (const stage of TACTIC_STAGES) {
       cmp.selectTechnique(stage.techniques[0]);
     }
@@ -50,11 +55,35 @@ describe('AttackPath', () => {
   });
 
   it('resets to the first stage with an empty path on restart', () => {
-    const cmp = new AttackPath();
+    const cmp = create();
     cmp.selectTechnique(TACTIC_STAGES[0].techniques[0]);
     cmp.restart();
     expect(cmp.stageIndex()).toBe(0);
     expect(cmp.picks().length).toBe(0);
     expect(cmp.isComplete()).toBe(false);
+  });
+});
+
+describe('AttackPath engagement hand-off', () => {
+  beforeEach(() => {
+    localStorage.clear();
+    TestBed.resetTestingModule();
+  });
+
+  it('writes the finished chain and detection score to the engagement', () => {
+    const cmp = TestBed.runInInjectionContext(() => new AttackPath());
+    for (const stage of TACTIC_STAGES) cmp.selectTechnique(stage.techniques[0]);
+    cmp.addToEngagement();
+    const s = TestBed.inject(EngagementService).state()!;
+    expect(s.techniques.map((t) => t.attackId)).toEqual(TACTIC_STAGES.map((st) => st.techniques[0].attackId));
+    expect(s.detectionScore).toBe(cmp.detectionScore());
+    expect(cmp.addedToEngagement()).toBe(true);
+  });
+
+  it('does nothing before the chain is complete', () => {
+    const cmp = TestBed.runInInjectionContext(() => new AttackPath());
+    cmp.selectTechnique(TACTIC_STAGES[0].techniques[0]);
+    cmp.addToEngagement();
+    expect(TestBed.inject(EngagementService).state()).toBeNull();
   });
 });

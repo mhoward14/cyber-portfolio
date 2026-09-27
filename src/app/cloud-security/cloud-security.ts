@@ -1,6 +1,8 @@
 import { Component, computed, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CATEGORY_LABELS, CloudProviderId, PROVIDERS, ProviderConfig, ResourceConfig } from './cloud-security-data';
+import { EngagementControlsPanel } from '../engagement/engagement-controls-panel';
+import { cloudEngagementControls } from './cloud-security-engagement';
 
 const STORAGE_KEY = 'cloud-security-state';
 
@@ -38,7 +40,7 @@ export interface RatedResource extends ResourceConfig {
 @Component({
   selector: 'app-cloud-security',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, EngagementControlsPanel],
   templateUrl: './cloud-security.html',
   styleUrl: './cloud-security.css',
 })
@@ -94,6 +96,12 @@ export class CloudSecurity {
   });
 
   findings = computed(() => this.currentResources().filter((r) => !r.isSecure));
+
+  /** This provider's settings expressed as NIST 800-53 controls for Engagement Mode. */
+  engagementControls = computed(() => {
+    const byId = new Map(this.currentResources().map((r) => [r.id, r.isSecure]));
+    return cloudEngagementControls(this.currentProvider(), (id) => byId.get(id) ?? false);
+  });
 
   selectProvider(providerId: CloudProviderId) {
     this.selectedProviderId.set(providerId);

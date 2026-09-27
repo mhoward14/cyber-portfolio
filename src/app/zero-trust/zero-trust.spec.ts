@@ -85,3 +85,18 @@ describe('ZeroTrust', () => {
     expect(cmp.activeTab()).toBe('attack-path');
   });
 });
+
+describe('ZeroTrust focus from an Attack Path link', () => {
+  it('opens the matching maturity pillar', () => {
+    const zt = new ZeroTrust();
+    zt.focusFromTechnique({ attackId: 'T1021.004', name: '', tactic: '', note: '' });
+    expect(zt.activeTab()).toBe('maturity');
+    expect(zt.highlightedPillar()).toBe('network');
+  });
+
+  it('ignores techniques with no Zero Trust pillar', () => {
+    const zt = new ZeroTrust();
+    zt.focusFromTechnique({ attackId: 'T1486', name: '', tactic: '', note: '' });
+    expect(zt.highlightedPillar()).toBeNull();
+  });
+});

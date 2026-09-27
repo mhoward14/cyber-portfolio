@@ -2,6 +2,7 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { ArrivedFromBanner } from '../engagement/arrived-from';
 import { CONTROLS, BaselineControl, ControlStatus, STATUS_LABEL, Tier, TIER_ORDER } from './rmf-data';
 import { EngagementService } from '../engagement/engagement.service';
 import { EngagementPoam } from '../engagement/engagement.model';
@@ -72,7 +73,7 @@ function seedSampleState(): TrackerState {
 @Component({
   selector: 'app-rmf-tracker',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, ArrivedFromBanner],
   templateUrl: './rmf-tracker.html',
   styleUrl: './rmf-tracker.css'
 })

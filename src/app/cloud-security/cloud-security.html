@@ -14,6 +14,8 @@
     </div>
   </header>
 
+  <app-arrived-from route="/cloud-security" accent="#f59e0b" (arrived)="focusFromTechnique($event)" />
+
   <div class="cs-disclaimer">
     Original, illustrative resource configurations applying general practices from the
     <a [href]="currentProvider().benchmarkUrl" target="_blank" rel="noopener">{{ currentProvider().benchmarkName }}</a>

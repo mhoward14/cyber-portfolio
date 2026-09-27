@@ -901,3 +901,12 @@
     text-align: center;
   }
 }
+
+/* Pillar opened from an Attack Path "defend against this" link */
+.zt-pillar-row.is-highlighted {
+  border-radius: var(--radius-md);
+  outline: 2px solid #06b6d4;
+  outline-offset: 6px;
+  background: color-mix(in srgb, #06b6d4 10%, transparent);
+  box-shadow: 0 0 0 6px color-mix(in srgb, #06b6d4 10%, transparent);
+}

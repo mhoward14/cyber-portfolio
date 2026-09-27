@@ -1,6 +1,7 @@
 import { Component, computed, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { CATEGORY_LABELS, CloudProviderId, PROVIDERS, ProviderConfig, ResourceConfig } from './cloud-security-data';
+import { ArrivedFromBanner, ArrivedTechnique } from '../engagement/arrived-from';
+import { CATEGORY_LABELS, CloudProviderId, PROVIDERS, ProviderConfig, ResourceCategory, ResourceConfig } from './cloud-security-data';
 import { EngagementControlsPanel } from '../engagement/engagement-controls-panel';
 import { cloudEngagementControls } from './cloud-security-engagement';
 
@@ -37,10 +38,18 @@ export interface RatedResource extends ResourceConfig {
   isSecure: boolean;
 }
 
+/** Attack Path techniques whose mapped defense is a setting in this tool,
+ *  and the resource category that holds it. The backup-related techniques
+ *  (T1486, T1490) have no matching setting here, so they get the banner
+ *  without selecting a resource. */
+const TECHNIQUE_CATEGORIES: Record<string, ResourceCategory> = {
+  T1190: 'network',
+};
+
 @Component({
   selector: 'app-cloud-security',
   standalone: true,
-  imports: [RouterLink, EngagementControlsPanel],
+  imports: [RouterLink, EngagementControlsPanel, ArrivedFromBanner],
   templateUrl: './cloud-security.html',
   styleUrl: './cloud-security.css',
 })
@@ -107,6 +116,14 @@ export class CloudSecurity {
     this.selectedProviderId.set(providerId);
     const provider = this.providers.find((p) => p.id === providerId) ?? this.providers[0];
     this.selectedResourceId.set(provider.resources[0].id);
+  }
+
+  /** Select the resource that defends against the technique the visitor
+   *  followed from the Attack Path Builder. */
+  focusFromTechnique(t: ArrivedTechnique) {
+    const category = TECHNIQUE_CATEGORIES[t.attackId];
+    const resource = category && this.currentProvider().resources.find((r) => r.category === category);
+    if (resource) this.selectResource(resource.id);
   }
 
   selectResource(resourceId: string) {

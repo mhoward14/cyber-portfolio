@@ -14,6 +14,8 @@
     </div>
   </header>
 
+  <app-arrived-from route="/zero-trust" accent="#06b6d4" (arrived)="focusFromTechnique($event)" />
+
   <div class="zt-tabs" role="tablist" aria-label="Zero Trust Explorer sections">
     <button type="button" role="tab" [attr.aria-selected]="activeTab() === 'flow'" [class.active]="activeTab() === 'flow'" (click)="setTab('flow')">Request Flow</button>
     <button type="button" role="tab" [attr.aria-selected]="activeTab() === 'attack-path'" [class.active]="activeTab() === 'attack-path'" (click)="setTab('attack-path')">Attack Path</button>
@@ -183,7 +185,7 @@
 
     <div class="zt-pillar-rows">
       @for (pillar of pillars; track pillar.id) {
-        <div class="zt-pillar-row">
+        <div class="zt-pillar-row" [class.is-highlighted]="highlightedPillar() === pillar.id">
           <span class="zt-pillar-name">{{ pillar.name }}</span>
           <div class="zt-stage-picker" role="group" [attr.aria-label]="pillar.name + ' maturity stage'">
             @for (stage of stages; track stage) {

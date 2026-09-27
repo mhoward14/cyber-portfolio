@@ -7,6 +7,8 @@ import { EngagementService } from '../engagement/engagement.service';
 const create = () => TestBed.runInInjectionContext(() => new AttackPath());
 
 describe('AttackPath', () => {
+  beforeEach(() => sessionStorage.clear());
+
   it('starts at the first stage with an empty path', () => {
     const cmp = create();
     expect(cmp.stageIndex()).toBe(0);
@@ -67,6 +69,7 @@ describe('AttackPath', () => {
 describe('AttackPath engagement hand-off', () => {
   beforeEach(() => {
     localStorage.clear();
+    sessionStorage.clear();
     TestBed.resetTestingModule();
   });
 
@@ -87,3 +90,32 @@ describe('AttackPath engagement hand-off', () => {
     expect(TestBed.inject(EngagementService).state()).toBeNull();
   });
 });
+
+describe('AttackPath session', () => {
+  beforeEach(() => sessionStorage.clear());
+
+  it('restores the chain after navigating away and back', () => {
+    const first = create();
+    first.selectTechnique(TACTIC_STAGES[0].techniques[1]);
+    first.selectTechnique(TACTIC_STAGES[1].techniques[0]);
+    const second = create();
+    expect(second.stageIndex()).toBe(2);
+    expect(second.picks().map((p) => p.technique.id)).toEqual([
+      TACTIC_STAGES[0].techniques[1].id,
+      TACTIC_STAGES[1].techniques[0].id,
+    ]);
+  });
+
+  it('discards a saved chain with unknown techniques', () => {
+    sessionStorage.setItem('attack-path-session', JSON.stringify(['not-a-technique']));
+    expect(create().picks().length).toBe(0);
+  });
+
+  it('clears the saved chain on restart', () => {
+    const cmp = create();
+    cmp.selectTechnique(TACTIC_STAGES[0].techniques[0]);
+    cmp.restart();
+    expect(create().picks().length).toBe(0);
+  });
+});
+

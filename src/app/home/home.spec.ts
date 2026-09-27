@@ -10,12 +10,12 @@ describe('Home', () => {
     }).compileComponents();
   });
 
-  it('should render a card for each of the eight tools', async () => {
+  it('should render a card for each of the nine tools', async () => {
     const fixture = TestBed.createComponent(Home);
     fixture.detectChanges();
     await fixture.whenStable();
     const cards = (fixture.nativeElement as HTMLElement).querySelectorAll('.tool-card');
-    expect(cards.length).toBe(8);
+    expect(cards.length).toBe(9);
   });
 
   it('should lead with the three "Start here" tools in review order', async () => {
@@ -35,7 +35,7 @@ describe('Home', () => {
     const hrefs = Array.from((fixture.nativeElement as HTMLElement).querySelectorAll('.tool-card')).map((c) =>
       c.getAttribute('href'),
     );
-    expect(new Set(hrefs).size).toBe(8);
+    expect(new Set(hrefs).size).toBe(9);
   });
 
   it('should map every case study to at least one existing tool', () => {
@@ -55,6 +55,6 @@ describe('Home', () => {
     const links = Array.from(
       (fixture.nativeElement as HTMLElement).querySelectorAll('.project-tile.is-expanded .related-tool'),
     ).map((a) => a.getAttribute('href'));
-    expect(links).toEqual(['/attack-path']);
+    expect(links).toEqual(['/attack-path', '/packet-lab']);
   });
 });

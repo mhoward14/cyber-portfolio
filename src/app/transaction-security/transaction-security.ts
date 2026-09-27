@@ -1,5 +1,6 @@
 import { Component, computed, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { ArrivedFromBanner } from '../engagement/arrived-from';
 import {
   TRANSACTION_TYPES,
   TransactionStage,
@@ -43,7 +44,7 @@ export interface RatedStage extends TransactionStage {
 @Component({
   selector: 'app-transaction-security',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, ArrivedFromBanner],
   templateUrl: './transaction-security.html',
   styleUrl: './transaction-security.css',
 })

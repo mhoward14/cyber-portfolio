@@ -1,5 +1,6 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { ArrivedFromBanner } from '../engagement/arrived-from';
 import {
   DecisionOption,
   GRADE_LABELS,
@@ -56,7 +57,7 @@ function csvField(value: string): string {
 @Component({
   selector: 'app-incident-response',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, ArrivedFromBanner],
   templateUrl: './incident-response.html',
   styleUrl: './incident-response.css',
 })

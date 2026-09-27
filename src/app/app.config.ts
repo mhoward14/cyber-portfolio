@@ -1,6 +1,6 @@
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
-import { provideRouter, withHashLocation } from '@angular/router';
+import { provideRouter, withHashLocation, withInMemoryScrolling } from '@angular/router';
 import { routes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
@@ -10,6 +10,8 @@ export const appConfig: ApplicationConfig = {
     provideClientHydration(withEventReplay()),
     // Hash location: the site is a static GitHub Pages build with no
     // server-side rewrites, so deep links must not depend on path routing.
-    provideRouter(routes, withHashLocation())
+    // Scroll to the top on each navigation and restore the previous position
+    // on back/forward, so a page never opens mid-way down.
+    provideRouter(routes, withHashLocation(), withInMemoryScrolling({ scrollPositionRestoration: 'enabled' }))
   ]
 };

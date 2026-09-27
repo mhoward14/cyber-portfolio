@@ -69,7 +69,7 @@
                   <td class="er-muted">{{ t.tactic }}</td>
                   <td><strong>{{ t.name }}</strong><span class="er-id">{{ t.attackId }}</span></td>
                   <td><span class="er-pill" [class]="'er-pill stealth-' + t.stealth">{{ t.stealth }}</span></td>
-                  <td><a class="er-tool-link" [routerLink]="t.defense.route">{{ t.defense.tool }}</a><span class="er-muted"> &mdash; {{ t.defense.note }}</span></td>
+                  <td><a class="er-tool-link" [routerLink]="t.defense.route" [queryParams]="{ from: t.attackId }">{{ t.defense.tool }}</a><span class="er-muted"> &mdash; {{ t.defense.note }}</span></td>
                 </tr>
               }
             </tbody>

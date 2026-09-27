@@ -64,3 +64,14 @@ describe('CloudSecurity', () => {
     }
   });
 });
+
+describe('CloudSecurity focus from an Attack Path link', () => {
+  it('selects the resource that defends against the technique', () => {
+    localStorage.clear();
+    const cs = new CloudSecurity();
+    cs.focusFromTechnique({ attackId: 'T1190', name: '', tactic: '', note: '' });
+    expect(cs.selectedResource()!.category).toBe('network');
+    cs.focusFromTechnique({ attackId: 'T1486', name: '', tactic: '', note: '' });
+    expect(cs.selectedResource()!.category).toBe('network'); // no backup setting: selection unchanged
+  });
+});

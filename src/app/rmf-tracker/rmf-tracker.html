@@ -11,6 +11,8 @@
     <p class="rmf-intro">Select a FIPS 199 impact level to pull its applicable control baseline, then track implementation status and notes per control — the same workflow behind an SSP or a POA&amp;M, minus the paperwork.</p>
   </header>
 
+  <app-arrived-from route="/rmf-tracker" accent="#a855f7" />
+
   <div class="tier-picker">
     @for (t of tiers; track t.key) {
       <button type="button" class="tier-card" [class.active]="tier() === t.key" [attr.data-tier]="t.key" (click)="selectTier(t.key)">

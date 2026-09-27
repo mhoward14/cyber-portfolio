@@ -1,5 +1,6 @@
 import { Component, computed, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { ArrivedFromBanner, ArrivedTechnique } from '../engagement/arrived-from';
 import {
   ATTACK_PATH_DOWNSTREAM,
   DOD_ZT_STRATEGY_URL,
@@ -79,10 +80,22 @@ function toPointsAttr(pts: Point[]): string {
   return pts.map((p) => `${p.x.toFixed(2)},${p.y.toFixed(2)}`).join(' ');
 }
 
+/** Attack Path techniques whose mapped defense is Zero Trust, and the
+ *  maturity pillar that defense lives in. */
+const TECHNIQUE_PILLARS: Record<string, ZtPillarId> = {
+  T1566: 'user',
+  T1078: 'user',
+  T1550: 'user',
+  T1204: 'device',
+  'T1547.001': 'device',
+  T1548: 'apps',
+  'T1021.004': 'network',
+};
+
 @Component({
   selector: 'app-zero-trust',
   standalone: true,
-  imports: [RouterLink, EngagementControlsPanel],
+  imports: [RouterLink, EngagementControlsPanel, ArrivedFromBanner],
   templateUrl: './zero-trust.html',
   styleUrl: './zero-trust.css',
 })
@@ -128,6 +141,18 @@ export class ZeroTrust {
 
   // ---- Tabs ----
   activeTab = signal<ZtTab>('flow');
+
+  /** Pillar highlighted after arriving from an Attack Path defense link. */
+  highlightedPillar = signal<ZtPillarId | null>(null);
+
+  /** Open the maturity pillar that defends against the technique the
+   *  visitor followed from the Attack Path Builder. */
+  focusFromTechnique(t: ArrivedTechnique) {
+    const pillar = TECHNIQUE_PILLARS[t.attackId];
+    if (!pillar) return;
+    this.setTab('maturity');
+    this.highlightedPillar.set(pillar);
+  }
 
   setTab(tab: ZtTab) {
     this.activeTab.set(tab);

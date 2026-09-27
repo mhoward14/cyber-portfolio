@@ -1,5 +1,5 @@
 import { Injectable, computed, signal } from '@angular/core';
-import { ENGAGEMENT_STORAGE_KEY, Engagement, EngagementControl, EngagementDecision, EngagementTechnique } from './engagement.model';
+import { ENGAGEMENT_STORAGE_KEY, Engagement, EngagementControl, EngagementDecision, EngagementPoam, EngagementTechnique } from './engagement.model';
 import { buildSampleEngagement } from './engagement-sample';
 
 export const DEFAULT_SCENARIO = 'Untitled engagement';
@@ -56,6 +56,12 @@ export class EngagementService {
     const kept = s.controls.filter((c) => c.sourceKey !== sourceKey);
     const added = controls.map((c) => ({ ...c, sourceKey, attackIds: [...c.attackIds] }));
     this.commit({ ...s, controls: [...kept, ...added] });
+  }
+
+  /** Replace the POA&M items (drafted by the RMF Tracker). */
+  setPoams(poams: EngagementPoam[]) {
+    const s = this.ownRecord();
+    this.commit({ ...s, poams: poams.map((p) => ({ ...p })) });
   }
 
   /** The active engagement if it belongs to the visitor; otherwise a fresh

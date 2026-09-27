@@ -8,7 +8,7 @@
      evidence    Packet Analysis Lab (planned)
      decisions   IR Playbook Simulator
      controls    Zero Trust / Cloud Security / CI/CD Pipeline
-     poams       RMF Control Tracker (planned)
+     poams       RMF Control Tracker
 
    Slices a tool has not written yet stay empty, and the report only
    renders the slices that have data.

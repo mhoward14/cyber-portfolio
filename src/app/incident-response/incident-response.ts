@@ -8,6 +8,7 @@ import {
   IR_PHASE_ORDER,
   IrPhaseId,
   NIST_IR_URL,
+  NIST_IR_REV3_URL,
   SCENARIOS,
   Scenario,
 } from './incident-response-data';
@@ -39,6 +40,7 @@ export class IncidentResponse {
   readonly phaseOrder = IR_PHASE_ORDER;
   readonly gradeLabels = GRADE_LABELS;
   readonly nistIrUrl = NIST_IR_URL;
+  readonly nistIrRev3Url = NIST_IR_REV3_URL;
 
   view = signal<ViewState>('select');
   selectedScenario = signal<Scenario | null>(null);

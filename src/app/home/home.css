@@ -240,17 +240,6 @@
   border-color: rgba(0, 122, 255, 0.4);
 }
 
-/* Centered title line with pipe separators */
-.about-title {
-  text-align: center;
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: var(--color-text-muted);
-  letter-spacing: 0.04em;
-  margin: 0 0 1rem;
-  line-height: 1.6;
-}
-
 /* First paragraph — always visible */
 .about-bio-lead {
   color: var(--color-text-muted);

@@ -52,6 +52,7 @@ export const GRADE_LABELS: Record<Grade, string> = {
 };
 
 export const NIST_IR_URL = 'https://csrc.nist.gov/pubs/sp/800/61/r2/final';
+export const NIST_IR_REV3_URL = 'https://csrc.nist.gov/pubs/sp/800/61/r3/final';
 
 export const SCENARIOS: Scenario[] = [
   {

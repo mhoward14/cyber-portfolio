@@ -83,7 +83,7 @@ export function engagementToCsv(s: Engagement): string {
   for (const e of s.evidence) rows.push(['Evidence', e.kind, e.value, e.detail, '', e.attackId ?? '']);
   for (const d of s.decisions) rows.push(['Decision', d.phase, d.action, d.rationale, d.grade, '']);
   for (const c of s.controls) {
-    rows.push(['Control', c.id, c.name, `source: ${c.sourceTool}; CIS ${c.cis ?? '-'}; ISO ${c.iso ?? '-'}`, c.status, c.attackIds.join(' ')]);
+    rows.push(['Control', c.id, c.name, `source: ${c.sourceTool}${c.basis ? `; ${c.basis}` : ''}; CIS ${c.cis ?? '-'}; ISO ${c.iso ?? '-'}`, c.status, c.attackIds.join(' ')]);
   }
   for (const p of s.poams) rows.push(['POA&M', p.id, p.weakness, p.milestone, `${p.targetDays} days`, p.controlId]);
   return rows.map((r) => r.map(csvCell).join(',')).join('\r\n');

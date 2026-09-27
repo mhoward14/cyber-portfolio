@@ -19,6 +19,8 @@ import {
   ZeroTrustNode,
   ZtPillarId,
 } from './zero-trust-data';
+import { EngagementControlsPanel } from '../engagement/engagement-controls-panel';
+import { zeroTrustEngagementControls } from './zero-trust-engagement';
 
 type ZtTab = 'flow' | 'attack-path' | 'maturity';
 
@@ -80,7 +82,7 @@ function toPointsAttr(pts: Point[]): string {
 @Component({
   selector: 'app-zero-trust',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, EngagementControlsPanel],
   templateUrl: './zero-trust.html',
   styleUrl: './zero-trust.css',
 })
@@ -167,6 +169,9 @@ export class ZeroTrust {
   radarPolygonPoints = computed(() =>
     toPointsAttr(this.pillars.map((p, i) => axisPoint(i, STAGE_RADIUS[this.stageOf(p)])))
   );
+
+  /** Maturity stages expressed as NIST 800-53 controls for Engagement Mode. */
+  engagementControls = computed(() => zeroTrustEngagementControls(this.maturityStages()));
 
   maturityProfileSummary = computed(() => {
     const stages = this.maturityStages();

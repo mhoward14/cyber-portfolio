@@ -73,6 +73,14 @@ describe('EngagementService', () => {
     expect(s.responseScenario).toBe('Ransomware Attack');
   });
 
+  it('replaces one tool\'s controls and keeps the others', () => {
+    const c = (id: string, key: string) => ({ id, name: id, status: 'planned' as const, sourceTool: key, attackIds: [] });
+    service().setControls('zero-trust', [c('SC-7', 'zero-trust'), c('AC-6', 'zero-trust')]);
+    service().setControls('cloud-security', [c('AC-3', 'cloud-security')]);
+    service().setControls('zero-trust', [c('IR-4', 'zero-trust')]);
+    expect(service().state()!.controls.map((x) => x.id).sort()).toEqual(['AC-3', 'IR-4']);
+  });
+
   it('clears state and storage when ended', () => {
     service().start();
     service().end();

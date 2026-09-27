@@ -6,7 +6,7 @@
 
      techniques  Attack Path Builder
      evidence    Packet Analysis Lab (planned)
-     decisions   IR Playbook Simulator (planned)
+     decisions   IR Playbook Simulator
      controls    Zero Trust / Cloud Security / CI/CD tools (planned)
      poams       RMF Control Tracker (planned)
 
@@ -69,6 +69,8 @@ export interface Engagement {
   detectionScore: number | null;
   evidence: EngagementEvidence[];
   decisions: EngagementDecision[];
+  /** IR Simulator scenario the decisions came from, if any. */
+  responseScenario?: string;
   controls: EngagementControl[];
   poams: EngagementPoam[];
 }

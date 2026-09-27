@@ -37,4 +37,24 @@ describe('Home', () => {
     );
     expect(new Set(hrefs).size).toBe(8);
   });
+
+  it('should map every case study to at least one existing tool', () => {
+    const home = TestBed.createComponent(Home).componentInstance;
+    for (const project of home.projects()) {
+      const related = home.relatedTools(project.title);
+      expect(related.length, project.title).toBeGreaterThan(0);
+    }
+  });
+
+  it('should show related-tool links when a case study is expanded', async () => {
+    const fixture = TestBed.createComponent(Home);
+    fixture.detectChanges();
+    fixture.componentInstance.toggleProject('Penetration Testing');
+    fixture.detectChanges();
+    await fixture.whenStable();
+    const links = Array.from(
+      (fixture.nativeElement as HTMLElement).querySelectorAll('.project-tile.is-expanded .related-tool'),
+    ).map((a) => a.getAttribute('href'));
+    expect(links).toEqual(['/attack-path']);
+  });
 });

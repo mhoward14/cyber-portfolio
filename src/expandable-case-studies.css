@@ -204,6 +204,76 @@ body.light-mode .deliverable-card {
   color: #334155;
 }
 
+/* "Try it" links from a case study to the interactive tools that show the
+   same skills. Each link takes its tool's identity color via --tool-color. */
+.related-tool-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.related-tool {
+  --tool-color: var(--color-accent);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.55rem 0.9rem;
+  border: 1px solid color-mix(in srgb, var(--tool-color) 45%, var(--color-border));
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--tool-color) 10%, transparent);
+  color: var(--color-text);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition:
+    background-color 0.2s var(--ease-out),
+    border-color 0.2s var(--ease-out),
+    transform 0.2s var(--ease-spring);
+}
+.related-tool:hover {
+  background: color-mix(in srgb, var(--tool-color) 20%, transparent);
+  border-color: var(--tool-color);
+  color: var(--color-text);
+  transform: translateY(-2px);
+}
+.related-tool:focus-visible {
+  outline: 2px solid var(--tool-color);
+  outline-offset: 2px;
+}
+
+.related-tool-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--tool-color);
+  flex-shrink: 0;
+}
+
+.related-tool-arrow {
+  color: var(--tool-color);
+  transition: transform 0.2s var(--ease-spring);
+}
+.related-tool:hover .related-tool-arrow {
+  transform: translateX(3px);
+}
+
+body.light-mode .related-tool {
+  color: #0f172a;
+  background: color-mix(in srgb, var(--tool-color) 8%, #ffffff);
+}
+body.light-mode .related-tool:hover {
+  color: #0f172a;
+  background: color-mix(in srgb, var(--tool-color) 16%, #ffffff);
+}
+body.light-mode .related-tool-arrow {
+  color: color-mix(in srgb, var(--tool-color) 70%, #0f172a);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .related-tool, .related-tool-arrow { transition: none; }
+  .related-tool:hover, .related-tool:hover .related-tool-arrow { transform: none; }
+}
+
 .demonstrates-section {
   padding: 1rem 1.1rem;
   border-left: 3px solid var(--color-accent);

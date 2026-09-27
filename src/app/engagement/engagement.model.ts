@@ -7,7 +7,7 @@
      techniques  Attack Path Builder
      evidence    Packet Analysis Lab (planned)
      decisions   IR Playbook Simulator
-     controls    Zero Trust / Cloud Security / CI/CD tools (planned)
+     controls    Zero Trust / Cloud Security / CI/CD Pipeline
      poams       RMF Control Tracker (planned)
 
    Slices a tool has not written yet stay empty, and the report only
@@ -47,6 +47,10 @@ export interface EngagementControl {
   name: string;
   status: ControlStatus;
   sourceTool: string;
+  /** Stable key of the tool that wrote this control; a tool replaces only its own rows. */
+  sourceKey?: string;
+  /** The settings behind the control, e.g. "Pipeline gates: SAST, DAST". */
+  basis?: string;
   cis?: string;
   iso?: string;
   attackIds: string[];

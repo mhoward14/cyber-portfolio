@@ -184,6 +184,7 @@
 .er-id { font-family: var(--font-mono); }
 .er-id-cell { font-family: var(--font-mono); font-size: 0.76rem; color: var(--color-text-dim); }
 .er-tool-link { color: var(--color-accent); font-weight: 600; }
+.er-basis { display: block; margin-top: 0.2rem; font-size: 0.72rem; color: var(--color-text-muted); font-style: italic; }
 
 .er-pill {
   --pill: var(--color-text-dim);

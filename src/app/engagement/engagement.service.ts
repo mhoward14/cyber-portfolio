@@ -1,5 +1,5 @@
 import { Injectable, computed, signal } from '@angular/core';
-import { ENGAGEMENT_STORAGE_KEY, Engagement, EngagementDecision, EngagementTechnique } from './engagement.model';
+import { ENGAGEMENT_STORAGE_KEY, Engagement, EngagementControl, EngagementDecision, EngagementTechnique } from './engagement.model';
 import { buildSampleEngagement } from './engagement-sample';
 
 export const DEFAULT_SCENARIO = 'Untitled engagement';
@@ -46,6 +46,16 @@ export class EngagementService {
   setDecisions(decisions: EngagementDecision[], responseScenario: string) {
     const s = this.ownRecord();
     this.commit({ ...s, decisions: decisions.map((d) => ({ ...d })), responseScenario });
+  }
+
+  /** Replace one tool's controls, keeping controls other tools added.
+   *  Starts an engagement if none is active, and turns a sample into the
+   *  visitor's own record. */
+  setControls(sourceKey: string, controls: EngagementControl[]) {
+    const s = this.ownRecord();
+    const kept = s.controls.filter((c) => c.sourceKey !== sourceKey);
+    const added = controls.map((c) => ({ ...c, sourceKey, attackIds: [...c.attackIds] }));
+    this.commit({ ...s, controls: [...kept, ...added] });
   }
 
   /** The active engagement if it belongs to the visitor; otherwise a fresh

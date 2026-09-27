@@ -96,7 +96,7 @@
 
     @if (s.decisions.length) {
       <section class="er-section" aria-labelledby="er-decisions-h">
-        <div class="section-label"><h2 class="section-label-text" id="er-decisions-h">// RESPONSE DECISIONS</h2><span class="section-label-sub">Graded against NIST SP 800-61 principles</span></div>
+        <div class="section-label"><h2 class="section-label-text" id="er-decisions-h">// RESPONSE DECISIONS</h2><span class="section-label-sub">@if (s.responseScenario) {IR Simulator: {{ s.responseScenario }} &middot; }Graded against NIST SP 800-61 principles</span></div>
         <div class="er-decisions">
           @for (d of s.decisions; track d.action) {
             <div class="er-decision">

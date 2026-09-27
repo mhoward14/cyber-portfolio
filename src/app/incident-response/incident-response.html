@@ -31,9 +31,19 @@
         <span class="section-label-text ir-accent-text">// CHOOSE A SCENARIO</span>
       </div>
 
+      @if (recommended(); as rec) {
+        <div class="ir-engagement-hint">
+          <span class="ir-engagement-label">// ENGAGEMENT MODE</span>
+          <p>Your engagement's attack chain includes <strong>{{ rec.techniqueName }}</strong> ({{ rec.attackId }}). The highlighted scenario matches it.</p>
+        </div>
+      }
+
       <div class="ir-scenario-grid">
         @for (scenario of scenarios; track scenario.id) {
-          <div class="ir-scenario-card" [class]="'scenario-' + scenario.id">
+          <div class="ir-scenario-card" [class]="'scenario-' + scenario.id + (recommended()?.scenarioId === scenario.id ? ' is-recommended' : '')">
+            @if (recommended()?.scenarioId === scenario.id) {
+              <span class="ir-recommended-pill">Matches your engagement</span>
+            }
             <div class="ir-scenario-icon">
               @switch (scenario.iconKey) {
                 @case ('ransomware') {
@@ -221,6 +231,26 @@
             <div class="ir-lesson-card">
               <p>{{ entry.option.feedback }}</p>
             </div>
+          }
+        </div>
+
+        <div class="ir-engagement" aria-live="polite">
+          <div class="ir-engagement-text">
+            <span class="ir-engagement-label">// ENGAGEMENT MODE</span>
+            @if (addedToEngagement()) {
+              <p><strong>Added to your engagement.</strong> These decisions and their grades are in your Engagement Report.</p>
+            } @else if (engagement.active() && !engagement.state()!.isSample) {
+              <p>Save this response to <strong>{{ engagement.state()!.scenario }}</strong>. It replaces the engagement's current response decisions.</p>
+            } @else {
+              <p>Start an engagement with this response, then review it alongside an attack chain in one exportable report.</p>
+            }
+          </div>
+          @if (addedToEngagement()) {
+            <a class="ir-engagement-btn" routerLink="/report">View Engagement Report &rarr;</a>
+          } @else {
+            <button type="button" class="ir-engagement-btn" (click)="addToEngagement()">
+              {{ engagement.active() && !engagement.state()!.isSample ? 'Add to Engagement' : 'Start Engagement with This Response' }}
+            </button>
           }
         </div>
 

@@ -1,4 +1,4 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import {
   DecisionOption,
@@ -11,13 +11,39 @@ import {
   NIST_IR_REV3_URL,
   SCENARIOS,
   Scenario,
+  ScenarioId,
 } from './incident-response-data';
+import { EngagementService } from '../engagement/engagement.service';
+import { EngagementTechnique } from '../engagement/engagement.model';
 
 type ViewState = 'select' | 'decision' | 'feedback' | 'debrief';
 
 interface HistoryEntry {
   phase: IrPhaseId;
   option: DecisionOption;
+}
+
+export interface ScenarioRecommendation {
+  scenarioId: ScenarioId;
+  attackId: string;
+  techniqueName: string;
+}
+
+/** Pick the IR scenario that best matches an engagement's attack chain.
+ *  Impact techniques decide first (encryption or recovery inhibition means
+ *  ransomware); otherwise the initial-access technique does. Returns null
+ *  when nothing in the chain maps to a scenario. */
+export function recommendScenario(techniques: EngagementTechnique[]): ScenarioRecommendation | null {
+  const rules: { ids: string[]; scenarioId: ScenarioId }[] = [
+    { ids: ['T1486', 'T1490'], scenarioId: 'ransomware' },
+    { ids: ['T1566'], scenarioId: 'phishing' },
+    { ids: ['T1078'], scenarioId: 'insider-threat' },
+  ];
+  for (const rule of rules) {
+    const hit = techniques.find((t) => rule.ids.includes(t.attackId));
+    if (hit) return { scenarioId: rule.scenarioId, attackId: hit.attackId, techniqueName: hit.name };
+  }
+  return null;
 }
 
 function csvField(value: string): string {
@@ -35,7 +61,18 @@ function csvField(value: string): string {
   styleUrl: './incident-response.css',
 })
 export class IncidentResponse {
+  readonly engagement = inject(EngagementService);
   readonly scenarios = SCENARIOS;
+
+  /** True once this run's decisions have been written to the engagement. */
+  addedToEngagement = signal(false);
+
+  /** Scenario matching the active engagement's attack chain, if any. */
+  recommended = computed(() => {
+    const s = this.engagement.state();
+    if (!s || s.isSample) return null;
+    return recommendScenario(s.techniques);
+  });
   readonly phaseLabels = IR_PHASE_LABELS;
   readonly phaseOrder = IR_PHASE_ORDER;
   readonly gradeLabels = GRADE_LABELS;
@@ -90,6 +127,7 @@ export class IncidentResponse {
   }
 
   startScenario(scenario: Scenario) {
+    this.addedToEngagement.set(false);
     this.selectedScenario.set(scenario);
     this.phaseIndex.set(0);
     this.history.set([]);
@@ -115,7 +153,25 @@ export class IncidentResponse {
     }
   }
 
+  /** Save this run's graded decisions as the engagement's response,
+   *  starting an engagement if none is active. */
+  addToEngagement() {
+    const scenario = this.selectedScenario();
+    if (!scenario || this.view() !== 'debrief') return;
+    this.engagement.setDecisions(
+      this.history().map((h) => ({
+        phase: this.phaseLabels[h.phase],
+        action: h.option.text,
+        grade: h.option.grade,
+        rationale: h.option.feedback,
+      })),
+      scenario.name,
+    );
+    this.addedToEngagement.set(true);
+  }
+
   restart() {
+    this.addedToEngagement.set(false);
     this.selectedScenario.set(null);
     this.phaseIndex.set(0);
     this.history.set([]);

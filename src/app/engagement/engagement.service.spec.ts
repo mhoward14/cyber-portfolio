@@ -64,6 +64,15 @@ describe('EngagementService', () => {
     expect(service().state()!.scenario).toBe(DEFAULT_SCENARIO);
   });
 
+  it('records IR decisions without touching the attack chain', () => {
+    service().setTechniques([technique], 55);
+    service().setDecisions([{ phase: 'Containment', action: 'Isolate host', grade: 'optimal', rationale: 'r' }], 'Ransomware Attack');
+    const s = service().state()!;
+    expect(s.techniques.length).toBe(1);
+    expect(s.decisions.map((d) => d.action)).toEqual(['Isolate host']);
+    expect(s.responseScenario).toBe('Ransomware Attack');
+  });
+
   it('clears state and storage when ended', () => {
     service().start();
     service().end();

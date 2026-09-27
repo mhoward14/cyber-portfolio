@@ -1,6 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { ThemeService } from './theme.service';
+import { EngagementService } from './engagement/engagement.service';
 
 const SIDEBAR_STORAGE_KEY = 'sidebar-collapsed';
 
@@ -14,7 +15,7 @@ const SIDEBAR_STORAGE_KEY = 'sidebar-collapsed';
 export class App {
   sidebarCollapsed = signal(localStorage.getItem(SIDEBAR_STORAGE_KEY) === 'true');
 
-  constructor(public theme: ThemeService) {}
+  constructor(public theme: ThemeService, public engagement: EngagementService) {}
 
   toggleSidebar() {
     const next = !this.sidebarCollapsed();

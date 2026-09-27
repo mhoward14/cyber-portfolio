@@ -37,5 +37,9 @@ export const routes: Routes = [
     path: 'devops-pipeline',
     loadComponent: () => import('./devops-pipeline/devops-pipeline').then((m) => m.DevopsPipeline),
   },
+  {
+    path: 'report',
+    loadComponent: () => import('./engagement/engagement-report').then((m) => m.EngagementReport),
+  },
   { path: '**', redirectTo: '' },
 ];

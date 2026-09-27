@@ -373,3 +373,15 @@ a, .btn {
   text-decoration: none;
   transition: color 0.2s;
 }
+
+/* ========================================
+   PRINT
+   Used by the Engagement Report's "Print or save as PDF". Drops the
+   nav chrome and prints dark-mode pages on a white background.
+   ======================================== */
+@media print {
+  .sidebar, .top-nav { display: none !important; }
+  .app-main { margin-left: 0 !important; }
+  body, body::before, body::after { background: #fff !important; }
+  body { color: #0f172a; }
+}

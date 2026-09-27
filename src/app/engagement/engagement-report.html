@@ -1,0 +1,170 @@
+<div class="container er-page">
+  <a routerLink="/" class="back-link">
+    <svg class="back-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="15 18 9 12 15 6"></polyline>
+    </svg>
+    Back to Portfolio
+  </a>
+
+  @if (!state()) {
+    <header class="er-header">
+      <h1 class="er-title">Engagement Report</h1>
+      <p class="er-intro">Engagement Mode ties the tools together into one scenario. Build an attack chain in the Attack Path Builder, and this page traces it from technique to mapped defense in a single report you can export.</p>
+    </header>
+
+    <div class="er-empty">
+      <div class="er-empty-steps">
+        <div class="er-empty-step"><span class="er-step-num">1</span><div><strong>Build an attack chain</strong><span>Pick one ATT&amp;CK technique per stage in the Attack Path Builder.</span></div></div>
+        <div class="er-empty-step"><span class="er-step-num">2</span><div><strong>Add it to the engagement</strong><span>The finished chain and its mapped defenses are saved in your browser.</span></div></div>
+        <div class="er-empty-step"><span class="er-step-num">3</span><div><strong>Review and export</strong><span>See the whole trail here, then export it as CSV or save it as a PDF.</span></div></div>
+      </div>
+      <div class="er-actions er-actions-center">
+        <a class="er-btn er-btn-primary" routerLink="/attack-path">Start in the Attack Path Builder</a>
+        <button type="button" class="er-btn" (click)="loadSample()">Load a sample engagement</button>
+      </div>
+    </div>
+  } @else {
+    @let s = state()!;
+    <header class="er-report-head">
+      <div class="er-eyebrow">
+        // ENGAGEMENT REPORT
+        @if (s.isSample) { <span class="er-sample-pill">Sample data</span> }
+      </div>
+      <label class="er-scenario-label" for="er-scenario">Scenario name</label>
+      <input id="er-scenario" class="er-scenario" type="text" maxlength="80" [value]="s.scenario" (change)="rename($any($event.target).value)" (keydown.enter)="$any($event.target).blur()">
+      <div class="er-meta">
+        @if (startedLabel()) { <span>Started {{ startedLabel() }}</span> }
+        <span>Saved in this browser only</span>
+      </div>
+    </header>
+
+    @if (s.isSample) {
+      <p class="er-note">This is a fictional sample (Contoso Financial) showing a fully populated engagement. Its evidence, decisions, controls, and POA&amp;M items are illustrative. Building your own chain in the Attack Path Builder replaces it.</p>
+    }
+
+    <div class="er-kpis">
+      <div class="er-kpi"><span class="er-kpi-value">{{ s.techniques.length }}</span><span class="er-kpi-label">ATT&amp;CK techniques</span></div>
+      <div class="er-kpi" [class]="detectionTier() ? 'er-kpi tier-' + detectionTier() : 'er-kpi'">
+        <span class="er-kpi-value">{{ s.detectionScore ?? '–' }}@if (s.detectionScore != null) {<small>/100</small>}</span>
+        <span class="er-kpi-label">Detection likelihood</span>
+      </div>
+      <div class="er-kpi"><span class="er-kpi-value">{{ s.controls.length ? implementedCount() + ' / ' + s.controls.length : '–' }}</span><span class="er-kpi-label">Controls implemented</span></div>
+      <div class="er-kpi"><span class="er-kpi-value">{{ s.poams.length || '–' }}</span><span class="er-kpi-label">Open POA&amp;M items</span></div>
+    </div>
+
+    <section class="er-section" aria-labelledby="er-chain-h">
+      <div class="section-label">
+        <h2 class="section-label-text" id="er-chain-h">// ATTACK CHAIN &amp; MAPPED DEFENSES</h2>
+        <span class="section-label-sub">From the Attack Path Builder</span>
+      </div>
+      @if (s.techniques.length === 0) {
+        <div class="er-slot-empty">No attack chain yet. <a routerLink="/attack-path">Build one in the Attack Path Builder</a> and add it to this engagement.</div>
+      } @else {
+        <div class="er-table-wrap">
+          <table class="er-table">
+            <thead><tr><th scope="col">Stage</th><th scope="col">Technique</th><th scope="col">Stealth</th><th scope="col">Where it gets caught</th></tr></thead>
+            <tbody>
+              @for (t of s.techniques; track t.attackId + t.tactic) {
+                <tr>
+                  <td class="er-muted">{{ t.tactic }}</td>
+                  <td><strong>{{ t.name }}</strong><span class="er-id">{{ t.attackId }}</span></td>
+                  <td><span class="er-pill" [class]="'er-pill stealth-' + t.stealth">{{ t.stealth }}</span></td>
+                  <td><a class="er-tool-link" [routerLink]="t.defense.route">{{ t.defense.tool }}</a><span class="er-muted"> &mdash; {{ t.defense.note }}</span></td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </section>
+
+    @if (s.evidence.length) {
+      <section class="er-section" aria-labelledby="er-evidence-h">
+        <div class="section-label"><h2 class="section-label-text" id="er-evidence-h">// EVIDENCE</h2><span class="section-label-sub">Network and host indicators</span></div>
+        <div class="er-table-wrap">
+          <table class="er-table">
+            <thead><tr><th scope="col">Type</th><th scope="col">Indicator</th><th scope="col">Detail</th><th scope="col">Technique</th></tr></thead>
+            <tbody>
+              @for (e of s.evidence; track e.kind + e.value) {
+                <tr><td class="er-muted">{{ e.kind }}</td><td class="er-mono">{{ e.value }}</td><td>{{ e.detail }}</td><td class="er-id-cell">{{ e.attackId ?? '' }}</td></tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </section>
+    }
+
+    @if (s.decisions.length) {
+      <section class="er-section" aria-labelledby="er-decisions-h">
+        <div class="section-label"><h2 class="section-label-text" id="er-decisions-h">// RESPONSE DECISIONS</h2><span class="section-label-sub">Graded against NIST SP 800-61 principles</span></div>
+        <div class="er-decisions">
+          @for (d of s.decisions; track d.action) {
+            <div class="er-decision">
+              <span class="er-pill" [class]="'er-pill grade-' + d.grade">{{ d.grade }}</span>
+              <div><strong>{{ d.action }}</strong><span class="er-muted"> &middot; {{ d.phase }}</span><p>{{ d.rationale }}</p></div>
+            </div>
+          }
+        </div>
+      </section>
+    }
+
+    @if (s.controls.length) {
+      <section class="er-section" aria-labelledby="er-controls-h">
+        <div class="section-label"><h2 class="section-label-text" id="er-controls-h">// CONTROLS &amp; FRAMEWORK MAPPING</h2><span class="section-label-sub">NIST SP 800-53 Rev. 5 with CIS v8 and ISO/IEC 27001:2022 equivalents</span></div>
+        <div class="er-table-wrap">
+          <table class="er-table">
+            <thead><tr><th scope="col">Control</th><th scope="col">Status</th><th scope="col">Configured in</th><th scope="col">CIS v8</th><th scope="col">ISO 27001</th><th scope="col">Counters</th></tr></thead>
+            <tbody>
+              @for (c of s.controls; track c.id) {
+                <tr>
+                  <td><strong>{{ c.id }}</strong><span class="er-sub">{{ c.name }}</span></td>
+                  <td><span class="er-pill" [class]="'er-pill status-' + c.status">{{ c.status }}</span></td>
+                  <td class="er-muted">{{ c.sourceTool }}</td>
+                  <td class="er-mono">{{ c.cis ?? '–' }}</td>
+                  <td class="er-mono">{{ c.iso ?? '–' }}</td>
+                  <td class="er-id-cell">{{ c.attackIds.join(', ') }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </section>
+    }
+
+    @if (s.poams.length) {
+      <section class="er-section" aria-labelledby="er-poam-h">
+        <div class="section-label"><h2 class="section-label-text" id="er-poam-h">// PLAN OF ACTION &amp; MILESTONES</h2><span class="section-label-sub">Draft items for planned controls</span></div>
+        <div class="er-poams">
+          @for (p of s.poams; track p.id) {
+            <div class="er-poam">
+              <div class="er-poam-head"><span class="er-mono">{{ p.id }}</span><span class="er-muted">{{ p.controlId }} &middot; target {{ p.targetDays }} days</span></div>
+              <p><strong>Weakness:</strong> {{ p.weakness }}</p>
+              <p><strong>Milestone:</strong> {{ p.milestone }}</p>
+            </div>
+          }
+        </div>
+      </section>
+    }
+
+    @if (!hasLaterSlices() && s.techniques.length) {
+      <p class="er-note">Evidence, response decisions, controls, and POA&amp;M sections appear here as tools add them to the engagement. Load the sample to see a fully populated report.</p>
+    }
+
+    <div class="er-actions er-no-print">
+      <button type="button" class="er-btn er-btn-primary" (click)="exportCsv()">Export CSV</button>
+      <button type="button" class="er-btn" (click)="print()">Print or save as PDF</button>
+      @if (!confirmingEnd()) {
+        <button type="button" class="er-btn er-btn-quiet" (click)="confirmingEnd.set(true)">End engagement</button>
+      } @else {
+        <span class="er-confirm" role="alert">
+          Clear this engagement from your browser?
+          <button type="button" class="er-btn er-btn-danger" (click)="endEngagement()">Yes, clear it</button>
+          <button type="button" class="er-btn er-btn-quiet" (click)="confirmingEnd.set(false)">Cancel</button>
+        </span>
+      }
+      @if (!s.isSample) {
+        <button type="button" class="er-btn er-btn-quiet" (click)="loadSample()">Load sample instead</button>
+      }
+    </div>
+  }
+</div>

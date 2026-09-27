@@ -22,4 +22,12 @@ describe('App', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.querySelector('.sidebar')).toBeTruthy();
   });
+
+  it('should link the résumé PDF from the top nav', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+    const link = (fixture.nativeElement as HTMLElement).querySelector('.top-nav a.resume-btn');
+    expect(link?.getAttribute('href')).toBe('Matthew_Howard_Resume.pdf');
+    expect(link?.getAttribute('rel')).toContain('noopener');
+  });
 });

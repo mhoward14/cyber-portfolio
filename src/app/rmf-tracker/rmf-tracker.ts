@@ -1,8 +1,11 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { CONTROLS, BaselineControl, ControlStatus, STATUS_LABEL, Tier, TIER_ORDER } from './rmf-data';
+import { EngagementService } from '../engagement/engagement.service';
+import { EngagementPoam } from '../engagement/engagement.model';
+import { buildEngagementPoams, importEngagementControls, requiredTier } from './rmf-engagement';
 
 interface TrackerState {
   tier: Tier | null;
@@ -74,6 +77,7 @@ function seedSampleState(): TrackerState {
   styleUrl: './rmf-tracker.css'
 })
 export class RmfTracker {
+  readonly engagement = inject(EngagementService);
   readonly controls = CONTROLS;
   readonly statusLabel = STATUS_LABEL;
   readonly statusKeys: ControlStatus[] = ['implemented', 'partial', 'not-implemented', 'na'];
@@ -165,6 +169,66 @@ export class RmfTracker {
     return lines.join('\n');
   });
 
+  // ---- Engagement Mode ----
+
+  /** True when the visitor has their own (non-sample) engagement. */
+  ownEngagement = computed(() => {
+    const s = this.engagement.state();
+    return !!s && !s.isSample;
+  });
+
+  /** Tracker statuses implied by the controls other tools added. */
+  engagementImport = computed(() =>
+    this.ownEngagement() ? importEngagementControls(this.engagement.state()!.controls) : [],
+  );
+
+  importCounts = computed(() => {
+    const counts: Record<ControlStatus, number> = { implemented: 0, partial: 0, 'not-implemented': 0, na: 0 };
+    for (const i of this.engagementImport()) counts[i.status]++;
+    return counts;
+  });
+
+  importInSync = computed(() => {
+    const items = this.engagementImport();
+    const tier = this.tier();
+    if (items.length === 0 || !tier) return false;
+    const inScope = TIER_ORDER[requiredTier(items.map((i) => i.id))] <= TIER_ORDER[tier];
+    return inScope && items.every((i) => this.statusOf(i.id) === i.status);
+  });
+
+  /** Baseline the last import had to raise, if any, so the page can say so. */
+  tierRaisedTo = signal<Tier | null>(null);
+
+  /** Draft POA&M items for engagement controls still open in the tracker. */
+  engagementPoams = computed<EngagementPoam[]>(() =>
+    this.ownEngagement() ? buildEngagementPoams(this.engagement.state()!, (id) => this.statusOf(id)) : [],
+  );
+
+  poamsInSync = computed(() => {
+    const saved = this.engagement.state()?.poams ?? [];
+    return poamSignature(saved) === poamSignature(this.engagementPoams());
+  });
+
+  importFromEngagement() {
+    const items = this.engagementImport();
+    if (items.length === 0) return;
+    const needed = requiredTier(items.map((i) => i.id));
+    const current = this.tier();
+    if (!current || TIER_ORDER[needed] > TIER_ORDER[current]) {
+      this.tier.set(needed);
+      this.tierRaisedTo.set(needed);
+    } else {
+      this.tierRaisedTo.set(null);
+    }
+    this.statuses.update((st) => ({ ...st, ...Object.fromEntries(items.map((i) => [i.id, i.status])) }));
+    this.notes.update((n) => ({ ...n, ...Object.fromEntries(items.map((i) => [i.id, i.note])) }));
+    this.persist();
+  }
+
+  sendPoamsToEngagement() {
+    this.engagement.setPoams(this.engagementPoams());
+  }
+
   statusOf(id: string): ControlStatus {
     return this.statuses()[id] || 'not-implemented';
   }
@@ -213,4 +277,8 @@ export class RmfTracker {
       /* storage unavailable — state just won't persist across reloads */
     }
   }
+}
+
+function poamSignature(poams: EngagementPoam[]): string {
+  return poams.map((p) => `${p.controlId}|${p.targetDays}|${p.weakness}|${p.milestone}`).join('\n');
 }

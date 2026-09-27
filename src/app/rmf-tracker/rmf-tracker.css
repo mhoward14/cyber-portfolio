@@ -472,3 +472,78 @@
   .control-main { grid-template-columns: 1fr; }
   .control-meta { justify-content: space-between; }
 }
+
+/* ---------- Engagement Mode ---------- */
+.rmf-engagement {
+  display: grid;
+  gap: 0.7rem;
+  margin: 0 0 1.5rem;
+  padding: 1rem 1.2rem;
+  border: 1px solid color-mix(in srgb, #a855f7 40%, var(--color-border));
+  border-radius: var(--radius-lg);
+  background: color-mix(in srgb, #a855f7 7%, var(--color-surface));
+  color: var(--color-text-muted);
+  font-size: 0.88rem;
+}
+.rmf-engagement p { margin: 0; line-height: 1.55; }
+.rmf-engagement strong { color: var(--color-text); }
+.rmf-engagement a:not(.rmf-eng-btn) { color: #a855f7; font-weight: 600; }
+:host-context(.light-mode) .rmf-engagement a:not(.rmf-eng-btn) { color: #7e22ce; }
+.rmf-eng-label {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #a855f7;
+}
+:host-context(.light-mode) .rmf-eng-label { color: #7e22ce; }
+.rmf-eng-step {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem 0.9rem;
+}
+.rmf-eng-step p { flex: 1 1 280px; }
+.rmf-eng-step.is-locked { opacity: 0.65; }
+.rmf-eng-num {
+  width: 1.6rem;
+  height: 1.6rem;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-sm);
+  border: 1px solid color-mix(in srgb, #a855f7 50%, var(--color-border));
+  color: #a855f7;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.rmf-eng-hint { font-size: 0.8rem; font-style: italic; }
+.rmf-eng-done {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  color: var(--color-success);
+  background: color-mix(in srgb, var(--color-success) 14%, transparent);
+}
+:host-context(.light-mode) .rmf-eng-done { color: #047857; }
+.rmf-eng-btn {
+  padding: 0.55rem 1rem;
+  border: 1px solid #9333ea;
+  border-radius: var(--radius-md);
+  background: #9333ea;
+  color: #fff;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: filter 0.2s;
+}
+.rmf-eng-btn:hover { color: #fff; filter: brightness(1.1); }
+.rmf-eng-btn:focus-visible { outline: 2px solid #a855f7; outline-offset: 2px; }

@@ -1,11 +1,12 @@
 import { Component, signal, computed, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './home.html',
   styleUrl: './home.css'
 })
@@ -36,6 +37,36 @@ export class Home implements AfterViewInit {
   isExpanded(title: string) {
     return this.expandedProject() === title;
   }
+
+  // Interactive tools, in the README's recommended review order. The first
+  // three (startHere) are the quickest way into the portfolio for a recruiter.
+  // Colors match each tool's sidebar identity color in app.css.
+  readonly tools = [
+    { name: 'Attack Path Builder', route: '/attack-path', icon: 'attack', color: '#0a84ff', startHere: 1,
+      summary: 'Chain MITRE ATT&CK techniques across six attack stages and see where defenses would catch them.',
+      standard: 'MITRE ATT&CK' },
+    { name: 'Cloud Security Configuration Builder', route: '/cloud-security', icon: 'cloud', color: '#f59e0b', startHere: 2,
+      summary: 'Configure Azure, AWS, or GCP resources and watch a live posture score react to each setting.',
+      standard: 'CIS Benchmarks' },
+    { name: 'Incident Response Playbook Simulator', route: '/incident-response', icon: 'ir', color: '#f43f5e', startHere: 3,
+      summary: 'Work a ransomware, phishing, insider, or DDoS incident with feedback on every decision.',
+      standard: 'NIST SP 800-61' },
+    { name: 'Zero Trust Architecture Explorer', route: '/zero-trust', icon: 'zt', color: '#06b6d4', startHere: 0,
+      summary: 'Trace an identity-to-data request and assess maturity across the seven DoD Zero Trust pillars.',
+      standard: 'NIST SP 800-207' },
+    { name: 'RMF Control Tracker', route: '/rmf-tracker', icon: 'rmf', color: '#a855f7', startHere: 0,
+      summary: 'Track about 140 controls across all 20 NIST 800-53 families and draft POA&M text for gaps.',
+      standard: 'NIST SP 800-53' },
+    { name: 'Security Framework Crosswalk', route: '/crosswalk', icon: 'crosswalk', color: '#6366f1', startHere: 0,
+      summary: 'Map common control topics across NIST 800-53, CIS Controls v8, and ISO/IEC 27001.',
+      standard: 'NIST · CIS · ISO' },
+    { name: 'Digital Transaction Security Explorer', route: '/transaction-security', icon: 'txn', color: '#14b8a6', startHere: 0,
+      summary: 'Follow a card or ACH payment from capture to settlement with the controls at each stage.',
+      standard: 'PCI DSS · NACHA' },
+    { name: 'Secure CI/CD Pipeline Builder', route: '/devops-pipeline', icon: 'devops', color: '#d946ef', startHere: 0,
+      summary: 'Add security gates stage by stage and track a shift-left maturity score as the pipeline hardens.',
+      standard: 'NIST SP 800-218' },
+  ];
 
   projects = signal([
     {

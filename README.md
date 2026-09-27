@@ -32,7 +32,7 @@ Together, the tools show a connected workflow: model an attack, identify likely 
 
 ## Engagement Mode
 
-Engagement Mode links the tools into one scenario. Finish an attack chain in the **[Attack Path Builder](https://mhoward14.github.io/cyber-portfolio/#/attack-path)** and add it to an engagement, then open the **[Engagement Report](https://mhoward14.github.io/cyber-portfolio/#/report)** to trace each ATT&CK technique to the defense that would catch it. The report exports to CSV or prints to PDF, and a fictional sample engagement (Contoso Financial) shows a fully populated version with evidence, response decisions, NIST SP 800-53 controls mapped to CIS Controls v8 and ISO/IEC 27001:2022, and draft POA&M items. Engagement data is saved only in the visitor's browser.
+Engagement Mode links the tools into one scenario. Finish an attack chain in the **[Attack Path Builder](https://mhoward14.github.io/cyber-portfolio/#/attack-path)** and add it to an engagement; the **[IR Playbook Simulator](https://mhoward14.github.io/cyber-portfolio/#/incident-response)** then recommends the scenario that matches the chain and can add its graded response decisions. Open the **[Engagement Report](https://mhoward14.github.io/cyber-portfolio/#/report)** to trace each ATT&CK technique to the defense that would catch it, alongside the response. The report exports to CSV or prints to PDF, and a fictional sample engagement (Contoso Financial) shows a fully populated version with evidence, response decisions, NIST SP 800-53 controls mapped to CIS Controls v8 and ISO/IEC 27001:2022, and draft POA&M items. Engagement data is saved only in the visitor's browser.
 
 ## Case studies
 

@@ -566,3 +566,86 @@ button.ir-option:hover {
     width: 100%;
   }
 }
+
+/* ---------- Engagement Mode ---------- */
+.ir-engagement-label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #f43f5e;
+}
+:host-context(.light-mode) .ir-engagement-label { color: #be123c; }
+
+.ir-engagement-hint {
+  margin: 0 0 1.25rem;
+  padding: 0.85rem 1.1rem;
+  border: 1px solid color-mix(in srgb, #f43f5e 40%, var(--color-border));
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, #f43f5e 7%, var(--color-surface));
+}
+.ir-engagement-hint p {
+  margin: 0.3rem 0 0;
+  color: var(--color-text-muted);
+  font-size: 0.88rem;
+}
+.ir-engagement-hint strong { color: var(--color-text); }
+
+.ir-scenario-card { position: relative; }
+.ir-scenario-card.is-recommended {
+  border-color: var(--sc);
+  box-shadow: 0 0 0 1px var(--sc), 0 14px 32px -16px color-mix(in srgb, var(--sc) 60%, transparent);
+}
+.ir-recommended-pill {
+  position: absolute;
+  top: 0.85rem;
+  right: 0.85rem;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.22rem 0.55rem;
+  border-radius: 999px;
+  color: var(--color-text);
+  background: color-mix(in srgb, var(--sc) 18%, transparent);
+  border: 1px solid color-mix(in srgb, var(--sc) 50%, transparent);
+}
+
+.ir-engagement {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 1.75rem 0 1rem;
+  padding: 1.1rem 1.25rem;
+  border: 1px solid color-mix(in srgb, #f43f5e 40%, var(--color-border));
+  border-radius: var(--radius-lg);
+  background: color-mix(in srgb, #f43f5e 7%, var(--color-surface));
+}
+.ir-engagement-text { flex: 1 1 320px; }
+.ir-engagement-text p {
+  margin: 0.35rem 0 0;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+.ir-engagement-text strong { color: var(--color-text); }
+.ir-engagement-btn {
+  display: inline-block;
+  padding: 0.65rem 1.1rem;
+  border: 1px solid #e11d48;
+  border-radius: var(--radius-md);
+  background: #e11d48;
+  color: #fff;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: filter 0.2s;
+}
+.ir-engagement-btn:hover { color: #fff; filter: brightness(1.1); }
+.ir-engagement-btn:focus-visible { outline: 2px solid #f43f5e; outline-offset: 2px; }

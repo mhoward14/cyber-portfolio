@@ -1,5 +1,5 @@
 import { Injectable, computed, signal } from '@angular/core';
-import { ENGAGEMENT_STORAGE_KEY, Engagement, EngagementTechnique } from './engagement.model';
+import { ENGAGEMENT_STORAGE_KEY, Engagement, EngagementDecision, EngagementTechnique } from './engagement.model';
 import { buildSampleEngagement } from './engagement-sample';
 
 export const DEFAULT_SCENARIO = 'Untitled engagement';
@@ -36,9 +36,23 @@ export class EngagementService {
   /** Replace the attack chain. Starts a new engagement if none is active,
    *  and turns a sample into the visitor's own record. */
   setTechniques(techniques: EngagementTechnique[], detectionScore: number | null) {
-    const base = this.state();
-    const s = !base || base.isSample ? emptyEngagement(DEFAULT_SCENARIO) : base;
+    const s = this.ownRecord();
     this.commit({ ...s, techniques: techniques.map((t) => ({ ...t, defense: { ...t.defense } })), detectionScore });
+  }
+
+  /** Replace the response decisions with an IR Simulator run. Starts an
+   *  engagement if none is active, and turns a sample into the visitor's
+   *  own record. */
+  setDecisions(decisions: EngagementDecision[], responseScenario: string) {
+    const s = this.ownRecord();
+    this.commit({ ...s, decisions: decisions.map((d) => ({ ...d })), responseScenario });
+  }
+
+  /** The active engagement if it belongs to the visitor; otherwise a fresh
+   *  one, so tool results never get mixed into the sample. */
+  private ownRecord(): Engagement {
+    const base = this.state();
+    return !base || base.isSample ? emptyEngagement(DEFAULT_SCENARIO) : base;
   }
 
   end() {

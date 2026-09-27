@@ -156,7 +156,7 @@
 
       <div class="ap-defenses-recap">
         @for (defense of mappedDefenses(); track defense.technique.id) {
-          <a class="ap-defense-item ap-defense-link" [routerLink]="defense.route"><strong>{{ defense.tool }}</strong> &mdash; {{ defense.note }}</a>
+          <a class="ap-defense-item ap-defense-link" [routerLink]="defense.route" [queryParams]="{ from: defense.technique.attackId }"><strong>{{ defense.tool }}</strong> &mdash; {{ defense.note }}</a>
         }
       </div>
 

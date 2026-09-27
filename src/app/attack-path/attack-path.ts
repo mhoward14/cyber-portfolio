@@ -16,6 +16,28 @@ const TIER_LABELS: Record<DetectionTier, string> = {
   noisy: 'Noisy',
 };
 
+const SESSION_KEY = 'attack-path-session';
+
+/** Restore the chain for this browser session, so following a defense link
+ *  and coming back doesn't lose it. Unknown technique IDs discard it. */
+function loadSession(): PathPick[] {
+  try {
+    if (typeof sessionStorage === 'undefined') return [];
+    const ids: unknown = JSON.parse(sessionStorage.getItem(SESSION_KEY) || '[]');
+    if (!Array.isArray(ids) || ids.length > TACTIC_STAGES.length) return [];
+    const picks: PathPick[] = [];
+    for (let i = 0; i < ids.length; i++) {
+      const stage = TACTIC_STAGES[i];
+      const technique = stage.techniques.find((t) => t.id === ids[i]);
+      if (!technique) return [];
+      picks.push({ stage, technique });
+    }
+    return picks;
+  } catch {
+    return [];
+  }
+}
+
 @Component({
   selector: 'app-attack-path',
   standalone: true,
@@ -31,8 +53,9 @@ export class AttackPath {
   addedToEngagement = signal(false);
   readonly mitreUrl = MITRE_ATTACK_URL;
 
-  stageIndex = signal(0);
-  picks = signal<PathPick[]>([]);
+  private readonly restored = loadSession();
+  stageIndex = signal(this.restored.length);
+  picks = signal<PathPick[]>(this.restored);
 
   currentStage = computed<TacticStage | null>(() => this.stages[this.stageIndex()] ?? null);
   isComplete = computed(() => this.stageIndex() >= this.stages.length);
@@ -70,6 +93,7 @@ export class AttackPath {
     if (!stage) return;
     this.picks.update((arr) => [...arr, { stage, technique }]);
     this.stageIndex.update((i) => i + 1);
+    this.saveSession();
   }
 
   /** Save the finished chain as the engagement's attack chain, starting an
@@ -93,5 +117,14 @@ export class AttackPath {
     this.stageIndex.set(0);
     this.picks.set([]);
     this.addedToEngagement.set(false);
+    this.saveSession();
+  }
+
+  private saveSession() {
+    try {
+      sessionStorage.setItem(SESSION_KEY, JSON.stringify(this.picks().map((p) => p.technique.id)));
+    } catch {
+      /* storage unavailable: the chain just won't survive navigation */
+    }
   }
 }

@@ -66,6 +66,9 @@ export class Home implements AfterViewInit {
     { name: 'Secure CI/CD Pipeline Builder', route: '/devops-pipeline', icon: 'devops', color: '#d946ef', startHere: 0,
       summary: 'Add security gates stage by stage and track a shift-left maturity score as the pipeline hardens.',
       standard: 'NIST SP 800-218' },
+    { name: 'Packet Analysis Lab', route: '/packet-lab', icon: 'packet', color: '#84cc16', startHere: 0,
+      summary: 'Hunt C2 beacons, port scans, DNS tunnels, and cleartext passwords in captures, Wireshark-style.',
+      standard: 'MITRE ATT&CK' },
   ];
 
   // Interactive tools that demonstrate the same skills as each case study,
@@ -73,11 +76,11 @@ export class Home implements AfterViewInit {
   private readonly relatedToolRoutes: Record<string, string[]> = {
     'Cybersecurity Graduate Capstone': ['/zero-trust', '/rmf-tracker', '/incident-response'],
     'Governance, Risk, & Compliance': ['/rmf-tracker', '/crosswalk'],
-    'Penetration Testing': ['/attack-path'],
+    'Penetration Testing': ['/attack-path', '/packet-lab'],
     'Cybersecurity Architecture & Engineering': ['/zero-trust', '/cloud-security', '/attack-path'],
     'Cloud Security': ['/cloud-security', '/zero-trust'],
-    'Security Operations': ['/incident-response', '/attack-path'],
-    'Secure Network Design': ['/zero-trust', '/attack-path'],
+    'Security Operations': ['/incident-response', '/packet-lab', '/attack-path'],
+    'Secure Network Design': ['/zero-trust', '/packet-lab', '/attack-path'],
     'Cybersecurity Management': ['/rmf-tracker', '/crosswalk', '/incident-response'],
     'Secure Software Design': ['/devops-pipeline'],
     'Security Foundations': ['/crosswalk', '/incident-response'],

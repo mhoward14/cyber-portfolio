@@ -25,6 +25,50 @@
     <p class="sample-note">Sample assessment data shown for demo purposes — every status and note below is editable.</p>
   }
 
+  @if (ownEngagement()) {
+    <section class="rmf-engagement" aria-labelledby="rmf-eng-h" aria-live="polite">
+      <h2 class="rmf-eng-label" id="rmf-eng-h">// ENGAGEMENT MODE</h2>
+      @if (engagementImport().length === 0) {
+        <p>Your engagement has no controls yet. Add them from
+          <a routerLink="/cloud-security">Cloud Security</a>, <a routerLink="/zero-trust">Zero Trust</a>, or the
+          <a routerLink="/devops-pipeline">CI/CD Pipeline</a>, then import them here.</p>
+      } @else {
+        <div class="rmf-eng-step">
+          <span class="rmf-eng-num">1</span>
+          <p>
+            <strong>{{ engagementImport().length }} controls</strong> in <strong>{{ engagement.state()!.scenario }}</strong>:
+            {{ importCounts().implemented }} implemented &middot; {{ importCounts().partial }} partial &middot; {{ importCounts()['not-implemented'] }} not implemented
+          </p>
+          @if (importInSync()) {
+            <span class="rmf-eng-done">Imported</span>
+          } @else {
+            <button type="button" class="rmf-eng-btn" (click)="importFromEngagement()">Import into Tracker</button>
+          }
+        </div>
+        @if (tierRaisedTo(); as raised) {
+          <p class="rmf-eng-hint">Baseline set to {{ raised }} so every imported control is in scope.</p>
+        }
+        <div class="rmf-eng-step" [class.is-locked]="!importInSync()">
+          <span class="rmf-eng-num">2</span>
+          @if (!importInSync()) {
+            <p>Import the controls to draft POA&amp;M items for the ones still open.</p>
+          } @else if (engagementPoams().length === 0) {
+            <p>No open items: every imported control is implemented.</p>
+          } @else {
+            <p><strong>{{ engagementPoams().length }} draft POA&amp;M items</strong> for open controls, prioritized by the engagement's attack chain.</p>
+            @if (poamsInSync()) {
+              <a class="rmf-eng-btn" routerLink="/report">View Engagement Report &rarr;</a>
+            } @else {
+              <button type="button" class="rmf-eng-btn" (click)="sendPoamsToEngagement()">
+                {{ engagement.state()!.poams.length ? 'Update POA&M in Engagement' : 'Add POA&M to Engagement' }}
+              </button>
+            }
+          }
+        </div>
+      }
+    </section>
+  }
+
   @if (tier()) {
     <div class="summary">
       <div class="ring-wrap">

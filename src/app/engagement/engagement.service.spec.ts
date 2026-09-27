@@ -81,6 +81,13 @@ describe('EngagementService', () => {
     expect(service().state()!.controls.map((x) => x.id).sort()).toEqual(['AC-3', 'IR-4']);
   });
 
+  it('replaces POA&M items', () => {
+    const p = (id: string) => ({ id, controlId: 'SC-7', weakness: 'w', milestone: 'm', targetDays: 30 });
+    service().setPoams([p('POA&M-01'), p('POA&M-02')]);
+    service().setPoams([p('POA&M-01')]);
+    expect(service().state()!.poams.length).toBe(1);
+  });
+
   it('clears state and storage when ended', () => {
     service().start();
     service().end();

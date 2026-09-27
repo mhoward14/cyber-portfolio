@@ -1,6 +1,6 @@
 # Matthew Howard Cybersecurity Portfolio
 
-An interactive cybersecurity portfolio spanning **GRC/RMF, cloud and Zero Trust architecture, security operations, vulnerability analysis, DevSecOps, and penetration-testing methodology**. It combines eight browser-based security tools with eleven case-study areas and supporting application-security work.
+An interactive cybersecurity portfolio spanning **GRC/RMF, cloud and Zero Trust architecture, security operations, vulnerability analysis, DevSecOps, and penetration-testing methodology**. It combines nine browser-based security tools with eleven case-study areas and supporting application-security work.
 
 **Live site:** [mhoward14.github.io/cyber-portfolio](https://mhoward14.github.io/cyber-portfolio/)
 
@@ -27,8 +27,9 @@ For a short recruiter or hiring-manager review:
 | **[Security Framework Crosswalk](https://mhoward14.github.io/cyber-portfolio/#/crosswalk)** | Maps approximately 20 common control topics across NIST SP 800-53 Rev. 5, CIS Controls v8, and ISO/IEC 27001:2022 Annex A, with search, filters, relationship strength, and links to official sources. | Framework interpretation, control relationships, audit/compliance research, and translation between security standards. The mapping is a curated demonstration, not an exhaustive or authoritative crosswalk. |
 | **[Digital Transaction Security Explorer](https://mhoward14.github.io/cyber-portfolio/#/transaction-security)** | Walks a payment through its lifecycle &mdash; capture, transmission, tokenization, authorization, and monitoring &mdash; for card-present, card-not-present, and ACH transfers, with a live posture score and each stage mapped to PCI DSS v4.0 or the NACHA Operating Rules. | Cardholder-data-environment reasoning, tokenization and encryption tradeoffs, payment-fraud controls, and applied PCI DSS/NACHA compliance in a concrete transaction flow. |
 | **[Secure CI/CD Pipeline Builder](https://mhoward14.github.io/cyber-portfolio/#/devops-pipeline)** | Assembles a CI/CD pipeline's security controls stage by stage &mdash; source, build, test, deploy, and operate &mdash; with a live shift-left maturity score, each gate mapped to a specific practice in NIST SP 800-218 (the Secure Software Development Framework). | DevSecOps toolchain reasoning (SAST/DAST/SCA/IaC scanning, artifact signing, SBOMs), shift-left security thinking, and applied NIST SSDF practices relevant to DevSecOps and platform-security interviews. |
+| **[Packet Analysis Lab](https://mhoward14.github.io/cyber-portfolio/#/packet-lab)** | A Wireshark-style workbench with a packet list, protocol tree, and hex dump, driven by a display-filter engine that implements a subset of Wireshark's filter syntax. Four threat hunts (C2 beaconing, an internal SYN scan, DNS tunneling, and cleartext FTP/HTTP credentials) each pose analyst questions with feedback and map the finding to MITRE ATT&CK. Captures are synthetic, built byte-for-byte in the browser from fictional hosts. | Network traffic analysis, Wireshark display filters, TCP/IP and application-protocol fluency (DNS, TLS, HTTP, FTP), threat hunting, and translating packet evidence into ATT&CK techniques, relevant to SOC, CySA+, and network-defense interviews. |
 
-Together, the tools show a connected workflow: model an attack, identify likely detection and control opportunities, evaluate cloud and Zero Trust design choices, practice incident-response decisions, track RMF implementation, translate requirements across major frameworks, secure a payment transaction end to end, and harden the CI/CD pipeline that ships the code in the first place.
+Together, the tools show a connected workflow: model an attack, hunt for it in network traffic, identify likely detection and control opportunities, evaluate cloud and Zero Trust design choices, practice incident-response decisions, track RMF implementation, translate requirements across major frameworks, secure a payment transaction end to end, and harden the CI/CD pipeline that ships the code in the first place.
 
 ## Engagement Mode
 
@@ -60,7 +61,7 @@ The portfolio complements 21 years of U.S. Air Force experience in knowledge ope
 
 - Responsive Angular single-page application with a persistent collapsible sidebar
 - Searchable and expandable project case studies
-- Eight routed interactive security tools
+- Nine routed interactive security tools
 - Dark and light themes with saved browser preference
 - Local browser storage for longer-running RMF and Zero Trust assessments
 - Client-side CSV export for incident-response results

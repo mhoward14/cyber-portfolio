@@ -197,6 +197,21 @@
                 </div>
               </section>
 
+              @if (relatedTools(project.title).length) {
+                <section class="case-section related-tools-section">
+                  <h3>Try It: Related {{ relatedTools(project.title).length === 1 ? 'Tool' : 'Tools' }}</h3>
+                  <div class="related-tool-list">
+                    @for (tool of relatedTools(project.title); track tool.route) {
+                      <a class="related-tool" [routerLink]="tool.route" [style.--tool-color]="tool.color">
+                        <span class="related-tool-dot" aria-hidden="true"></span>
+                        <span class="related-tool-name">{{ tool.name }}</span>
+                        <span class="related-tool-arrow" aria-hidden="true">→</span>
+                      </a>
+                    }
+                  </div>
+                </section>
+              }
+
               <section class="case-section demonstrates-section">
                 <h3>What This Demonstrates</h3>
                 <p>{{ project.demonstrates }}</p>

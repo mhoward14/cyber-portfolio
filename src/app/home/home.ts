@@ -68,6 +68,29 @@ export class Home implements AfterViewInit {
       standard: 'NIST SP 800-218' },
   ];
 
+  // Interactive tools that demonstrate the same skills as each case study,
+  // keyed by case-study title. Routes must match an entry in `tools`.
+  private readonly relatedToolRoutes: Record<string, string[]> = {
+    'Cybersecurity Graduate Capstone': ['/zero-trust', '/rmf-tracker', '/incident-response'],
+    'Governance, Risk, & Compliance': ['/rmf-tracker', '/crosswalk'],
+    'Penetration Testing': ['/attack-path'],
+    'Cybersecurity Architecture & Engineering': ['/zero-trust', '/cloud-security', '/attack-path'],
+    'Cloud Security': ['/cloud-security', '/zero-trust'],
+    'Security Operations': ['/incident-response', '/attack-path'],
+    'Secure Network Design': ['/zero-trust', '/attack-path'],
+    'Cybersecurity Management': ['/rmf-tracker', '/crosswalk', '/incident-response'],
+    'Secure Software Design': ['/devops-pipeline'],
+    'Security Foundations': ['/crosswalk', '/incident-response'],
+    'Digital Transaction & Payment Security': ['/transaction-security'],
+  };
+
+  relatedTools(title: string) {
+    const routes = this.relatedToolRoutes[title] ?? [];
+    return routes
+      .map((route) => this.tools.find((t) => t.route === route))
+      .filter((t): t is (typeof this.tools)[number] => !!t);
+  }
+
   projects = signal([
     {
       title: 'Cybersecurity Graduate Capstone',

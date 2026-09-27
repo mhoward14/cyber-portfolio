@@ -112,6 +112,59 @@
   animation: hero-enter 0.8s var(--ease-spring) 0.2s both;
 }
 
+/* "Download résumé (PDF)" — outlined call to action under the tagline */
+.resume-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 1.25rem 0 0.25rem;
+  padding: 0.6rem 1.1rem;
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-md);
+  background: var(--color-accent-dim);
+  color: var(--color-text);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: all 0.25s var(--ease-out);
+  animation: hero-enter 0.8s var(--ease-spring) 0.35s both;
+}
+.resume-link svg {
+  color: var(--color-accent);
+  flex-shrink: 0;
+}
+.resume-link:hover {
+  background: var(--color-accent);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px -8px var(--color-accent-glow);
+}
+.resume-link:hover svg {
+  color: #fff;
+}
+.resume-link:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+:host-context(.light-mode) .resume-link {
+  border-color: #2563eb;
+  background: rgba(37, 99, 235, 0.08);
+  color: #0f172a;
+}
+:host-context(.light-mode) .resume-link svg {
+  color: #2563eb;
+}
+:host-context(.light-mode) .resume-link:hover {
+  background: #2563eb;
+  color: #fff;
+}
+:host-context(.light-mode) .resume-link:hover svg {
+  color: #fff;
+}
+
 /* Wrapper around the remaining Credly iframe embed (ISC2 CC — no
    standalone badge image available yet). The other three certs use
    .cert-badge-img instead, which needs no clipping since the PNGs

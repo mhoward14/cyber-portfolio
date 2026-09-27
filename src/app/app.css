@@ -102,6 +102,19 @@
   box-shadow: 0 12px 24px -6px var(--color-accent-glow);
 }
 
+/* Résumé button — opens the PDF in a new tab */
+.resume-btn {
+  background-color: var(--color-surface);
+  color: white !important;
+  border: 1px solid var(--color-border);
+}
+.resume-btn:hover {
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 24px -6px var(--color-accent-glow);
+}
+
 /* Theme toggle button — sun/moon icon, same size as other nav buttons */
 .theme-btn {
   background-color: var(--color-surface);
@@ -438,6 +451,15 @@
 }
 :host-context(.light-mode) .email-btn:hover {
   border-color: var(--color-accent);
+}
+/* Résumé icon is stroke-only, so it follows `color` rather than fill */
+:host-context(.light-mode) .resume-btn {
+  background-color: var(--color-surface);
+  border-color: var(--color-border);
+  color: #1e293b !important;
+}
+:host-context(.light-mode) .resume-btn:hover {
+  color: white !important;
 }
 
 

@@ -377,6 +377,13 @@
   color: #d946ef;
 }
 
+.sidebar-link-packet:hover,
+.sidebar-link-packet.is-active {
+  background: rgba(132, 204, 22, 0.1);
+  border-left-color: #84cc16;
+  color: #84cc16;
+}
+
 /* Light-mode text/border variants of the tool accents above — the base
    hex values are tuned for dark backgrounds and fall short of 4.5:1
    against the sidebar's near-white light-mode background, so each gets
@@ -420,6 +427,11 @@
 :host-context(.light-mode) .sidebar-link-devops.is-active {
   border-left-color: #a21caf;
   color: #a21caf;
+}
+:host-context(.light-mode) .sidebar-link-packet:hover,
+:host-context(.light-mode) .sidebar-link-packet.is-active {
+  border-left-color: #4d7c0f;
+  color: #4d7c0f;
 }
 
 

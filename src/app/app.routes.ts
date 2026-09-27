@@ -38,6 +38,10 @@ export const routes: Routes = [
     loadComponent: () => import('./devops-pipeline/devops-pipeline').then((m) => m.DevopsPipeline),
   },
   {
+    path: 'packet-lab',
+    loadComponent: () => import('./packet-lab/packet-lab').then((m) => m.PacketLab),
+  },
+  {
     path: 'report',
     loadComponent: () => import('./engagement/engagement-report').then((m) => m.EngagementReport),
   },

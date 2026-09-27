@@ -1,6 +1,8 @@
 import { Component, computed, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { GateConfig, PIPELINE_STAGES, SSDF_NAME, SSDF_URL, StageConfig, StageId } from './devops-pipeline-data';
+import { EngagementControlsPanel } from '../engagement/engagement-controls-panel';
+import { devopsEngagementControls } from './devops-pipeline-engagement';
 
 const STORAGE_KEY = 'devops-pipeline-state';
 
@@ -40,7 +42,7 @@ export interface RatedStage extends Omit<StageConfig, 'gates'> {
 @Component({
   selector: 'app-devops-pipeline',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, EngagementControlsPanel],
   templateUrl: './devops-pipeline.html',
   styleUrl: './devops-pipeline.css',
 })
@@ -99,6 +101,12 @@ export class DevopsPipeline {
   });
 
   findings = computed(() => this.allGates().filter((g) => !g.isSecure));
+
+  /** The pipeline's gates rolled up into NIST 800-53 controls for Engagement Mode. */
+  engagementControls = computed(() => {
+    const byId = new Map(this.allGates().map((g) => [g.id, g.isSecure]));
+    return devopsEngagementControls((id) => byId.get(id) ?? false);
+  });
 
   selectStage(stageId: StageId) {
     this.selectedStageId.set(stageId);

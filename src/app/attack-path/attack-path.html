@@ -160,6 +160,28 @@
         }
       </div>
 
+      <div class="ap-engagement" aria-live="polite">
+        <div class="ap-engagement-text">
+          <div class="ap-panel-label">// ENGAGEMENT MODE</div>
+          @if (addedToEngagement()) {
+            <p><strong>Added to your engagement.</strong> The chain and its mapped defenses are in your Engagement Report.</p>
+          } @else if (engagement.active() && !engagement.state()!.isSample) {
+            <p>Save this chain to <strong>{{ engagement.state()!.scenario }}</strong>. It replaces the engagement's current attack chain.</p>
+          } @else {
+            <p>Start an engagement with this chain, then follow it from technique to mapped defense in one exportable report.</p>
+          }
+        </div>
+        <div class="ap-engagement-actions">
+          @if (addedToEngagement()) {
+            <a class="ap-engagement-btn" routerLink="/report">View Engagement Report &rarr;</a>
+          } @else {
+            <button type="button" class="ap-engagement-btn" (click)="addToEngagement()">
+              {{ engagement.active() && !engagement.state()!.isSample ? 'Add to Engagement' : 'Start Engagement with This Path' }}
+            </button>
+          }
+        </div>
+      </div>
+
       <div class="ap-summary-actions">
         <button type="button" class="ap-restart-btn" (click)="restart()">Build Another Path</button>
       </div>

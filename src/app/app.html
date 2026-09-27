@@ -96,6 +96,22 @@
     <span class="sidebar-link-label">CI/CD Pipeline</span>
   </a>
 
+  <div class="sidebar-divider"></div>
+  <div class="sidebar-section-label">Engagement</div>
+
+  <a routerLink="/report" routerLinkActive="is-active" class="sidebar-link sidebar-link-report" [attr.aria-label]="engagement.active() ? 'Engagement Report (' + engagement.entryCount() + ' entries)' : 'Engagement Report'">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+      <rect x="8" y="2" width="8" height="4" rx="1"></rect>
+      <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+      <path d="M9 12h6"></path>
+      <path d="M9 16h4"></path>
+    </svg>
+    <span class="sidebar-link-label">Report</span>
+    @if (engagement.active()) {
+      <span class="sidebar-badge" aria-hidden="true">{{ engagement.entryCount() }}</span>
+    }
+  </a>
+
   <div class="sidebar-spacer"></div>
 
   <button type="button" class="sidebar-collapse-btn" (click)="toggleSidebar()" [attr.aria-label]="sidebarCollapsed() ? 'Expand navigation' : 'Collapse navigation'">

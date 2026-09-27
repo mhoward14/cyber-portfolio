@@ -338,6 +338,38 @@
   border-left-color: #14b8a6;
   color: #14b8a6;
 }
+.sidebar-link-report:hover,
+.sidebar-link-report.is-active {
+  background: var(--color-accent-dim);
+  border-left-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+/* Entry count for the active engagement */
+.sidebar-link-report {
+  position: relative;
+}
+.sidebar-badge {
+  margin-left: auto;
+  min-width: 1.4rem;
+  padding: 0.1rem 0.4rem;
+  border-radius: 999px;
+  background: var(--color-accent);
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-align: center;
+}
+.sidebar.is-collapsed .sidebar-badge {
+  position: absolute;
+  top: 2px;
+  right: 4px;
+  min-width: 0;
+  padding: 0.05rem 0.3rem;
+  font-size: 0.55rem;
+}
+
 .sidebar-link-devops:hover,
 .sidebar-link-devops.is-active {
   background: rgba(217, 70, 239, 0.1);
@@ -498,5 +530,17 @@
 
   .app-main {
     margin-left: var(--sidebar-w-collapsed);
+  }
+}
+
+/* Phones always show the icon rail, so pin the engagement badge to the icon */
+@media (max-width: 640px) {
+  .sidebar-badge {
+    position: absolute;
+    top: 2px;
+    right: 4px;
+    min-width: 0;
+    padding: 0.05rem 0.3rem;
+    font-size: 0.55rem;
   }
 }

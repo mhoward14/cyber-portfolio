@@ -16,6 +16,7 @@
   </header>
 
   <app-arrived-from route="/transaction-security" accent="#14b8a6" />
+  <app-share-banner [session]="share" accent="#14b8a6" what="a transaction security configuration" (keep)="keepShared()" (discard)="discardShared()" />
 
   <div class="ts-disclaimer">
     Original, illustrative transaction flows applying general practices from the
@@ -115,6 +116,7 @@
           </div>
         }
       </div>
+      <app-share-button route="/transaction-security" [code]="shareCode()" accent="#14b8a6" label="Copy link to this configuration" />
     </aside>
   </div>
 </div>

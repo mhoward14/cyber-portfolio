@@ -1,5 +1,7 @@
 import { Component, computed, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { ShareBanner, ShareButton, ShareSession } from '../share/share-link';
+import { decodeZeroTrust, encodeZeroTrust } from './zero-trust-share';
 import { ArrivedFromBanner, ArrivedTechnique } from '../engagement/arrived-from';
 import {
   ATTACK_PATH_DOWNSTREAM,
@@ -95,7 +97,7 @@ const TECHNIQUE_PILLARS: Record<string, ZtPillarId> = {
 @Component({
   selector: 'app-zero-trust',
   standalone: true,
-  imports: [RouterLink, EngagementControlsPanel, ArrivedFromBanner],
+  imports: [RouterLink, EngagementControlsPanel, ArrivedFromBanner, ShareBanner, ShareButton],
   templateUrl: './zero-trust.html',
   styleUrl: './zero-trust.css',
 })
@@ -176,10 +178,34 @@ export class ZeroTrust {
   readonly targetRingPoints = toPointsAttr(this.targetRing);
   readonly labelPositions = this.pillars.map((p, i) => ({ pillar: p, ...axisPoint(i, LABEL_R) }));
 
+  readonly share = new ShareSession();
+  shareCode = computed(() =>
+    encodeZeroTrust({ provider: this.provider(), model: this.model(), tab: this.activeTab(), stages: this.maturityStages() }),
+  );
+
   constructor() {
     if (!this.loadedMaturity.fromStorage) {
       this.persistMaturity();
     }
+    this.share.open((code) => {
+      const shared = decodeZeroTrust(code);
+      if (!shared) return false;
+      this.provider.set(shared.provider);
+      this.model.set(shared.model);
+      this.activeTab.set(shared.tab);
+      this.maturityStages.set(shared.stages);
+      return true;
+    });
+  }
+
+  keepShared() {
+    this.share.close();
+    this.persistMaturity();
+  }
+
+  discardShared() {
+    this.share.close();
+    this.maturityStages.set(loadMaturityState().state.stages);
   }
 
   stageOf(pillar: MaturityPillar): MaturityStage {
@@ -214,6 +240,7 @@ export class ZeroTrust {
   );
 
   private persistMaturity() {
+    if (this.share.viewing()) return;
     const state: MaturityState = { stages: this.maturityStages() };
     try {
       localStorage.setItem(MATURITY_STORAGE_KEY, JSON.stringify(state));

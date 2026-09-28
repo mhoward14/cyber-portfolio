@@ -65,6 +65,8 @@ The portfolio complements 21 years of U.S. Air Force experience in knowledge ope
 - Dark and light themes with saved browser preference
 - Local browser storage for longer-running RMF and Zero Trust assessments
 - Client-side CSV export for incident-response results
+- Shareable result links: Attack Path, Cloud Security, Zero Trust, RMF Tracker, Transaction Security, CI/CD Pipeline, and IR Simulator debriefs encode the current choices in a compact, validated `?s=` code. Opening a link shows the shared result without overwriting the visitor's own saved work until they choose to keep it; RMF notes are never included.
+- Honors the operating system's reduced-motion setting site-wide
 - Automated tests for application logic and tool behavior
 - Open Graph and Twitter Card metadata for link previews
 - Cookieless Cloudflare Web Analytics

@@ -1,5 +1,7 @@
 import { Component, computed, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { ShareBanner, ShareButton, ShareSession } from '../share/share-link';
+import { decodePipeline, encodePipeline } from './devops-pipeline-share';
 import { GateConfig, PIPELINE_STAGES, SSDF_NAME, SSDF_URL, StageConfig, StageId } from './devops-pipeline-data';
 import { EngagementControlsPanel } from '../engagement/engagement-controls-panel';
 import { devopsEngagementControls } from './devops-pipeline-engagement';
@@ -42,7 +44,7 @@ export interface RatedStage extends Omit<StageConfig, 'gates'> {
 @Component({
   selector: 'app-devops-pipeline',
   standalone: true,
-  imports: [RouterLink, EngagementControlsPanel],
+  imports: [RouterLink, EngagementControlsPanel, ShareBanner, ShareButton],
   templateUrl: './devops-pipeline.html',
   styleUrl: './devops-pipeline.css',
 })
@@ -56,10 +58,29 @@ export class DevopsPipeline {
 
   private settingState = signal<SettingState>(seedState());
 
+  readonly share = new ShareSession();
+  shareCode = computed(() => encodePipeline(this.settingState()));
+
   constructor() {
     const { state, fromStorage } = loadState();
     this.settingState.set(state);
     if (!fromStorage) this.persist();
+    this.share.open((code) => {
+      const shared = decodePipeline(code);
+      if (!shared) return false;
+      this.settingState.set(shared);
+      return true;
+    });
+  }
+
+  keepShared() {
+    this.share.close();
+    this.persist();
+  }
+
+  discardShared() {
+    this.share.close();
+    this.settingState.set(loadState().state);
   }
 
   ratedStages = computed<RatedStage[]>(() => {
@@ -126,6 +147,7 @@ export class DevopsPipeline {
   }
 
   private persist() {
+    if (this.share.viewing()) return;
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(this.settingState()));
     } catch {

@@ -1,5 +1,10 @@
+import { TestBed } from '@angular/core/testing';
 import { CloudSecurity } from './cloud-security';
+
+const create = () => TestBed.runInInjectionContext(() => new CloudSecurity());
 import { PROVIDERS } from './cloud-security-data';
+import { ActivatedRoute, convertToParamMap } from '@angular/router';
+import { decodeCloud, encodeCloud } from './cloud-security-share';
 
 describe('CloudSecurity', () => {
   beforeEach(() => {
@@ -7,14 +12,14 @@ describe('CloudSecurity', () => {
   });
 
   it('seeds every resource as insecure by default, giving a score of 0', () => {
-    const cmp = new CloudSecurity();
+    const cmp = create();
     expect(cmp.score()).toBe(0);
     expect(cmp.ratingTier()).toBe('weak');
     expect(cmp.findings().length).toBe(cmp.currentResources().length);
   });
 
   it('raises the score and drops a finding when a resource is marked secure', () => {
-    const cmp = new CloudSecurity();
+    const cmp = create();
     const resource = cmp.currentResources()[0];
     cmp.setSecure(resource.id, true);
 
@@ -25,7 +30,7 @@ describe('CloudSecurity', () => {
   });
 
   it('reaches a strong rating once every resource in a provider is secure', () => {
-    const cmp = new CloudSecurity();
+    const cmp = create();
     for (const resource of cmp.currentResources()) {
       cmp.setSecure(resource.id, true);
     }
@@ -35,7 +40,7 @@ describe('CloudSecurity', () => {
   });
 
   it('keeps each provider\'s settings independent when switching providers', () => {
-    const cmp = new CloudSecurity();
+    const cmp = create();
     const azureResource = cmp.currentResources()[0];
     cmp.setSecure(azureResource.id, true);
     expect(cmp.score()).toBeGreaterThan(0);
@@ -49,11 +54,11 @@ describe('CloudSecurity', () => {
   });
 
   it('persists state to localStorage and reloads it on the next instantiation', () => {
-    const first = new CloudSecurity();
+    const first = create();
     const resource = first.currentResources()[0];
     first.setSecure(resource.id, true);
 
-    const second = new CloudSecurity();
+    const second = create();
     expect(second.currentResources().find((r) => r.id === resource.id)?.isSecure).toBe(true);
   });
 
@@ -68,10 +73,57 @@ describe('CloudSecurity', () => {
 describe('CloudSecurity focus from an Attack Path link', () => {
   it('selects the resource that defends against the technique', () => {
     localStorage.clear();
-    const cs = new CloudSecurity();
+    const cs = create();
     cs.focusFromTechnique({ attackId: 'T1190', name: '', tactic: '', note: '' });
     expect(cs.selectedResource()!.category).toBe('network');
     cs.focusFromTechnique({ attackId: 'T1486', name: '', tactic: '', note: '' });
     expect(cs.selectedResource()!.category).toBe('network'); // no backup setting: selection unchanged
+  });
+});
+
+const sharedRoute = (code: string) => ({
+  provide: ActivatedRoute,
+  useValue: { snapshot: { queryParamMap: convertToParamMap({ s: code }) } },
+});
+
+describe('CloudSecurity share links', () => {
+  beforeEach(() => localStorage.clear());
+
+  it('should round-trip provider, resource, and every setting', () => {
+    const cmp = create();
+    cmp.selectProvider('gcp');
+    const r = cmp.currentProvider().resources[2];
+    cmp.selectResource(r.id);
+    cmp.setSecure(r.id, true);
+    const decoded = decodeCloud(cmp.shareCode())!;
+    expect(decoded.providerId).toBe('gcp');
+    expect(decoded.resourceId).toBe(r.id);
+    expect(encodeCloud(decoded)).toBe(cmp.shareCode());
+    for (const bad of ['c1.9.0.AAA', 'c1.0.9.AAA', 'c1.0.0.A', 'x1.0.0.AAA']) expect(decodeCloud(bad), bad).toBeNull();
+  });
+
+  it('should show a shared configuration without saving it, then keep or discard it', () => {
+    const own = create();
+    const saved = localStorage.getItem('cloud-security-state');
+    const other = create();
+    for (const r of other.currentProvider().resources) other.setSecure(r.id, true);
+    const code = other.shareCode();
+    localStorage.setItem('cloud-security-state', saved!);
+
+    TestBed.resetTestingModule();
+    TestBed.configureTestingModule({ providers: [sharedRoute(code)] });
+    const viewer = create();
+    expect(viewer.share.viewing()).toBe(true);
+    expect(viewer.score()).toBe(100);
+    viewer.setSecure(viewer.currentProvider().resources[0].id, false);
+    expect(localStorage.getItem('cloud-security-state')).toBe(saved);
+    viewer.discardShared();
+    expect(viewer.score()).toBe(own.score());
+
+    TestBed.resetTestingModule();
+    TestBed.configureTestingModule({ providers: [sharedRoute(code)] });
+    const keeper = create();
+    keeper.keepShared();
+    expect(create().score()).toBe(100);
   });
 });

@@ -1,6 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 import { RmfTracker } from './rmf-tracker';
 import { CONTROLS, TIER_ORDER } from './rmf-data';
+import { ActivatedRoute, convertToParamMap } from '@angular/router';
+import { decodeRmf, encodeRmf } from './rmf-share';
 
 // RmfTracker injects EngagementService, so build it in an injection context.
 const create = () => TestBed.runInInjectionContext(() => new RmfTracker());
@@ -110,5 +112,44 @@ describe('RmfTracker', () => {
     const second = create();
     expect(second.tier()).toBe('moderate');
     expect(second.statusOf(control.id)).toBe('implemented');
+  });
+});
+
+const sharedRoute = (code: string) => ({
+  provide: ActivatedRoute,
+  useValue: { snapshot: { queryParamMap: convertToParamMap({ s: code }) } },
+});
+
+describe('RmfTracker share links', () => {
+  beforeEach(() => localStorage.clear());
+
+  it('should round-trip tier and every status, leaving notes out', () => {
+    const cmp = create();
+    cmp.setStatus(CONTROLS[0].id, 'na');
+    cmp.setNote(CONTROLS[0].id, 'private note');
+    const code = cmp.shareCode()!;
+    expect(code).not.toContain('private');
+    const decoded = decodeRmf(code)!;
+    expect(decoded.tier).toBe(cmp.tier());
+    expect(decoded.statuses).toEqual(cmp.statuses());
+    expect(encodeRmf(decoded)).toBe(code);
+    for (const bad of ['r1.4.' + code.split('.')[2], 'r1.2.AAAA', 'r1.2']) expect(decodeRmf(bad), bad).toBeNull();
+  });
+
+  it('should show a shared assessment without its notes or the sample banner, and restore on discard', () => {
+    const own = create();
+    const code = encodeRmf({ tier: 'high', statuses: { [CONTROLS[1].id]: 'implemented' } });
+    TestBed.resetTestingModule();
+    TestBed.configureTestingModule({ providers: [sharedRoute(code)] });
+    const viewer = create();
+    expect(viewer.tier()).toBe('high');
+    expect(viewer.statuses()).toEqual({ [CONTROLS[1].id]: 'implemented' });
+    expect(viewer.notes()).toEqual({});
+    expect(viewer.sample()).toBe(false);
+    viewer.setStatus(CONTROLS[2].id, 'partial');
+    expect(JSON.parse(localStorage.getItem('rmf-tracker-state') ?? 'null')?.tier ?? own.tier()).toBe(own.tier());
+    viewer.discardShared();
+    expect(viewer.statuses()).toEqual(own.statuses());
+    expect(viewer.notes()).toEqual(own.notes());
   });
 });

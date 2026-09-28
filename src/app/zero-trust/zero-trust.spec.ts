@@ -1,5 +1,10 @@
+import { TestBed } from '@angular/core/testing';
 import { ZeroTrust } from './zero-trust';
+
+const create = () => TestBed.runInInjectionContext(() => new ZeroTrust());
 import { MATURITY_PILLARS } from './zero-trust-data';
+import { ActivatedRoute, convertToParamMap } from '@angular/router';
+import { decodeZeroTrust } from './zero-trust-share';
 
 describe('ZeroTrust', () => {
   beforeEach(() => {
@@ -7,7 +12,7 @@ describe('ZeroTrust', () => {
   });
 
   it('defaults to the AWS/IaaS flow view with no node selected', () => {
-    const cmp = new ZeroTrust();
+    const cmp = create();
     expect(cmp.provider()).toBe('aws');
     expect(cmp.model()).toBe('iaas');
     expect(cmp.selectedNode()).toBeNull();
@@ -15,14 +20,14 @@ describe('ZeroTrust', () => {
   });
 
   it('reorders the provider tabs so the selected provider comes first', () => {
-    const cmp = new ZeroTrust();
+    const cmp = create();
     cmp.setProvider('gcp');
     expect(cmp.orderedProviders()[0]).toBe('gcp');
     expect(cmp.orderedProviders().length).toBe(3);
   });
 
   it('opens and closes a node detail panel', () => {
-    const cmp = new ZeroTrust();
+    const cmp = create();
     const node = cmp.nodes[0];
     cmp.openNode(node);
     expect(cmp.selectedNode()).toBe(node);
@@ -31,14 +36,14 @@ describe('ZeroTrust', () => {
   });
 
   it('looks up node responsibility for the currently selected deployment model', () => {
-    const cmp = new ZeroTrust();
+    const cmp = create();
     const node = cmp.nodes[0];
     cmp.setModel('saas');
     expect(cmp.responsibilityOf(node)).toBe(node.responsibilityByModel.saas);
   });
 
   it('seeds a maturity profile covering every pillar on first load', () => {
-    const cmp = new ZeroTrust();
+    const cmp = create();
     expect(Object.keys(cmp.maturityStages()).length).toBe(MATURITY_PILLARS.length);
     for (const pillar of MATURITY_PILLARS) {
       expect(cmp.stageOf(pillar)).toBeDefined();
@@ -46,7 +51,7 @@ describe('ZeroTrust', () => {
   });
 
   it('excludes advanced pillars from nextSteps and includes everything else', () => {
-    const cmp = new ZeroTrust();
+    const cmp = create();
     for (const pillar of MATURITY_PILLARS) {
       cmp.setStage(pillar, 'advanced');
     }
@@ -58,7 +63,7 @@ describe('ZeroTrust', () => {
   });
 
   it('counts maturity stages correctly in the profile summary', () => {
-    const cmp = new ZeroTrust();
+    const cmp = create();
     for (const pillar of MATURITY_PILLARS) {
       cmp.setStage(pillar, 'target');
     }
@@ -69,16 +74,16 @@ describe('ZeroTrust', () => {
   });
 
   it('persists maturity stage changes to localStorage across instantiations', () => {
-    const first = new ZeroTrust();
+    const first = create();
     const pillar = MATURITY_PILLARS[0];
     first.setStage(pillar, 'advanced');
 
-    const second = new ZeroTrust();
+    const second = create();
     expect(second.stageOf(pillar)).toBe('advanced');
   });
 
   it('switches between the flow, attack-path, and maturity tabs', () => {
-    const cmp = new ZeroTrust();
+    const cmp = create();
     cmp.setTab('maturity');
     expect(cmp.activeTab()).toBe('maturity');
     cmp.setTab('attack-path');
@@ -88,15 +93,55 @@ describe('ZeroTrust', () => {
 
 describe('ZeroTrust focus from an Attack Path link', () => {
   it('opens the matching maturity pillar', () => {
-    const zt = new ZeroTrust();
+    const zt = create();
     zt.focusFromTechnique({ attackId: 'T1021.004', name: '', tactic: '', note: '' });
     expect(zt.activeTab()).toBe('maturity');
     expect(zt.highlightedPillar()).toBe('network');
   });
 
   it('ignores techniques with no Zero Trust pillar', () => {
-    const zt = new ZeroTrust();
+    const zt = create();
     zt.focusFromTechnique({ attackId: 'T1486', name: '', tactic: '', note: '' });
     expect(zt.highlightedPillar()).toBeNull();
+  });
+});
+
+const sharedRoute = (code: string) => ({
+  provide: ActivatedRoute,
+  useValue: { snapshot: { queryParamMap: convertToParamMap({ s: code }) } },
+});
+
+describe('ZeroTrust share links', () => {
+  beforeEach(() => localStorage.clear());
+
+  it('should round-trip provider, model, tab, and maturity, and reject bad codes', () => {
+    const cmp = create();
+    cmp.setProvider('gcp');
+    cmp.setModel('saas');
+    cmp.setTab('maturity');
+    cmp.setStage(MATURITY_PILLARS[3], 'advanced');
+    const decoded = decodeZeroTrust(cmp.shareCode())!;
+    expect(decoded).toEqual({ provider: 'gcp', model: 'saas', tab: 'maturity', stages: cmp.maturityStages() });
+    for (const bad of ['z1.300.AAA', 'z1.000.A', 'z1.000.____', 'z2.000.AAA']) expect(decodeZeroTrust(bad), bad).toBeNull();
+  });
+
+  it('should open a shared assessment on its tab without overwriting saved maturity', () => {
+    const own = create();
+    const saved = localStorage.getItem('zero-trust-maturity-state');
+    const other = create();
+    for (const p of MATURITY_PILLARS) other.setStage(p, 'advanced');
+    other.setTab('maturity');
+    const code = other.shareCode();
+    localStorage.setItem('zero-trust-maturity-state', saved!);
+
+    TestBed.resetTestingModule();
+    TestBed.configureTestingModule({ providers: [sharedRoute(code)] });
+    const viewer = create();
+    expect(viewer.activeTab()).toBe('maturity');
+    expect(viewer.nextSteps().length).toBe(0);
+    viewer.setStage(MATURITY_PILLARS[0], 'not-started');
+    expect(localStorage.getItem('zero-trust-maturity-state')).toBe(saved);
+    viewer.discardShared();
+    expect(viewer.maturityStages()).toEqual(own.maturityStages());
   });
 });

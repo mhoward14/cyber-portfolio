@@ -1,5 +1,7 @@
 import { Component, computed, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { ShareBanner, ShareButton, ShareSession } from '../share/share-link';
+import { decodeTransaction, encodeTransaction } from './transaction-security-share';
 import { ArrivedFromBanner } from '../engagement/arrived-from';
 import {
   TRANSACTION_TYPES,
@@ -44,7 +46,7 @@ export interface RatedStage extends TransactionStage {
 @Component({
   selector: 'app-transaction-security',
   standalone: true,
-  imports: [RouterLink, ArrivedFromBanner],
+  imports: [RouterLink, ArrivedFromBanner, ShareBanner, ShareButton],
   templateUrl: './transaction-security.html',
   styleUrl: './transaction-security.css',
 })
@@ -56,10 +58,31 @@ export class TransactionSecurity {
 
   private settingState = signal<SettingState>(seedState());
 
+  readonly share = new ShareSession();
+  shareCode = computed(() => encodeTransaction({ typeId: this.selectedTypeId(), settings: this.settingState() }));
+
   constructor() {
     const { state, fromStorage } = loadState();
     this.settingState.set(state);
     if (!fromStorage) this.persist();
+    this.share.open((code) => {
+      const shared = decodeTransaction(code);
+      if (!shared) return false;
+      this.settingState.set(shared.settings);
+      this.selectedTypeId.set(shared.typeId);
+      this.selectedStageId.set(this.currentType().stages[0].id);
+      return true;
+    });
+  }
+
+  keepShared() {
+    this.share.close();
+    this.persist();
+  }
+
+  discardShared() {
+    this.share.close();
+    this.settingState.set(loadState().state);
   }
 
   currentType = computed<TransactionTypeConfig>(
@@ -117,6 +140,7 @@ export class TransactionSecurity {
   }
 
   private persist() {
+    if (this.share.viewing()) return;
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(this.settingState()));
     } catch {

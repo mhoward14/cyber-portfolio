@@ -1,5 +1,10 @@
+import { TestBed } from '@angular/core/testing';
 import { TransactionSecurity } from './transaction-security';
+
+const create = () => TestBed.runInInjectionContext(() => new TransactionSecurity());
 import { TRANSACTION_TYPES } from './transaction-security-data';
+import { ActivatedRoute, convertToParamMap } from '@angular/router';
+import { decodeTransaction } from './transaction-security-share';
 
 describe('TransactionSecurity', () => {
   beforeEach(() => {
@@ -7,14 +12,14 @@ describe('TransactionSecurity', () => {
   });
 
   it('seeds every stage as insecure by default, giving a score of 0', () => {
-    const cmp = new TransactionSecurity();
+    const cmp = create();
     expect(cmp.score()).toBe(0);
     expect(cmp.ratingTier()).toBe('weak');
     expect(cmp.findings().length).toBe(cmp.currentStages().length);
   });
 
   it('raises the score and drops a finding when a stage is marked secure', () => {
-    const cmp = new TransactionSecurity();
+    const cmp = create();
     const stage = cmp.currentStages()[0];
     cmp.setSecure(stage.id, true);
 
@@ -24,7 +29,7 @@ describe('TransactionSecurity', () => {
   });
 
   it('reaches a strong rating once every stage in a transaction type is secure', () => {
-    const cmp = new TransactionSecurity();
+    const cmp = create();
     for (const stage of cmp.currentStages()) {
       cmp.setSecure(stage.id, true);
     }
@@ -34,7 +39,7 @@ describe('TransactionSecurity', () => {
   });
 
   it('keeps each transaction type\'s settings independent when switching types', () => {
-    const cmp = new TransactionSecurity();
+    const cmp = create();
     const cardPresentStage = cmp.currentStages()[0];
     cmp.setSecure(cardPresentStage.id, true);
     expect(cmp.score()).toBeGreaterThan(0);
@@ -48,11 +53,11 @@ describe('TransactionSecurity', () => {
   });
 
   it('persists state to localStorage and reloads it on the next instantiation', () => {
-    const first = new TransactionSecurity();
+    const first = create();
     const stage = first.currentStages()[0];
     first.setSecure(stage.id, true);
 
-    const second = new TransactionSecurity();
+    const second = create();
     expect(second.currentStages().find((s) => s.id === stage.id)?.isSecure).toBe(true);
   });
 
@@ -70,5 +75,35 @@ describe('TransactionSecurity', () => {
     expect(cardPresent.standardName).toContain('PCI');
     expect(cardNotPresent.standardName).toContain('PCI');
     expect(ach.standardName).toContain('NACHA');
+  });
+});
+
+const sharedRoute = (code: string) => ({
+  provide: ActivatedRoute,
+  useValue: { snapshot: { queryParamMap: convertToParamMap({ s: code }) } },
+});
+
+describe('TransactionSecurity share links', () => {
+  beforeEach(() => localStorage.clear());
+
+  it('should round-trip the type and settings, open without saving, and keep on request', () => {
+    const cmp = create();
+    cmp.selectType('ach');
+    for (const s of cmp.currentStages()) cmp.setSecure(s.id, true);
+    const code = cmp.shareCode();
+    expect(decodeTransaction(code)!.typeId).toBe('ach');
+    for (const bad of ['t1.7.AA', 't1.0.A', 't9.0.AAA']) expect(decodeTransaction(bad), bad).toBeNull();
+
+    localStorage.clear();
+    create();
+    const saved = localStorage.getItem('transaction-security-state');
+    TestBed.resetTestingModule();
+    TestBed.configureTestingModule({ providers: [sharedRoute(code)] });
+    const viewer = create();
+    expect(viewer.selectedTypeId()).toBe('ach');
+    expect(viewer.currentStages().every((s) => s.isSecure)).toBe(true);
+    expect(localStorage.getItem('transaction-security-state')).toBe(saved);
+    viewer.keepShared();
+    expect(localStorage.getItem('transaction-security-state')).not.toBe(saved);
   });
 });

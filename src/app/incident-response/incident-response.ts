@@ -1,5 +1,7 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { ShareBanner, ShareButton, ShareSession } from '../share/share-link';
+import { decodeIrRun, encodeIrRun } from './incident-response-share';
 import { ArrivedFromBanner } from '../engagement/arrived-from';
 import {
   DecisionOption,
@@ -57,7 +59,7 @@ function csvField(value: string): string {
 @Component({
   selector: 'app-incident-response',
   standalone: true,
-  imports: [RouterLink, ArrivedFromBanner],
+  imports: [RouterLink, ArrivedFromBanner, ShareBanner, ShareButton],
   templateUrl: './incident-response.html',
   styleUrl: './incident-response.css',
 })
@@ -171,7 +173,29 @@ export class IncidentResponse {
     this.addedToEngagement.set(true);
   }
 
+  readonly share = new ShareSession();
+  /** Link to a finished run's debrief. */
+  shareCode = computed(() => {
+    const scenario = this.selectedScenario();
+    if (!scenario || this.view() !== 'debrief') return null;
+    return encodeIrRun(scenario, this.history().map((h) => h.option));
+  });
+
+  constructor() {
+    this.share.open((code) => {
+      const run = decodeIrRun(code);
+      if (!run) return false;
+      this.selectedScenario.set(run.scenario);
+      this.history.set(run.scenario.decisions.map((d, i) => ({ phase: d.phase, option: run.choices[i] })));
+      this.phaseIndex.set(run.scenario.decisions.length - 1);
+      this.selectedOptionId.set(run.choices.at(-1)!.id);
+      this.view.set('debrief');
+      return true;
+    });
+  }
+
   restart() {
+    if (this.share.viewing()) this.share.close();
     this.addedToEngagement.set(false);
     this.selectedScenario.set(null);
     this.phaseIndex.set(0);

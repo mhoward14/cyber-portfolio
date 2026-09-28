@@ -2,6 +2,8 @@ import { TestBed } from '@angular/core/testing';
 import { AttackPath } from './attack-path';
 import { TACTIC_STAGES } from './attack-path-data';
 import { EngagementService } from '../engagement/engagement.service';
+import { ActivatedRoute, convertToParamMap } from '@angular/router';
+import { decodeAttackPath, encodeAttackPath } from './attack-path-share';
 
 // AttackPath injects EngagementService, so build it in an injection context.
 const create = () => TestBed.runInInjectionContext(() => new AttackPath());
@@ -119,3 +121,55 @@ describe('AttackPath session', () => {
   });
 });
 
+const sharedRoute = (code: string) => ({
+  provide: ActivatedRoute,
+  useValue: { snapshot: { queryParamMap: convertToParamMap({ s: code }) } },
+});
+
+describe('AttackPath share links', () => {
+  beforeEach(() => sessionStorage.clear());
+
+  const finish = (ap: AttackPath, pick: number) => {
+    for (const stage of TACTIC_STAGES) ap.selectTechnique(stage.techniques[Math.min(pick, stage.techniques.length - 1)]);
+  };
+
+  it('should round-trip a chain and reject malformed codes', () => {
+    const ap = create();
+    finish(ap, 1);
+    const code = ap.shareCode()!;
+    expect(code).toMatch(/^a1\.\d{6}$/);
+    expect(decodeAttackPath(code)!.map((p) => p.technique.id)).toEqual(ap.picks().map((p) => p.technique.id));
+    for (const bad of ['a1.9', 'a1.0000000', 'a2.000000', 'a1.', 'a1.0x']) expect(decodeAttackPath(bad), bad).toBeNull();
+    expect(encodeAttackPath([])).toBe('a1.');
+  });
+
+  it('should show a shared chain without touching the visitor’s own until kept', () => {
+    const own = create();
+    finish(own, 0);
+    const ownIds = own.picks().map((p) => p.technique.id);
+    const other = create();
+    other.restart();
+    finish(other, 1);
+    const code = other.shareCode()!;
+    other.restart();
+    finish(other, 0);
+
+    TestBed.resetTestingModule();
+    TestBed.configureTestingModule({ providers: [sharedRoute(code)] });
+    const viewer = create();
+    expect(viewer.share.viewing()).toBe(true);
+    expect(viewer.isComplete()).toBe(true);
+    expect(encodeAttackPath(viewer.picks())).toBe(code);
+    expect(JSON.parse(sessionStorage.getItem('attack-path-session')!)).toEqual(ownIds);
+
+    viewer.discardShared();
+    expect(viewer.picks().map((p) => p.technique.id)).toEqual(ownIds);
+
+    TestBed.resetTestingModule();
+    TestBed.configureTestingModule({ providers: [sharedRoute(code)] });
+    const keeper = create();
+    keeper.keepShared();
+    expect(keeper.share.viewing()).toBe(false);
+    expect(JSON.parse(sessionStorage.getItem('attack-path-session')!)).toEqual(keeper.picks().map((p) => p.technique.id));
+  });
+});

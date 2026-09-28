@@ -17,6 +17,8 @@
     Original, illustrative attack chains applying tactics and techniques from the <a [href]="mitreUrl" target="_blank" rel="noopener">MITRE ATT&amp;CK&reg; Enterprise Matrix</a>. Stealth ratings and defense mappings are this tool's own original content, not official ATT&amp;CK mitigation guidance &mdash; and this is not a penetration-testing tool.
   </div>
 
+  <app-share-banner [session]="share" accent="#0a84ff" what="an attack path" (keep)="keepShared()" (discard)="discardShared()" />
+
   <div class="ap-stepper">
     @for (stage of stages; track stage.id; let i = $index) {
       <div class="ap-step" [class.ap-step-done]="i < stageIndex()" [class.ap-step-current]="i === stageIndex()">
@@ -183,6 +185,7 @@
       </div>
 
       <div class="ap-summary-actions">
+        <app-share-button route="/attack-path" [code]="shareCode()" accent="#0a84ff" label="Copy link to this path" />
         <button type="button" class="ap-restart-btn" (click)="restart()">Build Another Path</button>
       </div>
     </div>

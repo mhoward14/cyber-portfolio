@@ -25,13 +25,6 @@ export class Home implements AfterViewInit {
     if (this.route?.snapshot.queryParamMap.get('tour') === '1' && !this.tour.active()) {
       setTimeout(() => this.tour.start());
     }
-    if (!document.querySelector('script[data-credly-embed]')) {
-      const script = document.createElement('script');
-      script.src = 'https://cdn.credly.com/assets/utilities/embed.js';
-      script.async = true;
-      script.setAttribute('data-credly-embed', 'true');
-      document.body.appendChild(script);
-    }
   }
 
   toggleAbout() {

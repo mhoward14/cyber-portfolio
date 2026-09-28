@@ -71,7 +71,7 @@ The portfolio complements 21 years of U.S. Air Force experience in knowledge ope
 - Open Graph and Twitter Card metadata for link previews
 - Cookieless Cloudflare Web Analytics
 - Static output deployed through GitHub Pages
-- Browser hardening: a strict Content Security Policy with no inline script, clickjacking protection, validated inputs everywhere, and a scraper-resistant contact link. See [SECURITY.md](SECURITY.md) for the full control list and the limits of static hosting.
+- Browser hardening: a strict Content Security Policy with no inline script and Trusted Types enforced, no third-party widgets, clickjacking protection, validated inputs everywhere, and a scraper-resistant contact link. See [SECURITY.md](SECURITY.md) for the full control list and the limits of static hosting.
 
 ## Technology
 
@@ -87,7 +87,7 @@ The portfolio complements 21 years of U.S. Air Force experience in knowledge ope
 
 Requirements:
 
-- Node.js 20
+- Node.js 22 (pinned in `.nvmrc`, which CI and the deploy both read)
 - npm
 
 Install dependencies and start the development server:

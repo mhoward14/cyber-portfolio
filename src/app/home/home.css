@@ -414,6 +414,30 @@
    "Start here" step number.
    ============================================================ */
 
+/* "Take the 90-second tour" button at the end of the tools label row. */
+.tour-launch {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-left: auto;
+  padding: 0.45rem 0.9rem;
+  border: 1px solid var(--color-accent);
+  border-radius: 2rem;
+  background: var(--color-accent-dim);
+  color: var(--color-text);
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.tour-launch:hover {
+  background: color-mix(in srgb, var(--color-accent) 25%, transparent);
+}
+.tour-launch svg {
+  color: var(--color-accent);
+}
+
 .tools-section {
   margin-bottom: 3rem;
 }

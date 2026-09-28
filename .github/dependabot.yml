@@ -1,0 +1,23 @@
+# Weekly dependency updates. Minor and patch bumps are grouped into one
+# pull request per ecosystem so they arrive as a single reviewable change;
+# CI runs the full test suite and build on each one before it can merge.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    groups:
+      npm-minor-and-patch:
+        update-types: [minor, patch]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    groups:
+      actions:
+        patterns: ["*"]

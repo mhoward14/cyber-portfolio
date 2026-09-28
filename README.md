@@ -8,7 +8,7 @@ An interactive cybersecurity portfolio spanning **GRC/RMF, cloud and Zero Trust 
 
 ## Start here
 
-For a short recruiter or hiring-manager review:
+For a short recruiter or hiring-manager review, take the **[90-second guided tour](https://mhoward14.github.io/cyber-portfolio/#/?tour=1)**, or open the tools directly:
 
 1. **[Attack Path Builder](https://mhoward14.github.io/cyber-portfolio/#/attack-path)** — see how offensive techniques connect to defensive controls across the portfolio.
 2. **[Cloud Security Configuration Builder](https://mhoward14.github.io/cyber-portfolio/#/cloud-security)** — change Azure, AWS, or GCP settings and watch the security posture respond.

@@ -588,7 +588,8 @@
 
 @media (max-width: 768px) {
   .ap-layout {
-    grid-template-columns: 1fr;
+    /* minmax(0, 1fr) lets the single column shrink to narrow phones. */
+    grid-template-columns: minmax(0, 1fr);
   }
   .ap-side-panel {
     position: static;

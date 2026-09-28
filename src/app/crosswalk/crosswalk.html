@@ -28,7 +28,8 @@
     <div class="crosswalk-search search-box">
       <input
         type="text"
-        placeholder="Search by control ID, title, or keyword..."
+        placeholder="Search controls…"
+        aria-label="Search by control ID, title, or keyword"
         [ngModel]="query()"
         (ngModelChange)="query.set($event)"
       />

@@ -1,4 +1,4 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, computed, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ShareBanner, ShareButton, ShareSession } from '../share/share-link';
 import { decodeZeroTrust, encodeZeroTrust } from './zero-trust-share';
@@ -97,6 +97,7 @@ const TECHNIQUE_PILLARS: Record<string, ZtPillarId> = {
 
 @Component({
   selector: 'app-zero-trust',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: true,
   imports: [RouterLink, EngagementControlsPanel, ArrivedFromBanner, ShareBanner, ShareButton, ExportButton],
   templateUrl: './zero-trust.html',

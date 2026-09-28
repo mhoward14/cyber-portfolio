@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ShareBanner, ShareButton, ShareSession } from '../share/share-link';
 import { decodeIrRun, encodeIrRun } from './incident-response-share';
@@ -52,6 +52,7 @@ export function recommendScenario(techniques: EngagementTechnique[]): ScenarioRe
 
 @Component({
   selector: 'app-incident-response',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: true,
   imports: [RouterLink, ArrivedFromBanner, ShareBanner, ShareButton],
   templateUrl: './incident-response.html',

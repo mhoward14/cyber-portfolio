@@ -1,4 +1,4 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, computed, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ShareBanner, ShareButton, ShareSession } from '../share/share-link';
 import { decodeCloud, encodeCloud } from './cloud-security-share';
@@ -47,6 +47,7 @@ const TECHNIQUE_CATEGORIES: Record<string, ResourceCategory> = {
 
 @Component({
   selector: 'app-cloud-security',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: true,
   imports: [RouterLink, EngagementControlsPanel, ArrivedFromBanner, ShareBanner, ShareButton, ExportButton],
   templateUrl: './cloud-security.html',

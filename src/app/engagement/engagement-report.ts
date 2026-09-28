@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { EngagementService } from './engagement.service';
 import { Engagement } from './engagement.model';
@@ -8,6 +8,7 @@ export type DetectionTier = 'stealthy' | 'moderate' | 'noisy';
 
 @Component({
   selector: 'app-engagement-report',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: true,
   imports: [RouterLink],
   templateUrl: './engagement-report.html',

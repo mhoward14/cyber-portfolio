@@ -1,4 +1,4 @@
-import { Component, signal, computed, AfterViewInit, inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy, signal, computed, AfterViewInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
@@ -7,6 +7,7 @@ import { EmailLink } from '../security/email-link';
 
 @Component({
   selector: 'app-home',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink, EmailLink],
   templateUrl: './home.html',

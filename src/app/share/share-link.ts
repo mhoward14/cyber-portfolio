@@ -11,7 +11,7 @@
    chooses "Keep as mine" (or goes "Back to my own").
    ============================================================ */
 
-import { Component, computed, inject, input, output, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, computed, inject, input, output, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 export const SHARE_PARAM = 's';
@@ -103,6 +103,7 @@ export class ShareSession {
 /** Notice shown while a tool displays a shared result. */
 @Component({
   selector: 'app-share-banner',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: true,
   template: `
     @if (session().viewing()) {
@@ -191,6 +192,7 @@ export class ShareBanner {
 /** "Copy share link" button with a fallback field when the clipboard is unavailable. */
 @Component({
   selector: 'app-share-button',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: true,
   template: `
     <span class="sh" [style.--sh-accent]="accent()">

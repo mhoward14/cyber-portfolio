@@ -1,5 +1,13 @@
 import { Injectable, computed, signal } from '@angular/core';
-import { ENGAGEMENT_STORAGE_KEY, Engagement, EngagementControl, EngagementDecision, EngagementPoam, EngagementTechnique } from './engagement.model';
+import {
+  ENGAGEMENT_STORAGE_KEY,
+  Engagement,
+  EngagementControl,
+  EngagementDecision,
+  EngagementEvidence,
+  EngagementPoam,
+  EngagementTechnique,
+} from './engagement.model';
 import { buildSampleEngagement } from './engagement-sample';
 
 export const DEFAULT_SCENARIO = 'Untitled engagement';
@@ -46,6 +54,15 @@ export class EngagementService {
   setDecisions(decisions: EngagementDecision[], responseScenario: string) {
     const s = this.ownRecord();
     this.commit({ ...s, decisions: decisions.map((d) => ({ ...d })), responseScenario });
+  }
+
+  /** Replace one source's evidence (a Packet Lab hunt), keeping evidence
+   *  from other sources. Starts an engagement if none is active, and turns
+   *  a sample into the visitor's own record. */
+  setEvidence(sourceKey: string, evidence: EngagementEvidence[]) {
+    const s = this.ownRecord();
+    const kept = s.evidence.filter((e) => e.sourceKey !== sourceKey);
+    this.commit({ ...s, evidence: [...kept, ...evidence.map((e) => ({ ...e, sourceKey }))] });
   }
 
   /** Replace one tool's controls, keeping controls other tools added.

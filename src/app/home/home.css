@@ -723,6 +723,60 @@
   letter-spacing: 0.08em;
 }
 
+/* At-a-glance metrics on each case-study tile. Every value comes from
+   the case study's own text (see the projects data in home.ts); the
+   label (dt) precedes the value (dd) in the markup for screen readers,
+   and column-reverse shows the value first. */
+.metric-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
+  margin: 0 0 1rem;
+}
+.metric-tile {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-end;
+  padding: 0.55rem 0.65rem;
+  border: 1px solid var(--color-border);
+  border-top: 2px solid var(--project-color, var(--color-accent));
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--project-color, var(--color-accent)) 6%, transparent);
+}
+.metric-value {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 800;
+  line-height: 1.15;
+  color: var(--color-text);
+  white-space: nowrap;
+}
+/* Phones: one metric per line ("28 risks prioritized"), since three
+   side-by-side tiles get too narrow next to the collapsed sidebar. */
+@media (max-width: 480px) {
+  .metric-row {
+    grid-template-columns: 1fr;
+    gap: 0.3rem;
+  }
+  .metric-tile {
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    align-items: baseline;
+    gap: 0.5rem;
+    padding: 0.35rem 0.6rem;
+    border-top-width: 1px;
+    border-left: 2px solid var(--project-color, var(--color-accent));
+  }
+  .metric-value { font-size: 1rem; }
+  .metric-label { margin-top: 0; font-size: 0.74rem; }
+}
+.metric-label {
+  margin-top: 0.2rem;
+  font-size: 0.7rem;
+  line-height: 1.35;
+  color: var(--color-text-muted);
+}
+
 /* Skill tag pills */
 .tag-list {
   display: flex;
@@ -961,10 +1015,13 @@
     padding: 1rem 1rem 0.5rem;
   }
   .stat-item {
-    padding: 0 1rem;
+    padding: 0 0.75rem;
   }
   .stat-number {
     font-size: 1.35rem;
+  }
+  .stat-label {
+    letter-spacing: 0.08em;
   }
 
   .section-label {

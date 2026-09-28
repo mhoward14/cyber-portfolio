@@ -87,7 +87,7 @@ The portfolio complements 21 years of U.S. Air Force experience in knowledge ope
 
 Requirements:
 
-- Node.js 20
+- Node.js 22 (pinned in `.nvmrc`, which CI and the deploy both read)
 - npm
 
 Install dependencies and start the development server:

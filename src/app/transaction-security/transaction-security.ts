@@ -11,6 +11,7 @@ import {
   TransactionTypeConfig,
   TransactionTypeId,
 } from './transaction-security-data';
+import { loadBooleanState } from '../security/stored-state';
 
 const STORAGE_KEY = 'transaction-security-state';
 
@@ -32,13 +33,7 @@ function seedState(): SettingState {
 }
 
 function loadState(): { state: SettingState; fromStorage: boolean } {
-  try {
-    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
-    if (saved) return { state: saved, fromStorage: true };
-  } catch {
-    /* ignore malformed storage */
-  }
-  return { state: seedState(), fromStorage: false };
+  return loadBooleanState(STORAGE_KEY, seedState);
 }
 
 export interface RatedStage extends TransactionStage {

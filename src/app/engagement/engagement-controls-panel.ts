@@ -1,4 +1,4 @@
-import { Component, computed, inject, input } from '@angular/core';
+import { Component, ChangeDetectionStrategy, computed, inject, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { EngagementService } from './engagement.service';
 import { EngagementControl } from './engagement.model';
@@ -10,6 +10,7 @@ export type PanelStatus = 'saved' | 'stale' | 'add' | 'start';
  *  are in the engagement and offers to add or update them. */
 @Component({
   selector: 'app-engagement-controls-panel',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: true,
   imports: [RouterLink],
   template: `

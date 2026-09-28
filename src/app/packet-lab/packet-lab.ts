@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { EngagementService } from '../engagement/engagement.service';
 import { compileFilter } from './display-filter';
@@ -109,6 +109,7 @@ export function hexRows(bytes: Uint8Array): HexRow[] {
 
 @Component({
   selector: 'app-packet-lab',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: true,
   imports: [RouterLink],
   templateUrl: './packet-lab.html',

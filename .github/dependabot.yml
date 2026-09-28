@@ -10,6 +10,10 @@ updates:
       day: monday
     open-pull-requests-limit: 5
     groups:
+      # Angular's packages must move together, so every Angular update,
+      # including major versions, arrives as one pull request.
+      angular:
+        patterns: ["@angular/*", "@angular-devkit/*", "typescript", "zone.js"]
       npm-minor-and-patch:
         update-types: [minor, patch]
 

@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ShareBanner, ShareButton, ShareSession } from '../share/share-link';
 import { decodeAttackPath, encodeAttackPath } from './attack-path-share';
@@ -44,6 +44,7 @@ function loadSession(): PathPick[] {
 
 @Component({
   selector: 'app-attack-path',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: true,
   imports: [RouterLink, ShareBanner, ShareButton, ExportButton],
   templateUrl: './attack-path.html',

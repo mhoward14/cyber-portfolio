@@ -2,6 +2,7 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { EngagementService } from './engagement.service';
 import { Engagement } from './engagement.model';
+import { downloadText, fileSlug, toCsv } from '../share/export-file';
 
 export type DetectionTier = 'stealthy' | 'moderate' | 'noisy';
 
@@ -61,15 +62,7 @@ export class EngagementReport {
   exportCsv() {
     const s = this.state();
     if (!s) return;
-    const blob = new Blob([engagementToCsv(s)], { type: 'text/csv;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${slug(s.scenario) || 'engagement'}-report.csv`;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    URL.revokeObjectURL(url);
+    downloadText(`${fileSlug(s.scenario) || 'engagement'}-report.csv`, engagementToCsv(s));
   }
 }
 
@@ -86,15 +79,5 @@ export function engagementToCsv(s: Engagement): string {
     rows.push(['Control', c.id, c.name, `source: ${c.sourceTool}${c.basis ? `; ${c.basis}` : ''}; CIS ${c.cis ?? '-'}; ISO ${c.iso ?? '-'}`, c.status, c.attackIds.join(' ')]);
   }
   for (const p of s.poams) rows.push(['POA&M', p.id, p.weakness, p.milestone, `${p.targetDays} days`, p.controlId]);
-  return rows.map((r) => r.map(csvCell).join(',')).join('\r\n');
-}
-
-function csvCell(value: string): string {
-  // Neutralize spreadsheet formula injection, then quote.
-  const safe = /^[=+\-@\t\r]/.test(value) ? `'${value}` : value;
-  return `"${safe.replace(/"/g, '""')}"`;
-}
-
-function slug(text: string): string {
-  return text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 60);
+  return toCsv(rows);
 }

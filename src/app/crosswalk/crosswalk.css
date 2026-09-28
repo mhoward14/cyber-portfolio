@@ -609,3 +609,8 @@ body:not(.light-mode) .crosswalk-row {
     justify-content: center;
   }
 }
+
+/* Download button at the right end of the "mapped controls" label row. */
+.cw-export {
+  margin-left: auto;
+}

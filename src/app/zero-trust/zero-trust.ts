@@ -2,6 +2,8 @@ import { Component, computed, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ShareBanner, ShareButton, ShareSession } from '../share/share-link';
 import { decodeZeroTrust, encodeZeroTrust } from './zero-trust-share';
+import { zeroTrustCsv } from './zero-trust-export';
+import { ExportButton, dateStamp, downloadText } from '../share/export-file';
 import { ArrivedFromBanner, ArrivedTechnique } from '../engagement/arrived-from';
 import {
   ATTACK_PATH_DOWNSTREAM,
@@ -97,7 +99,7 @@ const TECHNIQUE_PILLARS: Record<string, ZtPillarId> = {
 @Component({
   selector: 'app-zero-trust',
   standalone: true,
-  imports: [RouterLink, EngagementControlsPanel, ArrivedFromBanner, ShareBanner, ShareButton],
+  imports: [RouterLink, EngagementControlsPanel, ArrivedFromBanner, ShareBanner, ShareButton, ExportButton],
   templateUrl: './zero-trust.html',
   styleUrl: './zero-trust.css',
 })
@@ -196,6 +198,10 @@ export class ZeroTrust {
       this.maturityStages.set(shared.stages);
       return true;
     });
+  }
+
+  downloadCsv() {
+    downloadText(`zero-trust-maturity-${dateStamp()}.csv`, zeroTrustCsv(this.maturityStages(), this.provider(), this.model()));
   }
 
   keepShared() {

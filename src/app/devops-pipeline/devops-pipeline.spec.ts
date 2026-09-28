@@ -5,6 +5,7 @@ const create = () => TestBed.runInInjectionContext(() => new DevopsPipeline());
 import { PIPELINE_STAGES } from './devops-pipeline-data';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { decodePipeline, encodePipeline } from './devops-pipeline-share';
+import { pipelineCsv } from './devops-pipeline-export';
 
 describe('DevopsPipeline', () => {
   beforeEach(() => {
@@ -114,5 +115,16 @@ describe('DevopsPipeline share links', () => {
     expect(viewer.ratedStages().every((s) => s.score === 100)).toBe(true);
     viewer.discardShared();
     expect(viewer.shareCode()).toBe(cmp.shareCode());
+  });
+});
+
+describe('DevopsPipeline CSV export', () => {
+  it('should list every gate with its SSDF practice and the maturity score', () => {
+    const gate = PIPELINE_STAGES[0].gates[0];
+    const csv = pipelineCsv({ [gate.id]: true });
+    const total = PIPELINE_STAGES.reduce((n, s) => n + s.gates.length, 0);
+    expect(csv).toContain(`(1 of ${total} gates enabled)`);
+    expect(csv).toContain(`"${gate.ssdfPractice}"`);
+    expect(csv.match(/"Gap"/g)!.length).toBe(total - 1);
   });
 });

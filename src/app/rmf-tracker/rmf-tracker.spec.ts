@@ -3,6 +3,7 @@ import { RmfTracker } from './rmf-tracker';
 import { CONTROLS, TIER_ORDER } from './rmf-data';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { decodeRmf, encodeRmf } from './rmf-share';
+import { rmfAssessmentCsv, rmfPoamCsv } from './rmf-export';
 
 // RmfTracker injects EngagementService, so build it in an injection context.
 const create = () => TestBed.runInInjectionContext(() => new RmfTracker());
@@ -151,5 +152,29 @@ describe('RmfTracker share links', () => {
     viewer.discardShared();
     expect(viewer.statuses()).toEqual(own.statuses());
     expect(viewer.notes()).toEqual(own.notes());
+  });
+});
+
+describe('RmfTracker CSV exports', () => {
+  beforeEach(() => localStorage.clear());
+
+  it('should export every active control and a POA&M of only the open ones', () => {
+    const t = create();
+    const input = { tier: t.tier()!, controls: t.activeControls(), statusOf: (id: string) => t.statusOf(id), notes: t.notes() };
+    const assessment = rmfAssessmentCsv(input).split('\r\n');
+    expect(assessment.length).toBe(6 + t.activeControls().length);
+    const open = t.activeControls().filter((c) => ['partial', 'not-implemented'].includes(t.statusOf(c.id)));
+    const poam = rmfPoamCsv(input);
+    expect(poam.split('\r\n').length).toBe(6 + open.length);
+    expect(poam).toContain('"POAM-001"');
+    expect(poam).toContain('"Point of contact","Resources required","Scheduled completion date","Milestones"');
+    expect(poam).not.toContain('"Implemented"');
+  });
+
+  it('should describe the weakness from the status when no note was recorded', () => {
+    const t = create();
+    const c = t.activeControls()[0];
+    const poam = rmfPoamCsv({ tier: 'moderate', controls: [c], statusOf: () => 'not-implemented', notes: {} });
+    expect(poam).toContain(`${c.title} is not implemented.`);
   });
 });

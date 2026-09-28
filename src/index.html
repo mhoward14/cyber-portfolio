@@ -29,9 +29,11 @@
        report-uri and sandbox in <meta>, so clickjacking is handled in
        main.ts (the app won't start inside another site's frame).
        style-src needs 'unsafe-inline' for Angular's component styles; scripts
-       stay strict: only this site, Credly's badge embed, and Cloudflare Web
-       Analytics, with no inline script or inline event handlers. -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.credly.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self'; media-src 'none'; font-src 'self'; connect-src 'self' https://static.cloudflareinsights.com https://cloudflareinsights.com; frame-src https://www.credly.com; worker-src 'none'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
+       stay strict: only this site and Cloudflare Web Analytics, with no inline
+       script or inline event handlers. Trusted Types makes the browser reject
+       any string written into an HTML or script sink (innerHTML and the like)
+       unless it went through Angular's sanitizing policy. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self'; media-src 'none'; font-src 'self'; connect-src 'self' https://static.cloudflareinsights.com https://cloudflareinsights.com; frame-src 'none'; worker-src 'none'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'; require-trusted-types-for 'script'; trusted-types angular angular#bundler">
   <!-- Cloudflare Web Analytics -->
   <script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "357df2900302495ba1dfe40791246cc5"}'></script>
   <!-- End Cloudflare Web Analytics -->

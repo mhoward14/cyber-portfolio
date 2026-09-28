@@ -24,7 +24,14 @@
   <meta name="twitter:image:alt" content="Matthew R. Howard, Cybersecurity Portfolio: Cybersecurity and Information Assurance; ISSO, GRC/RMF, Security Operations; 8 interactive security tools and 11 case studies.">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <meta name="referrer" content="strict-origin-when-cross-origin">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-MhtPZXr7+LpJUY5qtMutB+qWfQtMaPccfe7QXtCcEYc=' 'unsafe-hashes' https://cdn.credly.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://static.cloudflareinsights.com https://cloudflareinsights.com; frame-src https://www.credly.com; object-src 'none'; base-uri 'self'; form-action 'self'">
+  <!-- Content Security Policy. GitHub Pages can't send response headers, so
+       this <meta> policy is the site's CSP. Browsers ignore frame-ancestors,
+       report-uri and sandbox in <meta>, so clickjacking is handled in
+       main.ts (the app won't start inside another site's frame).
+       style-src needs 'unsafe-inline' for Angular's component styles; scripts
+       stay strict: only this site, Credly's badge embed, and Cloudflare Web
+       Analytics, with no inline script or inline event handlers. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.credly.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self'; media-src 'none'; font-src 'self'; connect-src 'self' https://static.cloudflareinsights.com https://cloudflareinsights.com; frame-src https://www.credly.com; worker-src 'none'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
   <!-- Cloudflare Web Analytics -->
   <script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "357df2900302495ba1dfe40791246cc5"}'></script>
   <!-- End Cloudflare Web Analytics -->

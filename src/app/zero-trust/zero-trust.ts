@@ -26,10 +26,12 @@ import {
 } from './zero-trust-data';
 import { EngagementControlsPanel } from '../engagement/engagement-controls-panel';
 import { zeroTrustEngagementControls } from './zero-trust-engagement';
+import { isPlainObject, mergeKnown, oneOf, readStored } from '../security/stored-state';
 
 type ZtTab = 'flow' | 'attack-path' | 'maturity';
 
 const MATURITY_STORAGE_KEY = 'zero-trust-maturity-state';
+const MATURITY_STAGES: readonly MaturityStage[] = ['not-started', 'target', 'advanced'];
 
 interface MaturityState {
   stages: Record<ZtPillarId, MaturityStage>;
@@ -50,13 +52,10 @@ function seedMaturityState(): MaturityState {
 }
 
 function loadMaturityState(): { state: MaturityState; fromStorage: boolean } {
-  try {
-    const saved = JSON.parse(localStorage.getItem(MATURITY_STORAGE_KEY) || 'null');
-    if (saved) return { state: saved, fromStorage: true };
-  } catch {
-    /* ignore malformed storage */
-  }
-  return { state: seedMaturityState(), fromStorage: false };
+  const seed = seedMaturityState();
+  const saved = readStored(MATURITY_STORAGE_KEY);
+  const stages = isPlainObject(saved) ? mergeKnown(saved['stages'], seed.stages, oneOf(MATURITY_STAGES)) : null;
+  return stages ? { state: { stages: stages as MaturityState['stages'] }, fromStorage: true } : { state: seed, fromStorage: false };
 }
 
 const AXIS_COUNT = 7;

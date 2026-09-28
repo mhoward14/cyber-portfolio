@@ -8,6 +8,7 @@ import { ArrivedFromBanner, ArrivedTechnique } from '../engagement/arrived-from'
 import { CATEGORY_LABELS, CloudProviderId, PROVIDERS, ProviderConfig, ResourceCategory, ResourceConfig } from './cloud-security-data';
 import { EngagementControlsPanel } from '../engagement/engagement-controls-panel';
 import { cloudEngagementControls } from './cloud-security-engagement';
+import { loadBooleanState } from '../security/stored-state';
 
 const STORAGE_KEY = 'cloud-security-state';
 
@@ -29,13 +30,7 @@ function seedState(): SettingState {
 }
 
 function loadState(): { state: SettingState; fromStorage: boolean } {
-  try {
-    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
-    if (saved) return { state: saved, fromStorage: true };
-  } catch {
-    /* ignore malformed storage */
-  }
-  return { state: seedState(), fromStorage: false };
+  return loadBooleanState(STORAGE_KEY, seedState);
 }
 
 export interface RatedResource extends ResourceConfig {

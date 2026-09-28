@@ -1,7 +1,8 @@
-import { Component, signal, computed, AfterViewInit } from '@angular/core';
+import { Component, signal, computed, AfterViewInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { TourService } from '../tour/tour.service';
 
 @Component({
   selector: 'app-home',
@@ -11,12 +12,18 @@ import { RouterLink } from '@angular/router';
   styleUrl: './home.css'
 })
 export class Home implements AfterViewInit {
+  readonly tour = inject(TourService);
+  private readonly route = inject(ActivatedRoute, { optional: true });
   searchTerm = signal('');
   isFiltering = signal(false);
   aboutExpanded = signal(false);
   expandedProject = signal<string | null>(null);
 
   ngAfterViewInit() {
+    // "#/?tour=1" starts the tour, so it can be linked from the README or a message.
+    if (this.route?.snapshot.queryParamMap.get('tour') === '1' && !this.tour.active()) {
+      setTimeout(() => this.tour.start());
+    }
     if (!document.querySelector('script[data-credly-embed]')) {
       const script = document.createElement('script');
       script.src = 'https://cdn.credly.com/assets/utilities/embed.js';

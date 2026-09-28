@@ -1,4 +1,4 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -8,6 +8,7 @@ import { crosswalkCsv } from './crosswalk-export';
 
 @Component({
   selector: 'app-crosswalk',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink, ExportButton],
   templateUrl: './crosswalk.html',

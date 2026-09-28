@@ -1,4 +1,4 @@
-import { Component, OnInit, computed, inject, input, output, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit, computed, inject, input, output, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { map } from 'rxjs';
@@ -31,6 +31,7 @@ export function findArrivedTechnique(attackId: string | null, route: string): Ar
  *  the technique so the tool can open the relevant section. */
 @Component({
   selector: 'app-arrived-from',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: true,
   imports: [RouterLink],
   template: `

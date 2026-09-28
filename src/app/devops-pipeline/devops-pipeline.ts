@@ -1,4 +1,4 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, computed, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ShareBanner, ShareButton, ShareSession } from '../share/share-link';
 import { decodePipeline, encodePipeline } from './devops-pipeline-share';
@@ -40,6 +40,7 @@ export interface RatedStage extends Omit<StageConfig, 'gates'> {
 
 @Component({
   selector: 'app-devops-pipeline',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: true,
   imports: [RouterLink, EngagementControlsPanel, ShareBanner, ShareButton, ExportButton],
   templateUrl: './devops-pipeline.html',

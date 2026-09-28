@@ -7,7 +7,7 @@
    apostrophe so it is shown as text instead of being evaluated.
    ============================================================ */
 
-import { Component, input, output } from '@angular/core';
+import { Component, ChangeDetectionStrategy, input, output } from '@angular/core';
 
 export type CsvRow = (string | number | null | undefined)[];
 
@@ -56,6 +56,7 @@ export function downloadText(filename: string, text: string, mime = 'text/csv') 
 /** Download button styled to sit beside the share button. */
 @Component({
   selector: 'app-export-button',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: true,
   template: `
     <button type="button" class="ex-btn" [style.--ex-accent]="accent()" [disabled]="disabled()" (click)="pressed.emit()">

@@ -5,6 +5,7 @@ const create = () => TestBed.runInInjectionContext(() => new ZeroTrust());
 import { MATURITY_PILLARS } from './zero-trust-data';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { decodeZeroTrust } from './zero-trust-share';
+import { zeroTrustCsv } from './zero-trust-export';
 
 describe('ZeroTrust', () => {
   beforeEach(() => {
@@ -143,5 +144,17 @@ describe('ZeroTrust share links', () => {
     expect(localStorage.getItem('zero-trust-maturity-state')).toBe(saved);
     viewer.discardShared();
     expect(viewer.maturityStages()).toEqual(own.maturityStages());
+  });
+});
+
+describe('ZeroTrust CSV export', () => {
+  it('should export each pillar with its stage and the matching next step', () => {
+    localStorage.clear();
+    const zt = create();
+    const csv = zeroTrustCsv(zt.maturityStages(), zt.provider(), zt.model());
+    for (const p of MATURITY_PILLARS) {
+      expect(csv).toContain(p.recommendations[zt.maturityStages()[p.id]].replace(/"/g, '""'));
+    }
+    expect(csv).toContain('AWS IaaS');
   });
 });

@@ -2,6 +2,8 @@ import { Component, computed, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ShareBanner, ShareButton, ShareSession } from '../share/share-link';
 import { decodeTransaction, encodeTransaction } from './transaction-security-share';
+import { transactionSecurityCsv } from './transaction-security-export';
+import { ExportButton, dateStamp, downloadText } from '../share/export-file';
 import { ArrivedFromBanner } from '../engagement/arrived-from';
 import {
   TRANSACTION_TYPES,
@@ -46,7 +48,7 @@ export interface RatedStage extends TransactionStage {
 @Component({
   selector: 'app-transaction-security',
   standalone: true,
-  imports: [RouterLink, ArrivedFromBanner, ShareBanner, ShareButton],
+  imports: [RouterLink, ArrivedFromBanner, ShareBanner, ShareButton, ExportButton],
   templateUrl: './transaction-security.html',
   styleUrl: './transaction-security.css',
 })
@@ -73,6 +75,10 @@ export class TransactionSecurity {
       this.selectedStageId.set(this.currentType().stages[0].id);
       return true;
     });
+  }
+
+  downloadCsv() {
+    downloadText(`transaction-security-configuration-${dateStamp()}.csv`, transactionSecurityCsv(this.settingState()));
   }
 
   keepShared() {

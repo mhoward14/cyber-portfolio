@@ -2,6 +2,8 @@ import { Component, computed, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ShareBanner, ShareButton, ShareSession } from '../share/share-link';
 import { decodeCloud, encodeCloud } from './cloud-security-share';
+import { cloudSecurityCsv } from './cloud-security-export';
+import { ExportButton, dateStamp, downloadText } from '../share/export-file';
 import { ArrivedFromBanner, ArrivedTechnique } from '../engagement/arrived-from';
 import { CATEGORY_LABELS, CloudProviderId, PROVIDERS, ProviderConfig, ResourceCategory, ResourceConfig } from './cloud-security-data';
 import { EngagementControlsPanel } from '../engagement/engagement-controls-panel';
@@ -51,7 +53,7 @@ const TECHNIQUE_CATEGORIES: Record<string, ResourceCategory> = {
 @Component({
   selector: 'app-cloud-security',
   standalone: true,
-  imports: [RouterLink, EngagementControlsPanel, ArrivedFromBanner, ShareBanner, ShareButton],
+  imports: [RouterLink, EngagementControlsPanel, ArrivedFromBanner, ShareBanner, ShareButton, ExportButton],
   templateUrl: './cloud-security.html',
   styleUrl: './cloud-security.css',
 })
@@ -81,6 +83,10 @@ export class CloudSecurity {
       this.selectedResourceId.set(shared.resourceId);
       return true;
     });
+  }
+
+  downloadCsv() {
+    downloadText(`cloud-security-configuration-${dateStamp()}.csv`, cloudSecurityCsv(this.settingState()));
   }
 
   keepShared() {

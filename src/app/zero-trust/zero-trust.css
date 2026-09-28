@@ -234,7 +234,9 @@
 /* Share link, under the tabs: covers the provider, model, tab, and maturity. */
 .zt-share-row {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
+  gap: 0.6rem;
   margin: -1rem 0 1.75rem;
 }
 

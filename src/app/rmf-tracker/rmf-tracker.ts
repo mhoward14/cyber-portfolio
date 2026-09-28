@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { ShareBanner, ShareButton, ShareSession } from '../share/share-link';
 import { decodeRmf, encodeRmf } from './rmf-share';
+import { rmfAssessmentCsv, rmfPoamCsv } from './rmf-export';
+import { ExportButton, dateStamp, downloadText } from '../share/export-file';
 import { ArrivedFromBanner } from '../engagement/arrived-from';
 import { CONTROLS, BaselineControl, ControlStatus, STATUS_LABEL, Tier, TIER_ORDER } from './rmf-data';
 import { EngagementService } from '../engagement/engagement.service';
@@ -75,7 +77,7 @@ function seedSampleState(): TrackerState {
 @Component({
   selector: 'app-rmf-tracker',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, ArrivedFromBanner, ShareBanner, ShareButton],
+  imports: [CommonModule, FormsModule, RouterLink, ArrivedFromBanner, ShareBanner, ShareButton, ExportButton],
   templateUrl: './rmf-tracker.html',
   styleUrl: './rmf-tracker.css'
 })
@@ -287,11 +289,31 @@ export class RmfTracker {
     this.poamOpen.set(!this.poamOpen());
   }
 
-  copyPoam() {
-    const text = this.poamText();
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(text).catch(() => {});
+  /** Result of the last copy, shown next to the button. */
+  poamCopyStatus = signal('');
+
+  async copyPoam() {
+    try {
+      await navigator.clipboard.writeText(this.poamText());
+      this.poamCopyStatus.set('Copied');
+    } catch {
+      this.poamCopyStatus.set('Copy failed. Select the text above and copy it manually.');
     }
+  }
+
+  private exportInput() {
+    const tier = this.tier();
+    return tier ? { tier, controls: this.activeControls(), statusOf: (id: string) => this.statusOf(id), notes: this.notes() } : null;
+  }
+
+  downloadAssessment() {
+    const x = this.exportInput();
+    if (x) downloadText(`rmf-assessment-${x.tier}-${dateStamp()}.csv`, rmfAssessmentCsv(x));
+  }
+
+  downloadPoam() {
+    const x = this.exportInput();
+    if (x) downloadText(`poam-draft-${x.tier}-${dateStamp()}.csv`, rmfPoamCsv(x));
   }
 
   private persist() {

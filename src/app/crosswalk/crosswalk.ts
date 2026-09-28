@@ -3,11 +3,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { CROSSWALK_DATA, CrosswalkEntry, FRAMEWORK_LABELS, FRAMEWORK_SOURCE_NAMES, FrameworkKey } from './crosswalk-data';
+import { ExportButton, dateStamp, downloadText } from '../share/export-file';
+import { crosswalkCsv } from './crosswalk-export';
 
 @Component({
   selector: 'app-crosswalk',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, ExportButton],
   templateUrl: './crosswalk.html',
   styleUrl: './crosswalk.css'
 })
@@ -73,5 +75,9 @@ export class Crosswalk {
   detailOrderedKeys(): FrameworkKey[] {
     const primary = this.selectedFramework();
     return [primary, ...this.frameworkKeys.filter((k) => k !== primary)];
+  }
+
+  downloadCsv() {
+    downloadText(`framework-crosswalk-${dateStamp()}.csv`, crosswalkCsv(this.filtered(), { query: this.query(), family: this.family() }));
   }
 }

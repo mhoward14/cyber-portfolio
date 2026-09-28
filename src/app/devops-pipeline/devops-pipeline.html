@@ -125,7 +125,10 @@
       </div>
 
       <app-engagement-controls-panel sourceKey="devops-pipeline" accent="#d946ef" [controls]="engagementControls()" />
-      <app-share-button route="/devops-pipeline" [code]="shareCode()" accent="#d946ef" label="Copy link to this pipeline" />
+      <div class="dp-result-actions">
+        <app-export-button accent="#d946ef" label="Download CSV" (pressed)="downloadCsv()" />
+        <app-share-button route="/devops-pipeline" [code]="shareCode()" accent="#d946ef" label="Copy link to this pipeline" />
+      </div>
     </aside>
   </div>
 </div>

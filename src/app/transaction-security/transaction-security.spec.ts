@@ -5,6 +5,7 @@ const create = () => TestBed.runInInjectionContext(() => new TransactionSecurity
 import { TRANSACTION_TYPES } from './transaction-security-data';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { decodeTransaction } from './transaction-security-share';
+import { transactionSecurityCsv } from './transaction-security-export';
 
 describe('TransactionSecurity', () => {
   beforeEach(() => {
@@ -105,5 +106,15 @@ describe('TransactionSecurity share links', () => {
     expect(localStorage.getItem('transaction-security-state')).toBe(saved);
     viewer.keepShared();
     expect(localStorage.getItem('transaction-security-state')).not.toBe(saved);
+  });
+});
+
+describe('TransactionSecurity CSV export', () => {
+  it('should list every stage of every transaction type with its control reference', () => {
+    const stages = TRANSACTION_TYPES.reduce((n, t) => n + t.stages.length, 0);
+    const csv = transactionSecurityCsv({});
+    expect(csv.split('\r\n').length).toBe(2 + TRANSACTION_TYPES.length + 2 + stages);
+    expect(csv.match(/"Finding"/g)!.length).toBe(stages);
+    expect(csv).toContain(TRANSACTION_TYPES[0].stages[0].controlReference);
   });
 });

@@ -4,6 +4,7 @@ import { TACTIC_STAGES } from './attack-path-data';
 import { EngagementService } from '../engagement/engagement.service';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { decodeAttackPath, encodeAttackPath } from './attack-path-share';
+import { attackPathCsv } from './attack-path-export';
 
 // AttackPath injects EngagementService, so build it in an injection context.
 const create = () => TestBed.runInInjectionContext(() => new AttackPath());
@@ -171,5 +172,18 @@ describe('AttackPath share links', () => {
     keeper.keepShared();
     expect(keeper.share.viewing()).toBe(false);
     expect(JSON.parse(sessionStorage.getItem('attack-path-session')!)).toEqual(keeper.picks().map((p) => p.technique.id));
+  });
+});
+
+describe('AttackPath CSV export', () => {
+  it('should export one row per stage with ATT&CK links and the detection score', () => {
+    sessionStorage.clear();
+    const ap = create();
+    for (const stage of TACTIC_STAGES) ap.selectTechnique(stage.techniques[0]);
+    const csv = attackPathCsv(ap.picks(), ap.detectionScore(), ap.detectionTierLabel());
+    const lines = csv.split('\r\n');
+    expect(lines[2]).toContain(`${ap.detectionScore()}/100`);
+    expect(lines.length).toBe(5 + TACTIC_STAGES.length);
+    expect(csv).toContain('https://attack.mitre.org/techniques/T1566/');
   });
 });

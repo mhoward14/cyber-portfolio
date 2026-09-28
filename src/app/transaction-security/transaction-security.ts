@@ -1,4 +1,4 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, computed, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ShareBanner, ShareButton, ShareSession } from '../share/share-link';
 import { decodeTransaction, encodeTransaction } from './transaction-security-share';
@@ -42,6 +42,7 @@ export interface RatedStage extends TransactionStage {
 
 @Component({
   selector: 'app-transaction-security',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: true,
   imports: [RouterLink, ArrivedFromBanner, ShareBanner, ShareButton, ExportButton],
   templateUrl: './transaction-security.html',

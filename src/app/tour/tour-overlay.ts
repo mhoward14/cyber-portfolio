@@ -7,7 +7,7 @@
    card, arrow keys move between steps, and Esc ends the tour.
    ============================================================ */
 
-import { Component, ElementRef, OnDestroy, computed, effect, inject, signal, viewChild } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ElementRef, OnDestroy, computed, effect, inject, signal, viewChild } from '@angular/core';
 import { TourService } from './tour.service';
 
 interface Rect {
@@ -47,6 +47,7 @@ export function placeCard(target: Rect | null, viewport: { width: number; height
 
 @Component({
   selector: 'app-tour-overlay',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: true,
   template: `
     @if (tour.step(); as step) {

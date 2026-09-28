@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -83,6 +83,7 @@ function seedSampleState(): TrackerState {
 
 @Component({
   selector: 'app-rmf-tracker',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink, ArrivedFromBanner, ShareBanner, ShareButton, ExportButton],
   templateUrl: './rmf-tracker.html',

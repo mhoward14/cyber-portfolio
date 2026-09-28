@@ -81,6 +81,16 @@ describe('EngagementService', () => {
     expect(service().state()!.controls.map((x) => x.id).sort()).toEqual(['AC-3', 'IR-4']);
   });
 
+  it('replaces only the evidence from the same source', () => {
+    const e = (value: string) => ({ kind: 'Host', value, detail: 'd' });
+    service().setEvidence('packet-lab:beaconing', [e('10.20.4.17'), e('203.0.113.47')]);
+    service().setEvidence('packet-lab:port-scan', [e('10.20.9.50')]);
+    service().setEvidence('packet-lab:beaconing', [e('10.20.4.17')]);
+    const evidence = service().state()!.evidence;
+    expect(evidence.map((x) => x.value).sort()).toEqual(['10.20.4.17', '10.20.9.50']);
+    expect(evidence.find((x) => x.value === '10.20.9.50')!.sourceKey).toBe('packet-lab:port-scan');
+  });
+
   it('replaces POA&M items', () => {
     const p = (id: string) => ({ id, controlId: 'SC-7', weakness: 'w', milestone: 'm', targetDays: 30 });
     service().setPoams([p('POA&M-01'), p('POA&M-02')]);

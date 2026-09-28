@@ -14,9 +14,10 @@
    `==` matches when ANY value matches, `!=` when NONE does.
    ============================================================ */
 
-import { FieldValue, Packet } from './packet-model';
+import { formatIpv6 } from './dissect';
+import { FieldValue, Packet } from './packet-types';
 
-type FieldType = 'protocol' | 'number' | 'string' | 'ipv4' | 'mac';
+type FieldType = 'protocol' | 'number' | 'string' | 'ipv4' | 'ipv6' | 'mac';
 
 /** Every field the lab's packets can carry, with the value type it holds. */
 export const FIELD_TYPES: Record<string, FieldType> = {
@@ -29,6 +30,57 @@ export const FIELD_TYPES: Record<string, FieldType> = {
   http: 'protocol',
   tls: 'protocol',
   ftp: 'protocol',
+  vlan: 'protocol',
+  ipv6: 'protocol',
+  arp: 'protocol',
+  icmp: 'protocol',
+  icmpv6: 'protocol',
+  sll: 'protocol',
+  null: 'protocol',
+  '_ws.malformed': 'protocol',
+  'frame.cap_len': 'number',
+  'eth.type': 'number',
+  'vlan.id': 'number',
+  'ip.id': 'number',
+  'ip.flags.df': 'number',
+  'ip.flags.mf': 'number',
+  'ip.frag_offset': 'number',
+  'ipv6.src': 'ipv6',
+  'ipv6.dst': 'ipv6',
+  'ipv6.addr': 'ipv6',
+  'ipv6.plen': 'number',
+  'ipv6.nxt': 'number',
+  'ipv6.hlim': 'number',
+  'arp.opcode': 'number',
+  'arp.src.hw_mac': 'mac',
+  'arp.dst.hw_mac': 'mac',
+  'arp.src.proto_ipv4': 'ipv4',
+  'arp.dst.proto_ipv4': 'ipv4',
+  'icmp.type': 'number',
+  'icmp.code': 'number',
+  'icmp.ident': 'number',
+  'icmp.seq': 'number',
+  'icmpv6.type': 'number',
+  'icmpv6.code': 'number',
+  'icmpv6.ident': 'number',
+  'icmpv6.seq': 'number',
+  'tcp.seq_raw': 'number',
+  'tcp.ack_raw': 'number',
+  'tcp.hdr_len': 'number',
+  'tcp.flags.urg': 'number',
+  'tcp.window_size_value': 'number',
+  'tcp.window_size': 'number',
+  'tcp.options.mss_val': 'number',
+  'dns.flags.rcode': 'number',
+  'dns.count.answers': 'number',
+  'dns.aaaa': 'ipv6',
+  'dns.cname': 'string',
+  'dns.ns': 'string',
+  'dns.ptr.domain_name': 'string',
+  'http.response.phrase': 'string',
+  'http.user_agent': 'string',
+  'http.content_type': 'string',
+  'tls.record.version': 'number',
   'frame.number': 'number',
   'frame.len': 'number',
   'frame.time_relative': 'number',
@@ -177,6 +229,23 @@ function parseIpv4(s: string): number | null {
   return ((o[0] << 24) | (o[1] << 16) | (o[2] << 8) | o[3]) >>> 0;
 }
 
+/** Parse IPv6 text (with at most one "::") into 16 bytes. */
+function parseIpv6(s: string): number[] | null {
+  if (!/^[0-9a-f:]+$/i.test(s) || s.split('::').length > 2) return null;
+  const [head, tail] = s.includes('::') ? s.split('::') : [s, null];
+  const groups = (part: string) => (part ? part.split(':') : []);
+  const h = groups(head);
+  const t = tail === null ? [] : groups(tail);
+  const missing = 8 - h.length - t.length;
+  if ((tail === null && missing !== 0) || (tail !== null && missing < 1)) return null;
+  const all = [...h, ...Array(tail === null ? 0 : missing).fill('0'), ...t];
+  if (all.some((g) => !/^[0-9a-f]{1,4}$/i.test(g))) return null;
+  return all.flatMap((g) => {
+    const n = parseInt(g, 16);
+    return [n >> 8, n & 0xff];
+  });
+}
+
 function parseValue(field: string, op: CmpOp, tok: Token): Value {
   const type = FIELD_TYPES[field];
   const raw = tok.text;
@@ -199,6 +268,11 @@ function parseValue(field: string, op: CmpOp, tok: Token): Value {
     }
     const mask = maskBits === 0 ? 0 : (0xffffffff << (32 - maskBits)) >>> 0;
     return { type: 'cidr', base: (base & mask) >>> 0, mask };
+  }
+  if (type === 'ipv6') {
+    const bytes = parseIpv6(raw);
+    if (!bytes) throw new FilterError(`"${raw}" is not an IPv6 address.`);
+    return { type: 'string', s: formatIpv6(bytes) };
   }
   if (type === 'mac') {
     const mac = raw.toLowerCase().replace(/-/g, ':');

@@ -1,0 +1,70 @@
+# ============================================================
+# Continuous Integration
+# Runs on every pull request (and on master after a merge) so a
+# change is proven before it can reach the live site:
+#   1. dependency audit     — no known high/critical advisories
+#   2. unit tests           — the full Vitest suite
+#   3. production build     — the same build the deploy runs
+#   4. build security check — the built page keeps its hardening
+# Pull requests also get a dependency review that fails on any
+# newly added package with a known vulnerability.
+# ============================================================
+
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [master]
+
+# Deny by default; each job asks only for what it needs.
+permissions: {}
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-test:
+    name: Build and test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Audit production dependencies
+        run: npm audit --omit=dev --audit-level=high
+
+      - name: Run unit tests
+        run: npm test -- --watch=false
+
+      - name: Build (production)
+        run: npm run build
+
+      - name: Check the built site's security hardening
+        run: node .github/scripts/check-build-security.mjs dist/portfolio-ui/browser
+
+  dependency-review:
+    name: Dependency review
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Review dependency changes
+        uses: actions/dependency-review-action@2031cfc080254a8a887f58cffee85186f0e49e48 # v4.9.0
+        with:
+          fail-on-severity: moderate

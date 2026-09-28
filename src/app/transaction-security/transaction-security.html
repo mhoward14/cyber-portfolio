@@ -116,7 +116,10 @@
           </div>
         }
       </div>
-      <app-share-button route="/transaction-security" [code]="shareCode()" accent="#14b8a6" label="Copy link to this configuration" />
+      <div class="ts-result-actions">
+        <app-export-button accent="#14b8a6" label="Download CSV" (pressed)="downloadCsv()" />
+        <app-share-button route="/transaction-security" [code]="shareCode()" accent="#14b8a6" label="Copy link to this configuration" />
+      </div>
     </aside>
   </div>
 </div>

@@ -185,6 +185,7 @@
       </div>
 
       <div class="ap-summary-actions">
+        <app-export-button accent="#0a84ff" label="Download CSV" (pressed)="downloadCsv()" />
         <app-share-button route="/attack-path" [code]="shareCode()" accent="#0a84ff" label="Copy link to this path" />
         <button type="button" class="ap-restart-btn" (click)="restart()">Build Another Path</button>
       </div>

@@ -457,3 +457,10 @@
     display: none;
   }
 }
+
+/* Download and share buttons under the score panel. */
+.dp-result-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}

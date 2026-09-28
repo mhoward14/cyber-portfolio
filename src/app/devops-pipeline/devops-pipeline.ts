@@ -7,6 +7,7 @@ import { ExportButton, dateStamp, downloadText } from '../share/export-file';
 import { GateConfig, PIPELINE_STAGES, SSDF_NAME, SSDF_URL, StageConfig, StageId } from './devops-pipeline-data';
 import { EngagementControlsPanel } from '../engagement/engagement-controls-panel';
 import { devopsEngagementControls } from './devops-pipeline-engagement';
+import { loadBooleanState } from '../security/stored-state';
 
 const STORAGE_KEY = 'devops-pipeline-state';
 
@@ -24,13 +25,7 @@ function seedState(): SettingState {
 }
 
 function loadState(): { state: SettingState; fromStorage: boolean } {
-  try {
-    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
-    if (saved) return { state: saved, fromStorage: true };
-  } catch {
-    /* ignore malformed storage */
-  }
-  return { state: seedState(), fromStorage: false };
+  return loadBooleanState(STORAGE_KEY, seedState);
 }
 
 export interface RatedGate extends GateConfig {

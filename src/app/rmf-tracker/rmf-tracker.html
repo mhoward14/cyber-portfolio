@@ -163,6 +163,7 @@
               <div class="control-detail-inner">
                 <label>Implementation Notes</label>
                 <textarea
+                  maxlength="10000"
                   placeholder="How is this control implemented, or why is it N/A?"
                   [ngModel]="notes()[c.id] || ''"
                   (ngModelChange)="setNote(c.id, $event)"

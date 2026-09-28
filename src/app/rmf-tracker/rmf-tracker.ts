@@ -11,6 +11,7 @@ import { CONTROLS, BaselineControl, ControlStatus, STATUS_LABEL, Tier, TIER_ORDE
 import { EngagementService } from '../engagement/engagement.service';
 import { EngagementPoam } from '../engagement/engagement.model';
 import { buildEngagementPoams, importEngagementControls, requiredTier } from './rmf-engagement';
+import { isPlainObject, oneOf, pickKnown, readStored, shortText } from '../security/stored-state';
 
 interface TrackerState {
   tier: Tier | null;
@@ -20,6 +21,7 @@ interface TrackerState {
 }
 
 const STORAGE_KEY = 'rmf-tracker-state';
+const MAX_NOTE_LENGTH = 10_000;
 
 const PARTIAL_NOTES = [
   'Compensating control in place; full implementation targeted next quarter.',
@@ -39,13 +41,18 @@ const OPEN_NOTES = [
 ];
 
 function loadState(): { state: TrackerState; fromStorage: boolean } {
-  try {
-    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
-    if (saved) return { state: saved, fromStorage: true };
-  } catch {
-    /* ignore malformed storage */
-  }
-  return { state: seedSampleState(), fromStorage: false };
+  const saved = readStored(STORAGE_KEY);
+  if (!isPlainObject(saved)) return { state: seedSampleState(), fromStorage: false };
+  const ids = new Set(CONTROLS.map((c) => c.id));
+  return {
+    state: {
+      tier: oneOf<Tier>(['low', 'moderate', 'high'])(saved['tier']) ? (saved['tier'] as Tier) : null,
+      statuses: pickKnown(saved['statuses'], ids, oneOf<ControlStatus>(['implemented', 'partial', 'not-implemented', 'na'])),
+      notes: pickKnown(saved['notes'], ids, shortText(MAX_NOTE_LENGTH)),
+      sample: saved['sample'] === true,
+    },
+    fromStorage: true,
+  };
 }
 
 /** First-ever visit: seed a plausible in-progress Moderate-baseline assessment

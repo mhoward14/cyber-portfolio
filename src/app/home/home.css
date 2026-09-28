@@ -447,7 +447,8 @@
 
 .tool-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  /* min() lets a single column shrink below 250px on the narrowest phones. */
+  grid-template-columns: repeat(auto-fill, minmax(min(250px, 100%), 1fr));
   gap: 1rem;
 }
 
@@ -886,6 +887,8 @@
 
 .footer-links {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 1rem;
   margin: 0.75rem 0 0.25rem;
 }
@@ -1052,5 +1055,19 @@
     flex-direction: column;
     align-items: flex-start;
     gap: 0.25rem;
+  }
+}
+
+/* Narrowest phones (320px): keep the stats row inside the card. */
+@media (max-width: 360px) {
+  .stat-item {
+    padding: 0 0.4rem;
+  }
+  .stat-number {
+    font-size: 1.15rem;
+  }
+  .stat-label {
+    font-size: 0.58rem;
+    letter-spacing: 0.02em;
   }
 }

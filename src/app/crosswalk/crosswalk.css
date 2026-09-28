@@ -130,6 +130,7 @@
 /* Retint the shared ">_" search box magenta for this page only */
 .crosswalk-search {
   flex: 1 1 260px;
+  min-width: 0;
   max-width: none;
   margin: 0;
 }
@@ -166,6 +167,8 @@
 
 .crosswalk-anchor {
   display: flex;
+  flex-wrap: wrap;
+  max-width: 100%;
   gap: 0.375rem;
   background-color: rgba(30, 41, 59, 0.65);
   border: 1px solid var(--color-border);
@@ -607,6 +610,20 @@ body:not(.light-mode) .crosswalk-row {
 
   .crosswalk-anchor {
     justify-content: center;
+  }
+
+  /* Fill the column instead of keeping the select's and input's natural
+     width, which overflows narrow phones. */
+  .crosswalk-search,
+  .crosswalk-family,
+  .crosswalk-family select {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+  /* In the column layout the 260px flex-basis would apply to height. */
+  .crosswalk-search {
+    flex: 0 0 auto;
   }
 }
 

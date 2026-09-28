@@ -2,6 +2,8 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { ShareBanner, ShareButton, ShareSession } from '../share/share-link';
+import { decodeRmf, encodeRmf } from './rmf-share';
 import { ArrivedFromBanner } from '../engagement/arrived-from';
 import { CONTROLS, BaselineControl, ControlStatus, STATUS_LABEL, Tier, TIER_ORDER } from './rmf-data';
 import { EngagementService } from '../engagement/engagement.service';
@@ -73,7 +75,7 @@ function seedSampleState(): TrackerState {
 @Component({
   selector: 'app-rmf-tracker',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, ArrivedFromBanner],
+  imports: [CommonModule, FormsModule, RouterLink, ArrivedFromBanner, ShareBanner, ShareButton],
   templateUrl: './rmf-tracker.html',
   styleUrl: './rmf-tracker.css'
 })
@@ -100,10 +102,37 @@ export class RmfTracker {
   expandedId = signal<string | null>(null);
   poamOpen = signal(false);
 
+  readonly share = new ShareSession();
+  /** Tier and statuses only: notes are free text and never leave the browser. */
+  shareCode = computed(() => (this.tier() ? encodeRmf({ tier: this.tier(), statuses: this.statuses() }) : null));
+
   constructor() {
     if (!this.loaded.fromStorage) {
       this.persist();
     }
+    this.share.open((code) => {
+      const shared = decodeRmf(code);
+      if (!shared) return false;
+      this.tier.set(shared.tier);
+      this.statuses.set(shared.statuses);
+      this.notes.set({});
+      this.sample.set(false);
+      return true;
+    });
+  }
+
+  keepShared() {
+    this.share.close();
+    this.persist();
+  }
+
+  discardShared() {
+    this.share.close();
+    const own = loadState().state;
+    this.tier.set(own.tier);
+    this.statuses.set(own.statuses);
+    this.notes.set(own.notes);
+    this.sample.set(own.sample);
   }
 
   activeControls = computed<BaselineControl[]>(() => {
@@ -266,6 +295,7 @@ export class RmfTracker {
   }
 
   private persist() {
+    if (this.share.viewing()) return;
     const state: TrackerState = {
       tier: this.tier(),
       statuses: this.statuses(),

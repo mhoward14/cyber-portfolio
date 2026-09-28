@@ -385,3 +385,23 @@ a, .btn {
   body, body::before, body::after { background: #fff !important; }
   body { color: #0f172a; }
 }
+
+/* ========================================
+   REDUCED MOTION
+   Site-wide: visitors who ask their OS for less motion get content
+   immediately, with no entrance animations, hover lifts, or smooth
+   scrolling. Components' own animations are covered too, since
+   these rules match every element.
+   ======================================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
+    scroll-behavior: auto !important;
+  }
+}

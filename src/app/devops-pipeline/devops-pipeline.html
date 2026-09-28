@@ -21,6 +21,8 @@
     &mdash; not an official NIST assessment tool or an exhaustive DevSecOps toolchain.
   </div>
 
+  <app-share-banner [session]="share" accent="#d946ef" what="a CI/CD pipeline configuration" (keep)="keepShared()" (discard)="discardShared()" />
+
   <div class="dp-stepper">
     @for (stage of ratedStages(); track stage.id; let i = $index) {
       <button
@@ -123,6 +125,7 @@
       </div>
 
       <app-engagement-controls-panel sourceKey="devops-pipeline" accent="#d946ef" [controls]="engagementControls()" />
+      <app-share-button route="/devops-pipeline" [code]="shareCode()" accent="#d946ef" label="Copy link to this pipeline" />
     </aside>
   </div>
 </div>

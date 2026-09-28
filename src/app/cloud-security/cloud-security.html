@@ -15,6 +15,7 @@
   </header>
 
   <app-arrived-from route="/cloud-security" accent="#f59e0b" (arrived)="focusFromTechnique($event)" />
+  <app-share-banner [session]="share" accent="#f59e0b" what="a cloud configuration" (keep)="keepShared()" (discard)="discardShared()" />
 
   <div class="cs-disclaimer">
     Original, illustrative resource configurations applying general practices from the
@@ -133,6 +134,7 @@
       </div>
 
       <app-engagement-controls-panel sourceKey="cloud-security" accent="#f59e0b" [controls]="engagementControls()" />
+      <app-share-button route="/cloud-security" [code]="shareCode()" accent="#f59e0b" label="Copy link to this configuration" />
     </aside>
   </div>
 </div>

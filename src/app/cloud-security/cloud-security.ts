@@ -1,5 +1,7 @@
 import { Component, computed, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { ShareBanner, ShareButton, ShareSession } from '../share/share-link';
+import { decodeCloud, encodeCloud } from './cloud-security-share';
 import { ArrivedFromBanner, ArrivedTechnique } from '../engagement/arrived-from';
 import { CATEGORY_LABELS, CloudProviderId, PROVIDERS, ProviderConfig, ResourceCategory, ResourceConfig } from './cloud-security-data';
 import { EngagementControlsPanel } from '../engagement/engagement-controls-panel';
@@ -49,7 +51,7 @@ const TECHNIQUE_CATEGORIES: Record<string, ResourceCategory> = {
 @Component({
   selector: 'app-cloud-security',
   standalone: true,
-  imports: [RouterLink, EngagementControlsPanel, ArrivedFromBanner],
+  imports: [RouterLink, EngagementControlsPanel, ArrivedFromBanner, ShareBanner, ShareButton],
   templateUrl: './cloud-security.html',
   styleUrl: './cloud-security.css',
 })
@@ -62,10 +64,33 @@ export class CloudSecurity {
 
   private settingState = signal<SettingState>(seedState());
 
+  readonly share = new ShareSession();
+  shareCode = computed(() =>
+    encodeCloud({ providerId: this.selectedProviderId(), resourceId: this.selectedResourceId(), settings: this.settingState() }),
+  );
+
   constructor() {
     const { state, fromStorage } = loadState();
     this.settingState.set(state);
     if (!fromStorage) this.persist();
+    this.share.open((code) => {
+      const shared = decodeCloud(code);
+      if (!shared) return false;
+      this.settingState.set(shared.settings);
+      this.selectedProviderId.set(shared.providerId);
+      this.selectedResourceId.set(shared.resourceId);
+      return true;
+    });
+  }
+
+  keepShared() {
+    this.share.close();
+    this.persist();
+  }
+
+  discardShared() {
+    this.share.close();
+    this.settingState.set(loadState().state);
   }
 
   currentProvider = computed<ProviderConfig>(
@@ -137,6 +162,7 @@ export class CloudSecurity {
   }
 
   private persist() {
+    if (this.share.viewing()) return;
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(this.settingState()));
     } catch {

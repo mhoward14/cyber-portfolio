@@ -3,6 +3,8 @@ import { IncidentResponse, recommendScenario } from './incident-response';
 import { EngagementService } from '../engagement/engagement.service';
 import { sampleTechniques } from '../engagement/engagement-sample';
 import { SCENARIOS } from './incident-response-data';
+import { ActivatedRoute, convertToParamMap } from '@angular/router';
+import { decodeIrRun } from './incident-response-share';
 
 // IncidentResponse injects EngagementService, so build it in an injection context.
 const create = () => TestBed.runInInjectionContext(() => new IncidentResponse());
@@ -186,3 +188,32 @@ describe('recommendScenario', () => {
   });
 });
 
+const sharedRoute = (code: string) => ({
+  provide: ActivatedRoute,
+  useValue: { snapshot: { queryParamMap: convertToParamMap({ s: code }) } },
+});
+
+describe('IncidentResponse share links', () => {
+  it('should reopen a finished run at its debrief, and leave shared mode on restart', () => {
+    const cmp = create();
+    const scenario = SCENARIOS[1];
+    cmp.startScenario(scenario);
+    for (const d of scenario.decisions) {
+      cmp.pickOption(d.options[d.options.length - 1]);
+      cmp.continueSimulation();
+    }
+    const code = cmp.shareCode()!;
+    expect(decodeIrRun(code)!.scenario).toBe(scenario);
+    for (const bad of ['i1.9.000', 'i1.1.00', 'i1.1.999', 'i1.x.000']) expect(decodeIrRun(bad), bad).toBeNull();
+
+    TestBed.resetTestingModule();
+    TestBed.configureTestingModule({ providers: [sharedRoute(code)] });
+    const viewer = create();
+    expect(viewer.view()).toBe('debrief');
+    expect(viewer.ratingLabel()).toBe(cmp.ratingLabel());
+    expect(viewer.shareCode()).toBe(code);
+    viewer.restart();
+    expect(viewer.share.viewing()).toBe(false);
+    expect(viewer.view()).toBe('select');
+  });
+});

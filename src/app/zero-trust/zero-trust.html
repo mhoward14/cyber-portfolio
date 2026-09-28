@@ -15,11 +15,15 @@
   </header>
 
   <app-arrived-from route="/zero-trust" accent="#06b6d4" (arrived)="focusFromTechnique($event)" />
+  <app-share-banner [session]="share" accent="#06b6d4" what="a Zero Trust assessment" (keep)="keepShared()" (discard)="discardShared()" />
 
   <div class="zt-tabs" role="tablist" aria-label="Zero Trust Explorer sections">
     <button type="button" role="tab" [attr.aria-selected]="activeTab() === 'flow'" [class.active]="activeTab() === 'flow'" (click)="setTab('flow')">Request Flow</button>
     <button type="button" role="tab" [attr.aria-selected]="activeTab() === 'attack-path'" [class.active]="activeTab() === 'attack-path'" (click)="setTab('attack-path')">Attack Path</button>
     <button type="button" role="tab" [attr.aria-selected]="activeTab() === 'maturity'" [class.active]="activeTab() === 'maturity'" (click)="setTab('maturity')">Maturity Assessment</button>
+  </div>
+  <div class="zt-share-row">
+    <app-share-button route="/zero-trust" [code]="shareCode()" accent="#06b6d4" label="Copy link to this view" />
   </div>
 
   @if (activeTab() === 'flow') {

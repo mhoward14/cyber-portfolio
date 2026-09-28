@@ -12,6 +12,7 @@
   </header>
 
   <app-arrived-from route="/rmf-tracker" accent="#a855f7" />
+  <app-share-banner [session]="share" accent="#a855f7" what="an RMF assessment" note="Links carry the baseline and control statuses; notes never leave the sharer's browser." (keep)="keepShared()" (discard)="discardShared()" />
 
   <div class="tier-picker">
     @for (t of tiers; track t.key) {
@@ -110,6 +111,7 @@
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
         Generate POA&amp;M
       </button>
+      <app-share-button route="/rmf-tracker" [code]="shareCode()" accent="#a855f7" label="Copy share link" />
     </div>
 
     @if (poamOpen()) {

@@ -1,5 +1,7 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { ShareBanner, ShareButton, ShareSession } from '../share/share-link';
+import { decodeAttackPath, encodeAttackPath } from './attack-path-share';
 import { MITRE_ATTACK_URL, STEALTH_DETECTION_WEIGHT, TACTIC_STAGES, TacticStage, Technique } from './attack-path-data';
 import { EngagementService } from '../engagement/engagement.service';
 
@@ -41,7 +43,7 @@ function loadSession(): PathPick[] {
 @Component({
   selector: 'app-attack-path',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, ShareBanner, ShareButton],
   templateUrl: './attack-path.html',
   styleUrl: './attack-path.css',
 })
@@ -56,6 +58,35 @@ export class AttackPath {
   private readonly restored = loadSession();
   stageIndex = signal(this.restored.length);
   picks = signal<PathPick[]>(this.restored);
+
+  readonly share = new ShareSession();
+  /** Link code for a finished chain. */
+  shareCode = computed(() => (this.isComplete() ? encodeAttackPath(this.picks()) : null));
+
+  constructor() {
+    this.share.open((code) => {
+      const picks = decodeAttackPath(code);
+      if (!picks) return false;
+      this.picks.set(picks);
+      this.stageIndex.set(picks.length);
+      return true;
+    });
+  }
+
+  /** Make the shared chain this visitor's own. */
+  keepShared() {
+    this.share.close();
+    this.saveSession();
+  }
+
+  /** Return to the chain this visitor had before opening the link. */
+  discardShared() {
+    const own = loadSession();
+    this.picks.set(own);
+    this.stageIndex.set(own.length);
+    this.addedToEngagement.set(false);
+    this.share.close();
+  }
 
   currentStage = computed<TacticStage | null>(() => this.stages[this.stageIndex()] ?? null);
   isComplete = computed(() => this.stageIndex() >= this.stages.length);
@@ -121,6 +152,7 @@ export class AttackPath {
   }
 
   private saveSession() {
+    if (this.share.viewing()) return;
     try {
       sessionStorage.setItem(SESSION_KEY, JSON.stringify(this.picks().map((p) => p.technique.id)));
     } catch {

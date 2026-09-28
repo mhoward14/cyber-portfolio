@@ -15,6 +15,7 @@
   </header>
 
   <app-arrived-from route="/incident-response" accent="#f43f5e" />
+  <app-share-banner [session]="share" accent="#f43f5e" what="an incident response run" [keepable]="false" (discard)="restart()" />
 
   <div class="ir-disclaimer">
     This simulator presents original scenarios, graded against general incident-response principles from
@@ -257,6 +258,7 @@
         </div>
 
         <div class="ir-debrief-actions">
+          <app-share-button route="/incident-response" [code]="shareCode()" accent="#f43f5e" label="Copy link to this debrief" />
           <button type="button" class="ir-secondary-btn" (click)="downloadResults()">Download Results (CSV)</button>
           <button type="button" class="ir-continue-btn" (click)="restart()">Try Another Scenario</button>
         </div>

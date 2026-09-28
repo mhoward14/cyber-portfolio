@@ -165,47 +165,6 @@
   color: #fff;
 }
 
-/* Wrapper around the remaining Credly iframe embed (ISC2 CC — no
-   standalone badge image available yet). The other three certs use
-   .cert-badge-img instead, which needs no clipping since the PNGs
-   already have a transparent background.
-
-   Credly's embed renders its iframe at a fixed internal size regardless
-   of the declared data-iframe-width/height (shrinking those just crops
-   the badge instead of scaling it), so .badge-clip stays sized to the
-   iframe's real 128x230 output and .badge-scale does the resizing via
-   a CSS transform instead — that scales the rendered pixels themselves
-   rather than asking Credly's page to lay out smaller. */
-.badge-clip {
-  width: 96px;
-  height: 93px;
-  overflow: hidden;
-}
-
-.badge-scale {
-  width: 128px;
-  height: 124px;
-  overflow: hidden;
-  transform: scale(0.75);
-  transform-origin: top left;
-}
-
-/* Credly's embed appears to leave blank space above the actual badge
-   glyph before its descriptive text starts, which left the badge
-   sitting visibly lower than the other (edge-to-edge) cert badges once
-   shrunk. Nudge the crop window up so it starts further into the
-   badge art instead of at the very top of the iframe.
-
-   ::ng-deep is required here: Credly's embed.js inserts its iframe as
-   a plain DOM node with no Angular-generated _ngcontent attribute, so
-   Angular's emulated view encapsulation would otherwise scope a plain
-   `.badge-scale > *` rule right out of ever matching it (confirmed via
-   a local DOM test — two earlier attempts at this offset silently did
-   nothing because of exactly this). */
-.badge-scale ::ng-deep > * {
-  margin-top: -13px;
-}
-
 .cert-badges {
   display: flex;
   flex-wrap: wrap;
@@ -986,11 +945,6 @@
   color: #1e3a8a;
 }
 
-/* Remaining Credly iframe badge (ISC2 CC): drop-shadow so its white
-   card lifts off the white light-mode background */
-:host-context(.light-mode) .badge-clip {
-  filter: drop-shadow(0 3px 10px rgba(0, 0, 0, 0.13));
-}
 
 
 /* ============================================================

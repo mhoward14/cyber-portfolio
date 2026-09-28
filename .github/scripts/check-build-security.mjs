@@ -1,7 +1,8 @@
 // ============================================================
 // Build security check
 // Fails CI when the production build loses any of the hardening in
-// SECURITY.md: the Content Security Policy is missing or weakened,
+// SECURITY.md: the Content Security Policy is missing or weakened
+// (including Trusted Types or the frame-src lockdown),
 // an inline event handler or inline script appears (for example,
 // from re-enabling Angular's critical-CSS inlining), the frame guard
 // is dropped from the bundle, or the contact address shows up as
@@ -40,7 +41,13 @@ if (!csp) {
     if (scriptSrc.includes(bad)) fail(`script-src allows ${bad}`);
   }
   if (scriptSrc.some((v) => v.startsWith("'sha") || v.startsWith("'nonce-"))) fail('script-src allows inline script by hash or nonce');
-  for (const [name, want] of [['object-src', "'none'"], ['base-uri', "'self'"], ['form-action', "'none'"]]) {
+  for (const [name, want] of [
+    ['object-src', "'none'"],
+    ['base-uri', "'self'"],
+    ['form-action', "'none'"],
+    ['frame-src', "'none'"],
+    ['require-trusted-types-for', "'script'"],
+  ]) {
     if (directives[name]?.join(' ') !== want) fail(`${name} should be ${want}, found ${directives[name]?.join(' ') ?? 'nothing'}`);
   }
 }

@@ -151,6 +151,16 @@
           <button class="project-summary" type="button" (click)="toggleProject(project.title)" [attr.aria-expanded]="isExpanded(project.title)">
             <h2>{{ project.title }}</h2>
             <p class="role-preview" [style.color]="project.color">{{ project.role }}</p>
+            @if (project.metrics.length) {
+              <dl class="metric-row" aria-label="At a glance">
+                @for (m of project.metrics; track m.label) {
+                  <div class="metric-tile">
+                    <dt class="metric-label">{{ m.label }}</dt>
+                    <dd class="metric-value">{{ m.value }}</dd>
+                  </div>
+                }
+              </dl>
+            }
             <div class="tag-list">
               @for (tag of project.tags; track tag) {
                 <span class="tag">{{ tag }}</span>

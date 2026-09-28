@@ -2,6 +2,8 @@ import { Component, computed, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ShareBanner, ShareButton, ShareSession } from '../share/share-link';
 import { decodePipeline, encodePipeline } from './devops-pipeline-share';
+import { pipelineCsv } from './devops-pipeline-export';
+import { ExportButton, dateStamp, downloadText } from '../share/export-file';
 import { GateConfig, PIPELINE_STAGES, SSDF_NAME, SSDF_URL, StageConfig, StageId } from './devops-pipeline-data';
 import { EngagementControlsPanel } from '../engagement/engagement-controls-panel';
 import { devopsEngagementControls } from './devops-pipeline-engagement';
@@ -44,7 +46,7 @@ export interface RatedStage extends Omit<StageConfig, 'gates'> {
 @Component({
   selector: 'app-devops-pipeline',
   standalone: true,
-  imports: [RouterLink, EngagementControlsPanel, ShareBanner, ShareButton],
+  imports: [RouterLink, EngagementControlsPanel, ShareBanner, ShareButton, ExportButton],
   templateUrl: './devops-pipeline.html',
   styleUrl: './devops-pipeline.css',
 })
@@ -71,6 +73,10 @@ export class DevopsPipeline {
       this.settingState.set(shared);
       return true;
     });
+  }
+
+  downloadCsv() {
+    downloadText(`cicd-pipeline-gates-${dateStamp()}.csv`, pipelineCsv(this.settingState()));
   }
 
   keepShared() {

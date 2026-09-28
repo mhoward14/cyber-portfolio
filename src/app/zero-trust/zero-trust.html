@@ -23,6 +23,7 @@
     <button type="button" role="tab" [attr.aria-selected]="activeTab() === 'maturity'" [class.active]="activeTab() === 'maturity'" (click)="setTab('maturity')">Maturity Assessment</button>
   </div>
   <div class="zt-share-row">
+    <app-export-button accent="#06b6d4" label="Download maturity CSV" (pressed)="downloadCsv()" />
     <app-share-button route="/zero-trust" [code]="shareCode()" accent="#06b6d4" label="Copy link to this view" />
   </div>
 

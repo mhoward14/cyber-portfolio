@@ -2,6 +2,7 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ShareBanner, ShareButton, ShareSession } from '../share/share-link';
 import { decodeIrRun, encodeIrRun } from './incident-response-share';
+import { dateStamp, downloadText, toCsv } from '../share/export-file';
 import { ArrivedFromBanner } from '../engagement/arrived-from';
 import {
   DecisionOption,
@@ -47,13 +48,6 @@ export function recommendScenario(techniques: EngagementTechnique[]): ScenarioRe
     if (hit) return { scenarioId: rule.scenarioId, attackId: hit.attackId, techniqueName: hit.name };
   }
   return null;
-}
-
-function csvField(value: string): string {
-  if (/[",\n]/.test(value)) {
-    return `"${value.replace(/"/g, '""')}"`;
-  }
-  return value;
 }
 
 @Component({
@@ -221,15 +215,6 @@ export class IncidentResponse {
     rows.push(['Scenario', scenario.name]);
     rows.push(['Overall Rating', this.ratingLabel()]);
 
-    const csv = rows.map((row) => row.map(csvField).join(',')).join('\n');
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `ir-simulation-${scenario.id}-${new Date().toISOString().slice(0, 10)}.csv`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
+    downloadText(`ir-simulation-${scenario.id}-${dateStamp()}.csv`, toCsv(rows));
   }
 }

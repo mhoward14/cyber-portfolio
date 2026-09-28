@@ -55,6 +55,7 @@
   <div class="section-label">
     <span class="section-label-text crosswalk-accent-text">// MAPPED CONTROLS</span>
     <span class="section-label-sub">{{ filtered().length }} of {{ data.length }} topics shown</span>
+    <app-export-button class="cw-export" accent="#6366f1" label="Download CSV" [disabled]="filtered().length === 0" (pressed)="downloadCsv()" />
   </div>
 
   <div class="crosswalk-list">

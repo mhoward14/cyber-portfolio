@@ -396,3 +396,10 @@
     flex-wrap: wrap;
   }
 }
+
+/* Download and share buttons under the score panel. */
+.cs-result-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}

@@ -5,6 +5,7 @@ const create = () => TestBed.runInInjectionContext(() => new CloudSecurity());
 import { PROVIDERS } from './cloud-security-data';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { decodeCloud, encodeCloud } from './cloud-security-share';
+import { cloudSecurityCsv } from './cloud-security-export';
 
 describe('CloudSecurity', () => {
   beforeEach(() => {
@@ -125,5 +126,19 @@ describe('CloudSecurity share links', () => {
     const keeper = create();
     keeper.keepShared();
     expect(create().score()).toBe(100);
+  });
+});
+
+describe('CloudSecurity CSV export', () => {
+  it('should list every resource for all providers with the current value and status', () => {
+    localStorage.clear();
+    const cs = create();
+    const r = cs.currentProvider().resources[0];
+    cs.setSecure(r.id, true);
+    const csv = cloudSecurityCsv(Object.fromEntries(PROVIDERS.flatMap((p) => p.resources.map((x) => [`${p.id}:${x.id}`, p.id === cs.currentProvider().id && x.id === r.id]))));
+    const rows = PROVIDERS.reduce((n, p) => n + p.resources.length, 0);
+    expect(csv.split('\r\n').length).toBe(2 + PROVIDERS.length + 2 + rows);
+    expect(csv).toContain(`"${r.secureValue}","${r.secureValue}","Secure"`);
+    expect(csv.match(/"Finding"/g)!.length).toBe(rows - 1);
   });
 });

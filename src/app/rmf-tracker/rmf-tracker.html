@@ -93,7 +93,7 @@
 
     <div class="filters">
       <div class="search-box rmf-search">
-        <input type="text" placeholder="Search control ID or title..." [ngModel]="query()" (ngModelChange)="query.set($event)">
+        <input type="text" placeholder="Search controls…" aria-label="Search controls by ID or title" [ngModel]="query()" (ngModelChange)="query.set($event)">
       </div>
       <select [ngModel]="familyFilter()" (ngModelChange)="familyFilter.set($event)" aria-label="Filter by control family">
         <option value="all">All Families</option>
@@ -107,11 +107,14 @@
           <option [value]="s">{{ statusLabel[s] }}</option>
         }
       </select>
-      <button class="poam-btn" type="button" (click)="togglePoam()">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
-        Generate POA&amp;M
-      </button>
-      <app-share-button route="/rmf-tracker" [code]="shareCode()" accent="#a855f7" label="Copy share link" />
+      <div class="filter-actions">
+        <button class="poam-btn" type="button" (click)="togglePoam()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+          Generate POA&amp;M
+        </button>
+        <app-export-button accent="#a855f7" label="Download CSV" [disabled]="!tier()" (pressed)="downloadAssessment()" />
+        <app-share-button route="/rmf-tracker" [code]="shareCode()" accent="#a855f7" label="Copy share link" />
+      </div>
     </div>
 
     @if (poamOpen()) {
@@ -119,7 +122,12 @@
         <h2>Draft POA&amp;M — open items</h2>
         <p class="hint">Every control marked Partial or Not Implemented, with its note, in a format you can paste into a real POA&amp;M tracker.</p>
         <textarea readonly [value]="poamText()"></textarea>
-        <button class="copy-btn" type="button" (click)="copyPoam()">Copy to clipboard</button>
+        <div class="poam-actions">
+          <button class="copy-btn" type="button" (click)="copyPoam()">Copy to clipboard</button>
+          <app-export-button accent="#a855f7" label="Download POA&amp;M (CSV)" (pressed)="downloadPoam()" />
+          <span class="poam-copy-status" aria-live="polite">{{ poamCopyStatus() }}</span>
+        </div>
+        <p class="hint">The CSV fills in each open item's weakness, status, and source, with columns for point of contact, resources, completion date, and milestones left to complete.</p>
       </div>
     }
 

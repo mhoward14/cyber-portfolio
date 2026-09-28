@@ -2,6 +2,8 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ShareBanner, ShareButton, ShareSession } from '../share/share-link';
 import { decodeAttackPath, encodeAttackPath } from './attack-path-share';
+import { attackPathCsv } from './attack-path-export';
+import { ExportButton, dateStamp, downloadText } from '../share/export-file';
 import { MITRE_ATTACK_URL, STEALTH_DETECTION_WEIGHT, TACTIC_STAGES, TacticStage, Technique } from './attack-path-data';
 import { EngagementService } from '../engagement/engagement.service';
 
@@ -43,7 +45,7 @@ function loadSession(): PathPick[] {
 @Component({
   selector: 'app-attack-path',
   standalone: true,
-  imports: [RouterLink, ShareBanner, ShareButton],
+  imports: [RouterLink, ShareBanner, ShareButton, ExportButton],
   templateUrl: './attack-path.html',
   styleUrl: './attack-path.css',
 })
@@ -142,6 +144,11 @@ export class AttackPath {
       this.detectionScore(),
     );
     this.addedToEngagement.set(true);
+  }
+
+  downloadCsv() {
+    if (!this.isComplete()) return;
+    downloadText(`attack-path-${dateStamp()}.csv`, attackPathCsv(this.picks(), this.detectionScore(), this.detectionTierLabel()));
   }
 
   restart() {

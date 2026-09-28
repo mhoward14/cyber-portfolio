@@ -547,3 +547,28 @@
 }
 .rmf-eng-btn:hover { color: #fff; filter: brightness(1.1); }
 .rmf-eng-btn:focus-visible { outline: 2px solid #a855f7; outline-offset: 2px; }
+
+/* POA&M panel actions: copy, download, and the copy result. */
+.poam-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0.6rem 0 0.5rem;
+}
+.poam-actions .copy-btn {
+  margin-top: 0;
+  align-self: stretch;
+}
+.poam-copy-status {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+/* POA&M, download, and share stay together and wrap as one group. */
+.filter-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-left: auto;
+}

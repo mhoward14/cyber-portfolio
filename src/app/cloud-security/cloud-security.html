@@ -134,7 +134,10 @@
       </div>
 
       <app-engagement-controls-panel sourceKey="cloud-security" accent="#f59e0b" [controls]="engagementControls()" />
-      <app-share-button route="/cloud-security" [code]="shareCode()" accent="#f59e0b" label="Copy link to this configuration" />
+      <div class="cs-result-actions">
+        <app-export-button accent="#f59e0b" label="Download CSV" (pressed)="downloadCsv()" />
+        <app-share-button route="/cloud-security" [code]="shareCode()" accent="#f59e0b" label="Copy link to this configuration" />
+      </div>
     </aside>
   </div>
 </div>

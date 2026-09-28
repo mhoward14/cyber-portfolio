@@ -5,7 +5,7 @@
    compliance evidence. Each tool owns one slice of the record:
 
      techniques  Attack Path Builder
-     evidence    Packet Analysis Lab (planned)
+     evidence    Packet Analysis Lab
      decisions   IR Playbook Simulator
      controls    Zero Trust / Cloud Security / CI/CD Pipeline
      poams       RMF Control Tracker
@@ -29,6 +29,9 @@ export interface EngagementEvidence {
   value: string;
   detail: string;
   attackId?: string;
+  /** Stable key of the source that wrote this row (a Packet Lab hunt);
+   *  re-adding from the same source replaces only its own rows. */
+  sourceKey?: string;
 }
 
 export type DecisionGrade = 'optimal' | 'suboptimal' | 'poor';

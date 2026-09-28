@@ -35,6 +35,11 @@ export interface Hunt {
   /** Filters offered as one-click chips in the filter bar. */
   suggestedFilters: string[];
   questions: HuntQuestion[];
+  /** Indicators the hunt establishes, written to the Engagement Report. */
+  findings: { kind: string; value: string; detail: string }[];
+  /** Attack Path techniques this hunt's traffic usually accompanies, and why;
+   *  used to recommend the hunt for an engagement's attack chain. */
+  relatedTo: { attackIds: string[]; reason: string };
   build: () => Packet[];
 }
 
@@ -80,7 +85,7 @@ class CaptureBuilder {
     const rtt = 0.012 + this.r() * 0.03;
     c.handshake(t, rtt);
     c.client_(t + rtt + 0.001, { type: 'tls-client-hello', sni });
-    c.server_(t + 2 * rtt + 0.002, { type: 'tls-app-data', length: 90 });
+    c.server_(t + 2 * rtt + 0.002, { type: 'tls-server-hello', seed: Math.floor(this.r() * 2 ** 31) });
     c.client_(t + 2 * rtt + 0.004, { type: 'tls-app-data', length: up });
     c.server_(t + 3 * rtt + 0.01, { type: 'tls-app-data', length: down });
     c.close(t + 3 * rtt + 0.2 + this.r() * 0.5);
@@ -306,6 +311,11 @@ const HUNT_LIST: Hunt[] = [
           'check-ins carry commands rather than bulk data, so this is command and control, not exfiltration.',
       },
     ],
+    findings: [
+      { kind: 'Host', value: BEACON_HOST, detail: `Opened a new TLS session to ${C2_IP} every 60 seconds, with under a second of jitter, for the full 10-minute capture.` },
+      { kind: 'C2 server', value: `${C2_IP} (${C2_NAME})`, detail: 'Server name imitates an update CDN. Check-ins are small and fixed-size (184 bytes up, 64 down).' },
+    ],
+    relatedTo: { attackIds: ['T1059.001', 'T1204', 'T1566'], reason: 'Code that runs on a host usually opens a command-and-control channel next.' },
     build: buildBeaconing,
   },
   {
@@ -379,6 +389,11 @@ const HUNT_LIST: Hunt[] = [
           'network means someone already has a foothold and is mapping services to move laterally, which is T1046.',
       },
     ],
+    findings: [
+      { kind: 'Scanner', value: SCANNER, detail: `Sent SYNs to 24 ports on ${SCAN_TARGET} in about a quarter of a second from one source port, resetting every SYN-ACK (half-open SYN scan).` },
+      { kind: 'Exposed services', value: `${SCAN_TARGET}: 22, 443, 3389`, detail: 'Ports that answered the scan: SSH, HTTPS, and RDP. The likely next targets for lateral movement.' },
+    ],
+    relatedTo: { attackIds: ['T1021.004', 'T1570', 'T1550'], reason: 'Lateral movement usually starts with discovering which services are reachable.' },
     build: buildPortScan,
   },
   {
@@ -446,6 +461,11 @@ const HUNT_LIST: Hunt[] = [
           `changes the registered domain to find its server; here the domain stays fixed and only the subdomain carries data.`,
       },
     ],
+    findings: [
+      { kind: 'Host', value: TUNNEL_HOST, detail: 'Sent 28 TXT queries with 44+ character base32 labels over about 90 seconds.' },
+      { kind: 'Tunnel domain', value: `t.${TUNNEL_DOMAIN}`, detail: 'Attacker-controlled zone. Query labels carry data out; base64 TXT answers carry data back in.' },
+    ],
+    relatedTo: { attackIds: [], reason: '' },
     build: buildDnsTunnel,
   },
   {
@@ -516,6 +536,11 @@ const HUNT_LIST: Hunt[] = [
           'rule does not help, and rotating a password that is still sent in cleartext only exposes the new one.',
       },
     ],
+    findings: [
+      { kind: 'Exposed credential', value: `jdoe (FTP, ${FTP_CLIENT} to ${FTP_SERVER})`, detail: 'USER and PASS sent in cleartext on port 21. Password redacted here; reset it and move the service to SFTP or FTPS.' },
+      { kind: 'Exposed credential', value: 'asmith (HTTP, intranet.corp.example)', detail: 'Login form posted over port 80 with the password in the body. Serve the form over HTTPS only.' },
+    ],
+    relatedTo: { attackIds: ['T1078'], reason: 'Valid accounts are often harvested from logins that cross the network unencrypted.' },
     build: buildCleartextCreds,
   },
 ];

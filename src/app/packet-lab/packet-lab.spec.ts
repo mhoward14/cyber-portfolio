@@ -2,7 +2,10 @@ import { TestBed } from '@angular/core/testing';
 import { compileFilter } from './display-filter';
 import { HUNTS } from './packet-lab-scenarios';
 import { Packet, buildPackets, encodeApp } from './packet-model';
-import { PacketLab, hexRows } from './packet-lab';
+import { PacketLab, ROW_LIMIT, hexRows, summarize } from './packet-lab';
+import { huntEvidence, recommendHunt } from './packet-lab-engagement';
+import { EngagementService } from '../engagement/engagement.service';
+import { ENGAGEMENT_STORAGE_KEY } from '../engagement/engagement.model';
 
 function filter(packets: Packet[], text: string) {
   const f = compileFilter(text);
@@ -43,7 +46,7 @@ describe('Packet model', () => {
   });
 
   it('should carry the SNI in cleartext inside a TLS Client Hello', () => {
-    const bytes = encodeApp({ type: 'tls-client-hello', sni: 'cdn.example' }).bytes;
+    const bytes = encodeApp({ type: 'tls-client-hello', sni: 'cdn.example' });
     expect(bytes[0]).toBe(0x16);
     expect(String.fromCharCode(...bytes)).toContain('cdn.example');
   });
@@ -175,6 +178,9 @@ describe('Hunts', () => {
       new Set(['10.20.6.33']),
     );
     expect(txt.length).toBe(tunnel.length + 2);
+    const response = filter(packets, 'dns.flags.response == 1 && dns.qry.name contains "syncdata"')[0];
+    const answer = response.layers.at(-1)!.fields.find((f) => f.label.startsWith('Answer:'))!;
+    expect(answer.label).toContain(String(response.fields.get('dns.qry.name')![0]));
   });
 
   it('cleartext credentials: the PASS command and the HTTP POST body are readable in the bytes', () => {
@@ -233,5 +239,74 @@ describe('Hunt answer order', () => {
     const positions = HUNTS.flatMap((h) => h.questions.map((q) => q.options.findIndex((o) => o.correct)));
     expect(new Set(positions).size).toBe(4);
     for (let i = 0; i < 4; i++) expect(positions.filter((p) => p === i).length).toBeLessThanOrEqual(8);
+  });
+});
+
+describe('Packet Lab and Engagement Mode', () => {
+  beforeEach(() => localStorage.removeItem(ENGAGEMENT_STORAGE_KEY));
+
+  it('should turn each hunt into evidence rows tagged with its technique and a working filter', () => {
+    for (const hunt of HUNTS) {
+      const packets = hunt.build();
+      const rows = huntEvidence(hunt, packets);
+      expect(rows.length).toBe(hunt.findings.length + 1);
+      expect(rows.every((r) => r.attackId === hunt.technique.id)).toBe(true);
+      const matched = filter(packets, hunt.evidenceFilter).length;
+      expect(rows.at(-1)!.detail).toContain(`isolates ${matched} of ${packets.length} packets`);
+    }
+  });
+
+  it('should never put a password into the evidence', () => {
+    const rows = HUNTS.flatMap((h) => huntEvidence(h, h.build()));
+    const text = JSON.stringify(rows);
+    expect(text).not.toContain('Harbor!2026');
+    expect(text).not.toContain('Ledger');
+  });
+
+  it('should recommend a hunt from the attack chain', () => {
+    const t = (attackId: string) => ({ attackId, name: attackId, tactic: 'x', stealth: 'low' as const, defense: { tool: '', route: '', note: '' } });
+    expect(recommendHunt([t('T1486')])).toBeNull();
+    expect(recommendHunt([t('T1570')])!.huntId).toBe('port-scan');
+    expect(recommendHunt([t('T1078')])!.huntId).toBe('cleartext-creds');
+    expect(recommendHunt([t('T1570'), t('T1059.001')])!.huntId).toBe('beaconing');
+  });
+
+  it('should add a finished hunt to the engagement, replacing only its own rows', () => {
+    const lab = TestBed.runInInjectionContext(() => new PacketLab());
+    const engagement = TestBed.inject(EngagementService);
+    lab.start('port-scan');
+    lab.addToEngagement();
+    expect(engagement.state()).toBeNull();
+
+    const finish = () => lab.hunt()!.questions.forEach((q, i) => lab.answer(i, q.options.findIndex((o) => o.correct)));
+    finish();
+    lab.addToEngagement();
+    expect(lab.addedToEngagement()).toBe(true);
+    const first = engagement.state()!.evidence.length;
+    expect(first).toBe(3);
+
+    lab.start('beaconing');
+    expect(lab.addedToEngagement()).toBe(false);
+    finish();
+    lab.addToEngagement();
+    lab.addToEngagement();
+    expect(engagement.state()!.evidence.length).toBe(first + 3);
+  });
+
+  it('should summarize an opened capture by protocol and host', () => {
+    const packets = HUNTS[0].build();
+    const sum = summarize(packets);
+    expect(sum.protocols.find((p) => p.key === 'ip')!.count).toBe(packets.length);
+    for (const p of sum.protocols) expect(filter(packets, p.key).length, p.key).toBe(p.count);
+    for (const h of sum.hosts) expect(filter(packets, h.filter).length, h.address).toBe(h.count);
+  });
+
+  it('should cap rendered rows but keep filtering everything', () => {
+    const lab = TestBed.runInInjectionContext(() => new PacketLab());
+    const first = HUNTS[0].build()[0];
+    const many = Array.from({ length: ROW_LIMIT + 5 }, (_, i) => ({ ...first, no: i + 1 }));
+    lab.packets.set(many);
+    expect(lab.displayed().length).toBe(ROW_LIMIT + 5);
+    expect(lab.rows().length).toBe(ROW_LIMIT);
   });
 });

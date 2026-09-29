@@ -168,6 +168,9 @@
 }
 .zt-toggle button[class*='provider-'].active {
   background-color: var(--pv);
+  color: #0f172a;
+}
+:host-context(.light-mode) .zt-toggle button[class*='provider-'].active {
   color: #ffffff;
 }
 
@@ -403,6 +406,7 @@
 }
 
 .zt-modal-name {
+  margin: 0;
   font-weight: 800;
   font-size: 1.05rem;
   color: var(--color-text);
@@ -454,7 +458,7 @@
   gap: 1.125rem;
 }
 
-.zt-section h4 {
+.zt-section h3 {
   font-family: var(--font-mono);
   font-size: 0.68rem;
   text-transform: uppercase;
@@ -484,7 +488,7 @@
   margin-bottom: 0.4rem;
   color: #f59e0b;
 }
-.zt-pitfall-head h4 {
+.zt-pitfall-head h3 {
   font-family: var(--font-mono);
   font-size: 0.68rem;
   text-transform: uppercase;

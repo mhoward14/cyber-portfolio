@@ -65,9 +65,9 @@
       <span class="section-label-sub">{{ providerLabels[provider()] }} &middot; {{ modelLabels[model()] }}</span>
     </div>
 
-    <div class="zt-flow" role="list">
+    <div class="zt-flow" role="group" aria-label="Request flow steps, in order">
       @for (node of nodes; track node.id; let last = $last) {
-        <button type="button" class="zt-node" [class]="'zt-resp-' + responsibilityOf(node)" (click)="openNode(node)" role="listitem">
+        <button type="button" class="zt-node" [class]="'zt-resp-' + responsibilityOf(node)" (click)="openNode(node)">
           <span class="zt-node-name">{{ node.name }}</span>
           <span class="zt-node-badge">{{ responsibilityLabels[responsibilityOf(node)] }}</span>
           <span class="zt-node-expand">View details &rarr;</span>
@@ -248,10 +248,10 @@
 
 @if (selectedNode(); as node) {
   <div class="modal-overlay" (click)="closeNode()">
-    <div class="modal-window zt-modal" [class]="'provider-' + provider()" (click)="$event.stopPropagation()">
+    <div class="modal-window zt-modal" [class]="'provider-' + provider()" appModalDialog="zt-modal-title" (dismissed)="closeNode()" (click)="$event.stopPropagation()">
       <div class="modal-accent-bar"></div>
       <div class="modal-header">
-        <span class="zt-modal-name">{{ node.name }}</span>
+        <h2 class="zt-modal-name" id="zt-modal-title">{{ node.name }}</h2>
         <span class="zt-resp-badge" [class]="'zt-resp-' + responsibilityOf(node)">
           {{ responsibilityLabels[responsibilityOf(node)] }}
         </span>
@@ -260,12 +260,12 @@
 
       <div class="modal-body">
         <section class="zt-section">
-          <h4>Zero Trust Principle &middot; NIST SP 800-207</h4>
+          <h3>Zero Trust Principle &middot; NIST SP 800-207</h3>
           <p>{{ node.principle }}</p>
         </section>
 
         <section class="zt-section">
-          <h4>{{ modelLabels[model()] }} Responsibility</h4>
+          <h3>{{ modelLabels[model()] }} Responsibility</h3>
           <p>{{ node.rationaleByModel[model()] }}</p>
         </section>
 
@@ -276,7 +276,7 @@
               <line x1="12" y1="9" x2="12" y2="13"></line>
               <line x1="12" y1="17" x2="12.01" y2="17"></line>
             </svg>
-            <h4>Common Pitfall</h4>
+            <h3>Common Pitfall</h3>
           </div>
           <p>{{ node.pitfall }}</p>
         </section>

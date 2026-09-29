@@ -555,7 +555,7 @@
 /* Amber and similar light hues fail contrast as text on white, so the
    "Open tool" label darkens its color in light mode */
 :host-context(.light-mode) .tool-open {
-  color: color-mix(in srgb, var(--tool-color) 70%, #0f172a);
+  color: color-mix(in srgb, var(--tool-color) 50%, #0f172a);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -584,6 +584,10 @@
   color: var(--color-text-dim);
   margin: 0.625rem 0 0;
   letter-spacing: 0.05em;
+}
+/* The live region stays in the page so screen readers announce the count; collapse it while empty */
+.result-count:empty {
+  margin: 0;
 }
 .result-count strong {
   color: var(--color-accent);
@@ -792,16 +796,16 @@
   display: inline-flex;
   align-items: center;
   gap: 0.3rem;
-  color: var(--color-accent);
+  color: var(--color-text-muted);
   font-size: 0.72rem;
   font-weight: 700;
-  opacity: 0.5;
-  transition: opacity 0.2s, gap 0.25s var(--ease-spring);
+  transition: color 0.2s, gap 0.25s var(--ease-spring);
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
-.project-tile:hover .view-label {
-  opacity: 1;
+.project-tile:hover .view-label,
+.project-tile:focus-within .view-label {
+  color: var(--color-accent);
   gap: 0.55rem;
 }
 

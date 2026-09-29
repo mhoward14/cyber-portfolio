@@ -30,4 +30,24 @@ describe('App', () => {
     expect(link?.getAttribute('href')).toBe('Matthew_Howard_Resume.pdf');
     expect(link?.getAttribute('rel')).toContain('noopener');
   });
+  it('offers a skip link that moves focus to the main content', async () => {
+    const fixture = TestBed.createComponent(App);
+    document.body.appendChild(fixture.nativeElement);
+    await fixture.whenStable();
+    const root = fixture.nativeElement as HTMLElement;
+    const skip = root.querySelector('a.skip-link') as HTMLAnchorElement;
+    expect(skip.textContent).toContain('Skip to main content');
+    const click = new MouseEvent('click', { bubbles: true, cancelable: true });
+    skip.dispatchEvent(click);
+    expect(click.defaultPrevented).toBe(true); // hash routing: never change the URL hash
+    expect(document.activeElement).toBe(root.querySelector('#main-content'));
+    fixture.nativeElement.remove();
+  });
+
+  it('marks the sidebar and top bar as distinct navigation landmarks', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+    const navs = Array.from((fixture.nativeElement as HTMLElement).querySelectorAll('nav'));
+    expect(navs.map((n) => n.getAttribute('aria-label')).sort()).toEqual(['Profile links', 'Site navigation']);
+  });
 });

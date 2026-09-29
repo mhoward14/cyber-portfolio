@@ -11,7 +11,8 @@
   --color-accent-glow:  rgba(59, 130, 246, 0.35);
   --color-text:         #f8fafc;
   --color-text-muted:   #94a3b8;
-  --color-text-dim:     #64748b;
+  --color-text-dim:     #7e8fa7;
+  --color-focus:        #60a5fa;
   --color-linkedin:     #0077b5;
   --color-danger:       #ef4444;
   --color-success:      #10b981;
@@ -80,6 +81,27 @@
   outline: none;
   transition: all 0.25s var(--ease-out);
   letter-spacing: 0.02em;
+}
+.search-box input:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+/* Text for screen readers only */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+/* Programmatic focus targets (skip link, page change): not interactive, so no ring */
+main:focus,
+main h1:focus {
+  outline: none;
 }
 .search-box input::placeholder {
   color: var(--color-text-dim);
@@ -228,6 +250,7 @@ body.light-mode {
   --color-text:         #0f172a;
   --color-text-muted:   #374151;
   --color-text-dim:     #4b5563;
+  --color-focus:        #1d4ed8;
   --color-danger:       #bf1010;
   --color-success:      #0a714f;
 

@@ -300,7 +300,7 @@
 .sidebar-link-crosswalk.is-active {
   background: rgba(99, 102, 241, 0.1);
   border-left-color: #6366f1;
-  color: #6366f1;
+  color: #818cf8;
 }
 .sidebar-link-rmf:hover,
 .sidebar-link-rmf.is-active {
@@ -343,6 +343,10 @@
   background: var(--color-accent-dim);
   border-left-color: var(--color-accent);
   color: var(--color-accent);
+}
+:host-context(.light-mode) .sidebar-link-report:hover,
+:host-context(.light-mode) .sidebar-link-report.is-active {
+  color: #1d4ed8;
 }
 
 /* Entry count for the active engagement */
@@ -555,4 +559,29 @@
     padding: 0.05rem 0.3rem;
     font-size: 0.55rem;
   }
+}
+
+/* Skip link: first thing a keyboard user tabs to; hidden until focused */
+.skip-link {
+  position: fixed;
+  top: 0.6rem;
+  left: 0.6rem;
+  z-index: 9999;
+  padding: 0.65rem 1.1rem;
+  border-radius: var(--radius-md);
+  background: #1d4ed8;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-decoration: none;
+  transform: translateY(-250%);
+}
+.skip-link:focus {
+  transform: none;
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px #1d4ed8;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .skip-link { transition: transform 0.15s var(--ease-out); }
 }

@@ -124,11 +124,13 @@
 
     <section class="search-section">
       <div class="search-box">
-        <input type="text" placeholder="Search projects, skills, frameworks..." [ngModel]="searchTerm()" (ngModelChange)="onSearch($event)">
+        <input type="text" aria-label="Search projects, skills, and frameworks" placeholder="Search projects, skills, frameworks..." [ngModel]="searchTerm()" (ngModelChange)="onSearch($event)">
       </div>
-      @if (isSearchActive()) {
-        <p class="result-count">Showing <strong>{{ filteredProjects().length }}</strong> of <strong>{{ totalProjects() }}</strong> projects</p>
-      }
+      <p class="result-count" role="status">
+        @if (isSearchActive()) {
+          Showing <strong>{{ filteredProjects().length }}</strong> of <strong>{{ totalProjects() }}</strong> projects
+        }
+      </p>
     </section>
 
     <div class="section-label">
@@ -136,7 +138,7 @@
       <span class="section-label-sub">Select a project to expand its case study</span>
     </div>
 
-    <main class="project-grid prioritized-grid" [class.is-filtering]="isFiltering()" [class.search-active]="isSearchActive()">
+    <div class="project-grid prioritized-grid" [class.is-filtering]="isFiltering()" [class.search-active]="isSearchActive()">
       @for (project of filteredProjects(); track project.title) {
         <article class="project-tile expandable-project"
           [class.is-expanded]="isExpanded(project.title)"
@@ -246,7 +248,7 @@
           <p>No projects match "<strong>{{ searchTerm() }}</strong>"</p>
         </div>
       }
-    </main>
+    </div>
   </div>
 </div>
 

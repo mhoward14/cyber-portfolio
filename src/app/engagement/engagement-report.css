@@ -100,6 +100,7 @@
 }
 .er-scenario:hover { border-color: var(--color-border); }
 .er-scenario:focus { outline: none; border-color: var(--color-accent); background: var(--color-surface); }
+.er-scenario:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
 .er-meta {
   display: flex; flex-wrap: wrap; gap: 0.4rem 1.25rem;
   font-family: var(--font-mono);
@@ -255,7 +256,7 @@
 }
 .er-btn:hover { border-color: var(--color-accent); color: var(--color-text); }
 .er-btn:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
-.er-btn-primary { background: var(--color-accent); border-color: var(--color-accent); color: #fff; }
+.er-btn-primary { background: #2563eb; border-color: #2563eb; color: #fff; }
 .er-btn-primary:hover { color: #fff; filter: brightness(1.08); }
 .er-btn-quiet { background: transparent; }
 .er-btn-danger { background: var(--color-danger); border-color: var(--color-danger); color: #fff; }

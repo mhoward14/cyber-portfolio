@@ -24,6 +24,7 @@ import {
   ZeroTrustNode,
   ZtPillarId,
 } from './zero-trust-data';
+import { ModalDialog } from '../a11y/modal-dialog';
 import { EngagementControlsPanel } from '../engagement/engagement-controls-panel';
 import { zeroTrustEngagementControls } from './zero-trust-engagement';
 import { isPlainObject, mergeKnown, oneOf, readStored } from '../security/stored-state';
@@ -99,7 +100,7 @@ const TECHNIQUE_PILLARS: Record<string, ZtPillarId> = {
   selector: 'app-zero-trust',
   changeDetection: ChangeDetectionStrategy.Eager,
   standalone: true,
-  imports: [RouterLink, EngagementControlsPanel, ArrivedFromBanner, ShareBanner, ShareButton, ExportButton],
+  imports: [RouterLink, EngagementControlsPanel, ArrivedFromBanner, ShareBanner, ShareButton, ExportButton, ModalDialog],
   templateUrl: './zero-trust.html',
   styleUrl: './zero-trust.css',
 })

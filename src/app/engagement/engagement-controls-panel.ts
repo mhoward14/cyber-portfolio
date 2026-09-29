@@ -62,14 +62,14 @@ export type PanelStatus = 'saved' | 'stale' | 'add' | 'start';
       letter-spacing: 0.05em;
       color: var(--ecp-accent);
     }
-    :host-context(.light-mode) .ecp-label { color: color-mix(in srgb, var(--ecp-accent) 70%, #0f172a); }
+    :host-context(.light-mode) .ecp-label { color: color-mix(in srgb, var(--ecp-accent) 50%, #0f172a); }
     .ecp-btn {
       justify-self: start;
       margin-top: 0.25rem;
       padding: 0.55rem 1rem;
       border: 1px solid var(--ecp-accent);
       border-radius: var(--radius-md);
-      background: color-mix(in srgb, var(--ecp-accent) 85%, #0f172a);
+      background: color-mix(in srgb, var(--ecp-accent) 55%, #0f172a);
       color: #fff;
       font: inherit;
       font-size: 0.82rem;

@@ -96,7 +96,8 @@
 
 @if (selectedEntry(); as entry) {
   <div class="modal-overlay" (click)="closeDetail()">
-    <div class="modal-window crosswalk-modal" [class]="'fw-' + selectedFramework()" (click)="$event.stopPropagation()">
+    <div class="modal-window crosswalk-modal" [class]="'fw-' + selectedFramework()" appModalDialog="cw-modal-title" (dismissed)="closeDetail()" (click)="$event.stopPropagation()">
+      <h2 class="visually-hidden" id="cw-modal-title">Control mapping: {{ entry.family }}</h2>
       <div class="modal-accent-bar"></div>
       <div class="modal-header">
         <span class="crosswalk-family-tag">{{ entry.family }}</span>

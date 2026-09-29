@@ -1,4 +1,6 @@
-<aside class="sidebar" aria-label="Site navigation" [class.is-collapsed]="sidebarCollapsed()">
+<a class="skip-link" href="#main-content" (click)="skipToMain($event)">Skip to main content</a>
+
+<nav class="sidebar" aria-label="Site navigation" [class.is-collapsed]="sidebarCollapsed()">
   <div class="sidebar-brand">
     <span class="sidebar-brand-full">MH.PORTFOLIO</span>
     <span class="sidebar-brand-short">MH</span>
@@ -128,9 +130,9 @@
     </svg>
     <span class="sidebar-link-label">Collapse</span>
   </button>
-</aside>
+</nav>
 
-<nav class="top-nav">
+<nav class="top-nav" aria-label="Profile links">
   <button class="nav-button theme-btn" (click)="theme.toggle()" [attr.aria-label]="theme.isDarkMode() ? 'Switch to light mode' : 'Switch to dark mode'">
     @if (theme.isDarkMode()) {
       <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -173,7 +175,7 @@
   </a>
 </nav>
 
-<main class="app-main">
+<main id="main-content" class="app-main" tabindex="-1">
   <router-outlet></router-outlet>
 </main>
 

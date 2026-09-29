@@ -198,6 +198,9 @@
 }
 .crosswalk-anchor button.active {
   background-color: var(--fw);
+  color: #0f172a;
+}
+:host-context(.light-mode) .crosswalk-anchor button.active {
   color: #ffffff;
 }
 
@@ -205,7 +208,7 @@
    styles; this modifier retints the accent text magenta to match
    the page instead of the site-wide green/blue. */
 .crosswalk-accent-text {
-  color: #6366f1 !important;
+  color: #818cf8 !important;
 }
 :host-context(.light-mode) .crosswalk-accent-text {
   color: #4d50ef !important;
@@ -301,9 +304,12 @@ body:not(.light-mode) .crosswalk-row {
 }
 
 .crosswalk-family-tag {
-  color: #6366f1;
+  color: #818cf8;
   background: rgba(99, 102, 241, 0.1);
   border: 1px solid rgba(99, 102, 241, 0.25);
+}
+:host-context(.light-mode) .crosswalk-family-tag {
+  color: #4f46e5;
 }
 
 .crosswalk-strength.strong {

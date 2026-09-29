@@ -120,7 +120,7 @@ export class ShareSession {
         </div>
       </aside>
     } @else if (session().invalid()) {
-      <aside class="sb sb-invalid" [style.--sb-accent]="accent()" role="status">
+      <div class="sb sb-invalid" [style.--sb-accent]="accent()" role="status">
         <div class="sb-body">
           <span class="sb-label">// SHARED LINK</span>
           <p>This shared link couldn't be read. It may be incomplete or from an older version of the tool, so the page opened normally.</p>
@@ -128,7 +128,7 @@ export class ShareSession {
         <div class="sb-actions">
           <button type="button" class="sb-btn" (click)="session().close()" aria-label="Dismiss">Dismiss</button>
         </div>
-      </aside>
+      </div>
     }
   `,
   styles: `

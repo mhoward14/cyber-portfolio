@@ -155,9 +155,10 @@
           </details>
         </form>
 
-        <div class="pl-list" tabindex="0" role="grid" aria-label="Packet list. Use the arrow keys to move between packets."
-          (keydown)="onListKey($event)">
-          <table>
+        <div class="pl-list">
+          <table tabindex="0" role="grid" aria-label="Packet list. Use the up and down arrow keys to move between packets."
+            [attr.aria-activedescendant]="selectedNo() !== null ? 'pkt-' + selectedNo() : null"
+            (keydown)="onListKey($event)">
             <thead>
               <tr>
                 <th class="c-no">No.</th>

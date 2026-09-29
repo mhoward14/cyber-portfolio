@@ -5,12 +5,13 @@ import { RouterLink } from '@angular/router';
 import { CROSSWALK_DATA, CrosswalkEntry, FRAMEWORK_LABELS, FRAMEWORK_SOURCE_NAMES, FrameworkKey } from './crosswalk-data';
 import { ExportButton, dateStamp, downloadText } from '../share/export-file';
 import { crosswalkCsv } from './crosswalk-export';
+import { ModalDialog } from '../a11y/modal-dialog';
 
 @Component({
   selector: 'app-crosswalk',
   changeDetection: ChangeDetectionStrategy.Eager,
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, ExportButton],
+  imports: [CommonModule, FormsModule, RouterLink, ExportButton, ModalDialog],
   templateUrl: './crosswalk.html',
   styleUrl: './crosswalk.css'
 })

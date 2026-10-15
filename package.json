@@ -33,7 +33,7 @@
     "@types/node": "^20.17.19",
     "jsdom": "^30.1.2",
     "prettier": "^3.9.10",
-    "typescript": "~7.0.2",
+    "typescript": "~6.0.3",
     "vitest": "^4.0.8"
   }
 }

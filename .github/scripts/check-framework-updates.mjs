@@ -84,19 +84,22 @@ async function findOpenWatchIssue() {
 }
 
 const FRAMEWORKS = {
-  nist: { name: 'NIST SP 800-53', dataFile: 'src/app/crosswalk/crosswalk-data.ts' },
-  cis: { name: 'CIS Controls', dataFile: 'src/app/crosswalk/crosswalk-data.ts' },
-  iso: { name: 'ISO/IEC 27001', dataFile: 'src/app/crosswalk/crosswalk-data.ts' },
-  nist80207: { name: 'NIST SP 800-207 (Zero Trust Architecture)', dataFile: 'src/app/zero-trust/zero-trust-data.ts' },
-  dod: { name: 'DoD Zero Trust Strategy', dataFile: 'src/app/zero-trust/zero-trust-data.ts' },
-  nist80161: { name: 'NIST SP 800-61 (Incident Handling Guide)', dataFile: 'src/app/incident-response/incident-response-data.ts' },
-  cisazure: { name: 'CIS Microsoft Azure Foundations Benchmark', dataFile: 'src/app/cloud-security/cloud-security-data.ts' },
-  cisaws: { name: 'CIS Amazon Web Services Foundations Benchmark', dataFile: 'src/app/cloud-security/cloud-security-data.ts' },
-  cisgcp: { name: 'CIS Google Cloud Platform Foundation Benchmark', dataFile: 'src/app/cloud-security/cloud-security-data.ts' },
-  mitreattack: { name: 'MITRE ATT&CK Enterprise Matrix', dataFile: 'src/app/attack-path/attack-path-data.ts' }
+  nist: { name: 'NIST SP 800-53', url: 'https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final', dataFile: 'src/app/crosswalk/crosswalk-data.ts' },
+  cis: { name: 'CIS Controls', url: 'https://www.cisecurity.org/controls/cis-controls-navigator', dataFile: 'src/app/crosswalk/crosswalk-data.ts' },
+  iso: { name: 'ISO/IEC 27001', url: 'https://www.iso.org/standard/27001.html', dataFile: 'src/app/crosswalk/crosswalk-data.ts' },
+  nist80207: { name: 'NIST SP 800-207 (Zero Trust Architecture)', url: 'https://csrc.nist.gov/pubs/sp/800/207/final', dataFile: 'src/app/zero-trust/zero-trust-data.ts' },
+  dod: { name: 'DoD Zero Trust Strategy', url: 'https://dodcio.defense.gov/Zero-Trust/', dataFile: 'src/app/zero-trust/zero-trust-data.ts' },
+  nist80161: { name: 'NIST SP 800-61 (Incident Handling Guide)', url: 'https://csrc.nist.gov/pubs/sp/800/61/r2/final', dataFile: 'src/app/incident-response/incident-response-data.ts' },
+  cisazure: { name: 'CIS Microsoft Azure Foundations Benchmark', url: 'https://www.cisecurity.org/benchmark/azure', dataFile: 'src/app/cloud-security/cloud-security-data.ts' },
+  cisaws: { name: 'CIS Amazon Web Services Foundations Benchmark', url: 'https://www.cisecurity.org/benchmark/amazon_web_services', dataFile: 'src/app/cloud-security/cloud-security-data.ts' },
+  cisgcp: { name: 'CIS Google Cloud Platform Foundation Benchmark', url: 'https://www.cisecurity.org/benchmark/google_cloud_computing_platform', dataFile: 'src/app/cloud-security/cloud-security-data.ts' },
+  mitreattack: { name: 'MITRE ATT&CK Enterprise Matrix', url: 'https://attack.mitre.org/matrices/enterprise/', dataFile: 'src/app/attack-path/attack-path-data.ts' }
 };
 
 async function main() {
+  // The baseline file holds only the last-seen page titles. The URLs that get
+  // fetched are the constants in FRAMEWORKS above, so nothing read from disk
+  // ever decides where an outbound request goes.
   const baseline = JSON.parse(readFileSync(BASELINE_PATH, 'utf8'));
 
   const changed = [];
@@ -105,23 +108,24 @@ async function main() {
 
   for (const key of Object.keys(FRAMEWORKS)) {
     const entry = baseline[key];
+    const { url } = FRAMEWORKS[key];
     try {
-      const title = await fetchTitle(entry.url);
+      const title = await fetchTitle(url);
       const versionToken = extractVersionToken(key, title);
 
       if (!entry.pageTitle) {
-        firstRun.push({ key, url: entry.url, title, versionToken });
+        firstRun.push({ key, url, title, versionToken });
       } else if (entry.pageTitle !== title) {
         changed.push({
           key,
-          url: entry.url,
+          url,
           oldTitle: entry.pageTitle,
           newTitle: title,
           versionToken
         });
       }
     } catch (err) {
-      failed.push({ key, url: entry.url, error: err.message });
+      failed.push({ key, url, error: err.message });
     }
   }
 

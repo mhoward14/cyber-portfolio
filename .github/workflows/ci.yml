@@ -6,6 +6,7 @@
 #   2. unit tests           — the full Vitest suite
 #   3. production build     — the same build the deploy runs
 #   4. build security check — the built page keeps its hardening
+#   5. accessibility check  — axe-core finds no WCAG 2.2 AA problems
 # Pull requests also get a dependency review that fails on any
 # newly added package with a known vulnerability.
 # ============================================================
@@ -56,6 +57,10 @@ jobs:
 
       - name: Check the built site's security hardening
         run: node .github/scripts/check-build-security.mjs dist/portfolio-ui/browser
+
+      # GitHub-hosted runners already have Google Chrome, so no browser is downloaded.
+      - name: Check the built site's accessibility
+        run: node .github/scripts/check-accessibility.mjs dist/portfolio-ui/browser
 
   dependency-review:
     name: Dependency review

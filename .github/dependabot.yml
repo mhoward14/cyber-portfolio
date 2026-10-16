@@ -15,6 +15,11 @@ updates:
       # Remove this when an Angular release widens the range.
       - dependency-name: "typescript"
         update-types: ["version-update:semver-major", "version-update:semver-minor"]
+      # CI and deploy run Node 22, so keep its type definitions on 22. A newer
+      # major describes APIs the runtime does not have. Minor and patch updates
+      # are still proposed. Raise this together with .nvmrc.
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
     groups:
       # Angular's packages must move together, so every Angular update,
       # including major versions, arrives as one pull request.

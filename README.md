@@ -4,6 +4,10 @@ An interactive cybersecurity portfolio spanning **GRC/RMF, cloud and Zero Trust 
 
 **Live site:** [mhoward14.github.io/cyber-portfolio](https://mhoward14.github.io/cyber-portfolio/)
 
+[![CI](https://github.com/mhoward14/cyber-portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/mhoward14/cyber-portfolio/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/mhoward14/cyber-portfolio/actions/workflows/codeql.yml/badge.svg)](https://github.com/mhoward14/cyber-portfolio/actions/workflows/codeql.yml)
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/mhoward14/cyber-portfolio/badge)](https://scorecard.dev/viewer/?uri=github.com/mhoward14/cyber-portfolio)
+
 > **Scope note:** The tools and case studies demonstrate applied analysis, design, and decision-making in academic and simulated environments. They are not presented as production deployments or operational outcomes. Professional Air Force/DoD experience is identified separately from portfolio work.
 
 ## Start here
@@ -14,6 +18,8 @@ For a short recruiter or hiring-manager review, take the **[90-second guided tou
 2. **[Cloud Security Configuration Builder](https://mhoward14.github.io/cyber-portfolio/#/cloud-security)** — change Azure, AWS, or GCP settings and watch the security posture respond.
 3. **[Incident Response Playbook Simulator](https://mhoward14.github.io/cyber-portfolio/#/incident-response)** — work through a security incident and receive decision-by-decision feedback.
 4. Use the remaining tools to go deeper into **Zero Trust architecture, RMF control management, and framework mapping**.
+
+Hiring for a specific role? **[Find a tool by role](https://mhoward14.github.io/cyber-portfolio/#/role-guide)** lists which tools show ISSO/GRC, SOC, cloud and Zero Trust, DevSecOps, and payments-compliance work. Want to see how the site itself is secured? **[How this site is secured](https://mhoward14.github.io/cyber-portfolio/#/site-security)** links every control to the file or workflow that implements it.
 
 ## Interactive security tools
 
@@ -121,8 +127,20 @@ Pushes to the `master` branch trigger the GitHub Pages workflow. The workflow:
 1. Checks out the repository using commit-pinned actions.
 2. Installs dependencies with `npm ci`.
 3. Builds the production site.
-4. Uploads the static browser output as a Pages artifact.
-5. Deploys the artifact using narrowly scoped job permissions and GitHub's OIDC-based Pages deployment.
+4. Generates a CycloneDX software bill of materials (`sbom.cdx.json`, published with the site) and signs a build-provenance attestation for every file that will be served.
+5. Uploads the static browser output as a Pages artifact.
+6. Deploys the artifact using narrowly scoped job permissions and GitHub's OIDC-based Pages deployment.
+
+### Verify a build
+
+Any file on the live site can be checked against the build that produced it. With the [GitHub CLI](https://cli.github.com/) installed:
+
+```
+curl -sO https://mhoward14.github.io/cyber-portfolio/sbom.cdx.json
+gh attestation verify sbom.cdx.json --repo mhoward14/cyber-portfolio
+```
+
+A passing check shows the file was produced by this repository's deploy workflow from a specific commit. It does not prove the code has no bugs. [OpenSSF Scorecard](https://scorecard.dev/viewer/?uri=github.com/mhoward14/cyber-portfolio) also scores the repository's supply-chain practices weekly (one maintainer means pull requests can't require a second approval, so its code-review check scores low).
 
 A separate scheduled workflow checks official publication pages for possible updates to the NIST, CIS, ISO/IEC, DoD Zero Trust, cloud-benchmark, and MITRE ATT&CK references used by the tools. It opens an issue for human review when a possible change is detected; it does not automatically rewrite security content.
 

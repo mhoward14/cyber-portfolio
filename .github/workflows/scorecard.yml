@@ -1,0 +1,71 @@
+# ============================================================
+# OpenSSF Scorecard
+# Scores this repository's supply-chain security practices (pinned
+# dependencies, token permissions, static analysis, dependency
+# updates, security policy and more) and publishes the result, so
+# the practices described in SECURITY.md are independently scored
+# instead of self-reported.
+#
+#   Published score: https://scorecard.dev/viewer/?uri=github.com/mhoward14/cyber-portfolio
+#
+# Findings are also uploaded to the repository's code-scanning
+# alerts. Notes on the score: one maintainer means pull requests
+# can't require a second person's approval, and the default workflow
+# token can't read the branch-protection rules, so those two checks
+# score lower than the repository's real configuration deserves.
+#
+# Scorecard restricts what a publishing workflow may contain, so
+# this one is deliberately small: no extra steps, no custom env.
+# ============================================================
+
+name: Scorecard supply-chain security
+
+on:
+  # Re-score when the branch rules change
+  branch_protection_rule:
+  # Weekly, early Monday UTC
+  schedule:
+    - cron: "27 6 * * 1"
+  push:
+    branches: [master]
+  # Lets you run it on demand from the Actions tab
+  workflow_dispatch:
+
+# Deny by default; the job asks for only what it needs.
+permissions: {}
+
+jobs:
+  analysis:
+    name: Scorecard analysis
+    runs-on: ubuntu-latest
+    permissions:
+      # Upload the results to code scanning
+      security-events: write
+      # Publish the result to the OpenSSF API and the public viewer
+      id-token: write
+      contents: read
+      actions: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Run analysis
+        uses: ossf/scorecard-action@fa7117db83c52d787ae5a89f350999701505d78e # v2.5.0
+        with:
+          results_file: results.sarif
+          results_format: sarif
+          publish_results: true
+
+      - name: Keep the results as a build artifact
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: scorecard-sarif
+          path: results.sarif
+          retention-days: 5
+
+      - name: Upload the results to code scanning
+        uses: github/codeql-action/upload-sarif@24c54180a607b1449ed407dd24f251e4e9147c8d # v4.38.3
+        with:
+          sarif_file: results.sarif

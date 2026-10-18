@@ -1,0 +1,84 @@
+<div class="container ss-page">
+  <a routerLink="/" class="back-link">
+    <svg class="back-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <polyline points="15 18 9 12 15 6"></polyline>
+    </svg>
+    Back to Portfolio
+  </a>
+
+  <header class="ss-header">
+    <h1 class="ss-title">How this site is secured</h1>
+    <p class="ss-intro">
+      A security portfolio should hold up to its own scrutiny. Each control below links to the file, workflow or setting
+      that implements it, so you can check the claim instead of taking it on trust.
+    </p>
+  </header>
+
+  @for (group of groups; track group.id) {
+    <section class="ss-group" [attr.aria-labelledby]="'ss-' + group.id">
+      <div class="section-label">
+        <h2 class="section-label-text" [id]="'ss-' + group.id">// {{ group.title.toUpperCase() }}</h2>
+        <span class="section-label-sub">{{ group.blurb }}</span>
+      </div>
+
+      <ul class="ss-grid">
+        @for (control of group.controls; track control.name) {
+          <li class="ss-card">
+            <h3 class="ss-card-title">{{ control.name }}</h3>
+            <p class="ss-card-what">{{ control.what }}</p>
+            <p class="ss-card-stops"><span class="ss-label">Stops</span> {{ control.stops }}</p>
+            <p class="ss-label">Check it</p>
+            <ul class="ss-evidence">
+              @for (e of control.evidence; track e.label) {
+                <li><a [href]="href(e)" target="_blank" rel="noopener">{{ e.label }}</a></li>
+              }
+            </ul>
+          </li>
+        }
+      </ul>
+    </section>
+  }
+
+  <section class="ss-group" aria-labelledby="ss-verify">
+    <div class="section-label">
+      <h2 class="section-label-text" id="ss-verify">// VERIFY IT YOURSELF</h2>
+      <span class="section-label-sub">Three checks that need no trust in this page.</span>
+    </div>
+    <ol class="ss-steps">
+      <li>
+        <strong>Read the policy.</strong> Open your browser’s developer tools on any page of this site and look at the
+        <code>Content-Security-Policy</code> meta tag in the document head.
+      </li>
+      <li>
+        <strong>Check a file against its build.</strong> With the
+        <a href="https://cli.github.com/" target="_blank" rel="noopener">GitHub CLI</a> installed, download the published
+        bill of materials and verify its signed provenance. It confirms the file was produced by this repository’s
+        deploy workflow, from a specific commit.
+        <pre class="ss-code"><code>{{ verifyCommands }}</code></pre>
+      </li>
+      <li>
+        <strong>See the rules in force.</strong> The
+        <a [href]="repoUrl + '/rules'" target="_blank" rel="noopener">repository rules</a> and the
+        <a [href]="repoUrl + '/actions'" target="_blank" rel="noopener">workflow runs</a> are public.
+      </li>
+    </ol>
+  </section>
+
+  <section class="ss-group" aria-labelledby="ss-limits">
+    <div class="section-label">
+      <h2 class="section-label-text" id="ss-limits">// KNOWN LIMITS</h2>
+      <span class="section-label-sub">What this setup does not do.</span>
+    </div>
+    <ul class="ss-limits">
+      @for (limit of limits; track limit) {
+        <li>{{ limit }}</li>
+      }
+    </ul>
+    <p class="ss-report">
+      Found a problem? Please report it privately through
+      <a [href]="repoUrl + '/security/advisories/new'" target="_blank" rel="noopener">GitHub’s private vulnerability reporting</a>
+      rather than a public issue. The full policy is in
+      <a [href]="repoUrl + '/blob/master/SECURITY.md'" target="_blank" rel="noopener">SECURITY.md</a>.
+    </p>
+  </section>
+</div>

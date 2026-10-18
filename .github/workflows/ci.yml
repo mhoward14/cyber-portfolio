@@ -55,6 +55,13 @@ jobs:
       - name: Build (production)
         run: npm run build
 
+      # The deploy publishes a bill of materials; prove here that it can be
+      # generated, so a problem shows up on the pull request, not after merge.
+      - name: Check the software bill of materials can be generated
+        run: |
+          npm sbom --sbom-format cyclonedx --package-lock-only > "$RUNNER_TEMP/sbom.cdx.json"
+          node -e "const s=JSON.parse(require('fs').readFileSync(process.env.RUNNER_TEMP + '/sbom.cdx.json','utf8')); if (s.bomFormat !== 'CycloneDX' || !s.components?.length) { throw new Error('SBOM is empty or malformed'); } console.log('SBOM components:', s.components.length)"
+
       - name: Check the built site's security hardening
         run: node .github/scripts/check-build-security.mjs dist/portfolio-ui/browser
 

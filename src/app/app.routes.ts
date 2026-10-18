@@ -56,5 +56,15 @@ export const routes: Routes = [
     title: 'Engagement Report | Matthew Howard',
     loadComponent: () => import('./engagement/engagement-report').then((m) => m.EngagementReport),
   },
+  {
+    path: 'role-guide',
+    title: 'Find a Tool by Role | Matthew Howard',
+    loadComponent: () => import('./role-guide/role-guide').then((m) => m.RoleGuide),
+  },
+  {
+    path: 'site-security',
+    title: 'How This Site Is Secured | Matthew Howard',
+    loadComponent: () => import('./site-security/site-security').then((m) => m.SiteSecurity),
+  },
   { path: '**', redirectTo: '' },
 ];

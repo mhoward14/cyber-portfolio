@@ -1,0 +1,178 @@
+/* ============================================================
+   SITE-SECURITY.CSS — HOW THIS SITE IS SECURED
+   Uses the site's own tokens and the global `.section-label`
+   building block, so it matches the rest of the portfolio in both
+   themes. No dedicated accent color: this page is about the site
+   itself, so it uses the site's blue.
+   ============================================================ */
+
+.ss-page {
+  padding-top: 5rem;
+  padding-bottom: 3rem;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-bottom: 2rem;
+  color: var(--color-text-dim);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: color 0.2s, gap 0.25s var(--ease-spring);
+}
+.back-link:hover {
+  color: var(--color-accent);
+  gap: 0.55rem;
+}
+.back-chevron {
+  width: 14px;
+  height: 14px;
+}
+
+.ss-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+.ss-title {
+  color: var(--color-accent);
+  font-size: clamp(1.6rem, 4vw, 2.5rem);
+  font-weight: 900;
+  letter-spacing: 0.02em;
+}
+.ss-intro {
+  max-width: 46rem;
+  margin: 0.9rem auto 0;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+
+.ss-group {
+  margin-bottom: 2.75rem;
+}
+
+.ss-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr));
+  gap: 1rem;
+  margin: 1.25rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ss-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1.1rem 1.2rem;
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-accent);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+.ss-card-title,
+.ss-card-what,
+.ss-card-stops,
+.ss-card .ss-label {
+  margin: 0;
+}
+.ss-card-title {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--color-text);
+}
+.ss-card-what {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+.ss-card-stops {
+  color: var(--color-text);
+  font-size: 0.85rem;
+}
+.ss-label {
+  display: inline-block;
+  margin-right: 0.35rem;
+  color: var(--color-text-dim);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.ss-evidence {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.85rem;
+}
+.ss-evidence a,
+.ss-steps a,
+.ss-report a {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+/* Each evidence link is a tap target of at least 24px. */
+.ss-evidence a {
+  display: inline-block;
+  padding: 0.3rem 0;
+}
+.ss-evidence a:hover,
+.ss-steps a:hover,
+.ss-report a:hover {
+  color: var(--color-focus);
+}
+
+.ss-steps {
+  display: grid;
+  gap: 1rem;
+  margin: 1.25rem 0 0;
+  padding-left: 1.4rem;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+.ss-steps strong {
+  color: var(--color-text);
+}
+.ss-steps code {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+}
+
+.ss-code {
+  margin: 0.7rem 0 0;
+  padding: 0.85rem 1rem;
+  overflow-x: auto;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  line-height: 1.6;
+}
+.ss-code code {
+  font-size: inherit;
+}
+
+.ss-limits {
+  display: grid;
+  gap: 0.6rem;
+  margin: 1.25rem 0 0;
+  padding-left: 1.2rem;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+
+.ss-report {
+  margin-top: 1.5rem;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}

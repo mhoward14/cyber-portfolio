@@ -358,7 +358,7 @@
   min-width: 1.4rem;
   padding: 0.1rem 0.4rem;
   border-radius: 999px;
-  background: var(--color-accent);
+  background: #2563eb;
   color: #fff;
   font-family: var(--font-mono);
   font-size: 0.65rem;

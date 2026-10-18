@@ -35,6 +35,9 @@ jobs:
     permissions:
       contents: read
       pages: read
+      # Sign the build-provenance attestation (see "Attest" below)
+      id-token: write
+      attestations: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -52,6 +55,29 @@ jobs:
       # under configurations.production, so no extra flag needed here.
       - name: Build (production)
         run: npm run build
+
+      # A CycloneDX bill of materials listing every dependency and marking
+      # which ones ship in the app. It is published with the site at
+      # /sbom.cdx.json. (`npm sbom --omit dev` drops most production
+      # packages in this npm version, so the full list is used.)
+      - name: Generate software bill of materials
+        run: |
+          npm sbom --sbom-format cyclonedx --package-lock-only > dist/portfolio-ui/browser/sbom.cdx.json
+          node -e "const s=JSON.parse(require('fs').readFileSync('dist/portfolio-ui/browser/sbom.cdx.json','utf8')); if (s.bomFormat !== 'CycloneDX' || !s.components?.length) { throw new Error('SBOM is empty or malformed'); } console.log('SBOM components:', s.components.length)"
+
+      # Sign a provenance attestation for every file that will be served,
+      # including the bill of materials. Anyone can then check a downloaded
+      # file with `gh attestation verify <file> --repo mhoward14/cyber-portfolio`.
+      - name: List the files to attest
+        run: |
+          cd dist/portfolio-ui/browser
+          find . -type f -print0 | sort -z | xargs -0 sha256sum > "$RUNNER_TEMP/site.sha256"
+          echo "Files to attest: $(wc -l < "$RUNNER_TEMP/site.sha256")"
+
+      - name: Attest
+        uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
+        with:
+          subject-checksums: ${{ runner.temp }}/site.sha256
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0

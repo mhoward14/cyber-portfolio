@@ -70,6 +70,12 @@
         </button>
       </div>
 
+      <p class="tools-links">
+        <a routerLink="/role-guide">Hiring for a specific role? Find the right tool</a>
+        <span aria-hidden="true">&middot;</span>
+        <a routerLink="/site-security">How this site is secured</a>
+      </p>
+
       <div class="tool-grid">
         @for (tool of tools; track tool.route) {
           <a class="tool-card" [routerLink]="tool.route" [style.--tool-color]="tool.color" [class.is-start]="tool.startHere > 0">

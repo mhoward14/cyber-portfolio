@@ -121,6 +121,25 @@
     }
   </a>
 
+  <div class="sidebar-divider"></div>
+  <div class="sidebar-section-label">About this site</div>
+
+  <a routerLink="/role-guide" routerLinkActive="is-active" class="sidebar-link" aria-label="Find a tool by role">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" aria-hidden="true">
+      <circle cx="12" cy="12" r="10"></circle>
+      <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
+    </svg>
+    <span class="sidebar-link-label">Find a tool by role</span>
+  </a>
+
+  <a routerLink="/site-security" routerLinkActive="is-active" class="sidebar-link" aria-label="How it's secured">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" aria-hidden="true">
+      <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+      <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+    </svg>
+    <span class="sidebar-link-label">How it's secured</span>
+  </a>
+
   <div class="sidebar-spacer"></div>
 
   <button type="button" class="sidebar-collapse-btn" (click)="toggleSidebar()" [attr.aria-label]="sidebarCollapsed() ? 'Expand navigation' : 'Collapse navigation'">

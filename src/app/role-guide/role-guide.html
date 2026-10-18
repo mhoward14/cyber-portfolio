@@ -1,0 +1,43 @@
+<div class="container rg-page">
+  <a routerLink="/" class="back-link">
+    <svg class="back-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <polyline points="15 18 9 12 15 6"></polyline>
+    </svg>
+    Back to Portfolio
+  </a>
+
+  <header class="rg-header">
+    <h1 class="rg-title">Find a tool by role</h1>
+    <p class="rg-intro">
+      Hiring for one kind of role? Pick it below to see which tools show that work and what you will find in each.
+    </p>
+  </header>
+
+  <aside class="rg-start" aria-labelledby="rg-start-title">
+    <h2 class="rg-start-title" id="rg-start-title">Not sure where to begin?</h2>
+    <p>
+      The tools connect through Engagement Mode: one scenario that carries an attack through the evidence, the response,
+      the controls and the report. Build an attack chain in the
+      <a routerLink="/attack-path">Attack Path Builder</a>, then open the
+      <a routerLink="/report">Engagement Report</a> to follow it through, or load the fictional Contoso Financial sample
+      there to see a finished one.
+    </p>
+  </aside>
+
+  <div class="rg-roles">
+    @for (role of roles; track role.id) {
+      <section class="rg-role" [attr.aria-labelledby]="'rg-' + role.id">
+        <h2 class="rg-role-title" [id]="'rg-' + role.id">{{ role.title }}</h2>
+        <p class="rg-role-focus">{{ role.focus }}</p>
+        <ul class="rg-tools">
+          @for (tool of role.tools; track tool.route) {
+            <li class="rg-tool">
+              <a class="rg-tool-link" [routerLink]="tool.route">{{ tool.name }}</a>
+              <p class="rg-tool-sees">{{ tool.sees }}</p>
+            </li>
+          }
+        </ul>
+      </section>
+    }
+  </div>
+</div>

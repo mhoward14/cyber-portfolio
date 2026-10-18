@@ -16,7 +16,16 @@ This portfolio is a static, client-side Angular application served by GitHub Pag
 | Hostile packet captures | The Packet Analysis Lab parses uploaded `.pcap`/`.pcapng` files locally with bounds-checked readers and a frame cap. Files are never uploaded. |
 | Referrer leakage | `strict-origin-when-cross-origin`: other sites see only the origin, never the page or share code. |
 | Email harvesting | The contact address is assembled only when a visitor reaches for the link, so it isn't in the page source or the JavaScript bundle. |
-| Supply chain | Production dependencies are kept at zero known vulnerabilities (`npm audit`). GitHub Actions are pinned to full commit SHAs, and each workflow job has least-privilege permissions. |
+| Supply chain | Production dependencies are kept at zero known vulnerabilities (`npm audit`). GitHub Actions are pinned to full commit SHAs, and each workflow job has least-privilege permissions. Each deploy publishes a software bill of materials and a signed build-provenance attestation for every file it serves, and OpenSSF Scorecard scores these practices weekly. |
+
+## Checking a build
+
+The [How this site is secured](https://mhoward14.github.io/cyber-portfolio/#/site-security) page links each control to the file or workflow behind it. To check a file on the live site against its signed build provenance, with the [GitHub CLI](https://cli.github.com/):
+
+```
+curl -sO https://mhoward14.github.io/cyber-portfolio/sbom.cdx.json
+gh attestation verify sbom.cdx.json --repo mhoward14/cyber-portfolio
+```
 
 ## Platform limits
 

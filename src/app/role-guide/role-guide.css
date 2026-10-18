@@ -1,0 +1,122 @@
+/* ============================================================
+   ROLE-GUIDE.CSS — FIND A TOOL BY ROLE
+   Site tokens only, so it matches the portfolio in both themes.
+   ============================================================ */
+
+.rg-page {
+  padding-top: 5rem;
+  padding-bottom: 3rem;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-bottom: 2rem;
+  color: var(--color-text-dim);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: color 0.2s, gap 0.25s var(--ease-spring);
+}
+.back-link:hover {
+  color: var(--color-accent);
+  gap: 0.55rem;
+}
+.back-chevron {
+  width: 14px;
+  height: 14px;
+}
+
+.rg-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+.rg-title {
+  color: var(--color-accent);
+  font-size: clamp(1.6rem, 4vw, 2.5rem);
+  font-weight: 900;
+  letter-spacing: 0.02em;
+}
+.rg-intro {
+  max-width: 44rem;
+  margin: 0.9rem auto 0;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+
+.rg-start {
+  max-width: 52rem;
+  margin: 0 auto 2.5rem;
+  padding: 1.1rem 1.3rem;
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-accent);
+  border-radius: var(--radius-md);
+  background: var(--color-accent-dim);
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+.rg-start-title {
+  margin-bottom: 0.4rem;
+  color: var(--color-text);
+  font-size: 1rem;
+  font-weight: 800;
+}
+/* Links inside the paragraph are underlined (not distinguished by color alone)
+   and use the stronger focus blue, which keeps 4.5:1 on the tinted panel. */
+.rg-start a {
+  color: var(--color-focus);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.rg-tool-link {
+  color: var(--color-accent);
+  text-underline-offset: 3px;
+}
+.rg-tool-link:hover {
+  color: var(--color-focus);
+}
+
+.rg-roles {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 24rem), 1fr));
+  gap: 1.25rem;
+}
+
+.rg-role {
+  padding: 1.2rem 1.3rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+.rg-role-title {
+  color: var(--color-text);
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+.rg-role-focus {
+  margin-top: 0.3rem;
+  color: var(--color-text-muted);
+  font-size: 0.88rem;
+  line-height: 1.55;
+}
+
+.rg-tools {
+  display: grid;
+  gap: 0.9rem;
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+.rg-tool-link {
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+.rg-tool-sees {
+  margin-top: 0.15rem;
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  line-height: 1.55;
+}

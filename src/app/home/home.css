@@ -1029,3 +1029,23 @@
     letter-spacing: 0.02em;
   }
 }
+
+/* Two quick links under the tools heading: the role guide and the security page. */
+.tools-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem 0.9rem;
+  margin: 0 0 1.25rem;
+  color: var(--color-text-dim);
+  font-size: 0.85rem;
+}
+.tools-links a {
+  padding: 0.3rem 0;
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.tools-links a:hover {
+  color: var(--color-focus);
+}

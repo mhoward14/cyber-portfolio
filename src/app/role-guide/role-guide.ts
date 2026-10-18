@@ -1,6 +1,6 @@
 /* ============================================================
    ROLE-GUIDE.TS — FIND A TOOL BY ROLE
-   A reviewer hiring for one kind of role shouldn't have to open ten
+   A reviewer hiring for one kind of role shouldn't have to open eleven
    tools to find the relevant one. Each role lists the tools that show
    that work and what the visitor will see in each. A unit test checks
    that every linked route exists.
@@ -37,6 +37,11 @@ export const ROLES: Role[] = [
         name: 'Vulnerability Prioritizer',
         route: '/vuln-priority',
         sees: 'Score findings with CVSS v3.1, add exploitation and exposure, and see the fix order change. Results flow into the Engagement Report under RA-5 and SI-2.',
+      },
+      {
+        name: 'Risk Register',
+        route: '/risk-register',
+        sees: 'Rate risks by likelihood and impact on NIST SP 800-30 scales, choose a treatment and see a heat map before and after. It can draft risks from prioritized vulnerabilities.',
       },
       {
         name: 'Security Framework Crosswalk',

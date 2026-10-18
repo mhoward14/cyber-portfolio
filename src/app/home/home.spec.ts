@@ -10,12 +10,12 @@ describe('Home', () => {
     }).compileComponents();
   });
 
-  it('should render a card for each of the ten tools', async () => {
+  it('should render a card for each of the eleven tools', async () => {
     const fixture = TestBed.createComponent(Home);
     fixture.detectChanges();
     await fixture.whenStable();
     const cards = (fixture.nativeElement as HTMLElement).querySelectorAll('.tool-card');
-    expect(cards.length).toBe(10);
+    expect(cards.length).toBe(11);
   });
 
   it('should lead with the three "Start here" tools in review order', async () => {
@@ -35,7 +35,7 @@ describe('Home', () => {
     const hrefs = Array.from((fixture.nativeElement as HTMLElement).querySelectorAll('.tool-card')).map((c) =>
       c.getAttribute('href'),
     );
-    expect(new Set(hrefs).size).toBe(10);
+    expect(new Set(hrefs).size).toBe(11);
   });
 
   it('should map every case study to at least one existing tool', () => {

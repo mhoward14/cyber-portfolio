@@ -74,6 +74,9 @@ export class Home implements AfterViewInit {
     { name: 'Vulnerability Prioritizer', route: '/vuln-priority', icon: 'vuln', color: '#f97316', startHere: 0,
       summary: 'Score findings with CVSS v3.1, add exploitation and exposure, and get a ranked fix order.',
       standard: 'CVSS v3.1 · RA-5' },
+    { name: 'Risk Register', route: '/risk-register', icon: 'risk', color: '#ec4899', startHere: 0,
+      summary: 'Rate risks by likelihood and impact, choose a treatment, and see a heat map before and after.',
+      standard: 'NIST SP 800-30' },
   ];
 
   // Interactive tools that demonstrate the same skills as each case study,

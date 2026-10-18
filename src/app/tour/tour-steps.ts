@@ -28,7 +28,7 @@ export const TOUR_STEPS: TourStep[] = [
   {
     route: '/',
     targets: ['.tool-card.is-start'],
-    title: 'Ten hands-on tools',
+    title: 'Eleven hands-on tools',
     body: 'Each one runs entirely in your browser. The three marked "Start here" are the quickest way in, and this tour visits them in order.',
     accent: '#3b82f6',
   },

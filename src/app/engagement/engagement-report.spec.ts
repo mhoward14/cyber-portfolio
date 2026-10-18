@@ -64,7 +64,7 @@ describe('engagementToCsv', () => {
   it('writes a header plus one row per record', () => {
     const s = buildSampleEngagement();
     const lines = engagementToCsv(s).split('\r\n');
-    const records = s.techniques.length + s.evidence.length + s.decisions.length + s.controls.length + s.poams.length + (s.findings?.length ?? 0);
+    const records = s.techniques.length + s.evidence.length + s.decisions.length + s.controls.length + s.poams.length + (s.findings?.length ?? 0) + (s.risks?.length ?? 0);
     expect(lines.length).toBe(records + 1);
     expect(lines[0]).toContain('"Section"');
   });

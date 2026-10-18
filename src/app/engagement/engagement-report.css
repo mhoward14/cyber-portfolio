@@ -212,6 +212,11 @@
 .grade-suboptimal, .status-planned, .stealth-medium { --pill: #f59e0b; }
 .grade-poor, .stealth-low, .prio-P1 { --pill: var(--color-danger); }
 .prio-P2 { --pill: #f59e0b; }
+.risk-very-high { --pill: var(--color-danger); }
+.risk-high { --pill: #f97316; }
+.risk-moderate { --pill: #f59e0b; }
+.risk-low { --pill: var(--color-success); }
+.risk-very-low { --pill: var(--color-text-muted); }
 .prio-P3 { --pill: var(--color-focus); }
 .prio-P4 { --pill: var(--color-text-muted); }
 :host-context(.light-mode) .grade-optimal,
@@ -289,3 +294,8 @@
 .er-table-wrap:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
 
 :host-context(.light-mode) .er-sample-pill { color: #7c3f06; }
+
+:host-context(.light-mode) .risk-very-high { --pill: #b91c1c; }
+:host-context(.light-mode) .risk-high { --pill: #9a3a06; }
+:host-context(.light-mode) .risk-moderate { --pill: #744702; }
+:host-context(.light-mode) .risk-low { --pill: #065f46; }

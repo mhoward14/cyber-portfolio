@@ -387,6 +387,12 @@
   border-left-color: #f97316;
   color: #f97316;
 }
+.sidebar-link-risk:hover,
+.sidebar-link-risk.is-active {
+  background: rgba(236, 72, 153, 0.1);
+  border-left-color: #ec4899;
+  color: #ec4899;
+}
 .sidebar-link-packet:hover,
 .sidebar-link-packet.is-active {
   background: rgba(132, 204, 22, 0.1);
@@ -442,6 +448,11 @@
 :host-context(.light-mode) .sidebar-link-vuln.is-active {
   border-left-color: #b84a0a;
   color: #b84a0a;
+}
+:host-context(.light-mode) .sidebar-link-risk:hover,
+:host-context(.light-mode) .sidebar-link-risk.is-active {
+  border-left-color: #be185d;
+  color: #be185d;
 }
 :host-context(.light-mode) .sidebar-link-packet:hover,
 :host-context(.light-mode) .sidebar-link-packet.is-active {

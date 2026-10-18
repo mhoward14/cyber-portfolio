@@ -1,0 +1,223 @@
+<div class="container rr-page">
+  <a routerLink="/" class="back-link">
+    <svg class="back-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <polyline points="15 18 9 12 15 6"></polyline>
+    </svg>
+    Back to Portfolio
+  </a>
+
+  <header class="rr-header">
+    <h1 class="rr-title">Risk Register</h1>
+    <p class="rr-intro">
+      A vulnerability is a fact about a system. A risk is what that could mean for the mission: how likely it is and how
+      much it would matter. Rate each risk, choose how to treat it, and see where the register stands before and after
+      treatment.
+    </p>
+  </header>
+
+  <section class="rr-panel" aria-labelledby="rr-add-h">
+    <h2 class="rr-panel-title" id="rr-add-h">// ADD A RISK</h2>
+
+    <div class="rr-field">
+      <label for="rr-title">Risk statement</label>
+      <input id="rr-title" type="text" [maxLength]="titleMax" autocomplete="off"
+             placeholder="e.g. Ransomware encrypts the file-server shares"
+             [value]="title()" (input)="title.set($any($event.target).value)" />
+    </div>
+
+    <div class="rr-grid">
+      <div class="rr-field">
+        <label for="rr-threat">Threat source</label>
+        <select id="rr-threat" (change)="threat.set($any($event.target).value)">
+          @for (t of threats; track t[0]) {
+            <option [value]="t[0]" [selected]="threat() === t[0]">{{ t[1] }}</option>
+          }
+        </select>
+      </div>
+      <div class="rr-field">
+        <label for="rr-likelihood">Likelihood</label>
+        <select id="rr-likelihood" aria-describedby="rr-likelihood-help" (change)="likelihood.set($any($event.target).value)">
+          @for (r of ratings; track r) {
+            <option [value]="r" [selected]="likelihood() === r">{{ ratingLabel[r] }}</option>
+          }
+        </select>
+        <p class="rr-help" id="rr-likelihood-help">{{ likelihoodHelp[likelihood()] }}</p>
+      </div>
+      <div class="rr-field">
+        <label for="rr-impact">Impact</label>
+        <select id="rr-impact" aria-describedby="rr-impact-help" (change)="impact.set($any($event.target).value)">
+          @for (r of ratings; track r) {
+            <option [value]="r" [selected]="impact() === r">{{ ratingLabel[r] }}</option>
+          }
+        </select>
+        <p class="rr-help" id="rr-impact-help">{{ impactHelp[impact()] }}</p>
+      </div>
+    </div>
+
+    <fieldset class="rr-fieldset">
+      <legend>Treatment</legend>
+      <div class="rr-grid">
+        <div class="rr-field">
+          <label for="rr-treatment">Response</label>
+          <select id="rr-treatment" (change)="treatment.set($any($event.target).value)">
+            @for (t of treatments; track t[0]) {
+              <option [value]="t[0]" [selected]="treatment() === t[0]">{{ t[1] }}</option>
+            }
+          </select>
+        </div>
+        <div class="rr-field">
+          <label for="rr-control">Control it relies on</label>
+          <select id="rr-control" (change)="controlId.set($any($event.target).value)">
+            <option value="" [selected]="controlId() === ''">None</option>
+            @for (c of controls; track c.id) {
+              <option [value]="c.id" [selected]="controlId() === c.id">{{ c.id }}: {{ c.title }}</option>
+            }
+          </select>
+        </div>
+        <div class="rr-field">
+          <label for="rr-res-l">Likelihood after treatment</label>
+          <select id="rr-res-l" (change)="residualLikelihood.set($any($event.target).value)">
+            <option value="" [selected]="residualLikelihood() === ''">Unchanged</option>
+            @for (r of ratings; track r) {
+              <option [value]="r" [selected]="residualLikelihood() === r">{{ ratingLabel[r] }}</option>
+            }
+          </select>
+        </div>
+        <div class="rr-field">
+          <label for="rr-res-i">Impact after treatment</label>
+          <select id="rr-res-i" (change)="residualImpact.set($any($event.target).value)">
+            <option value="" [selected]="residualImpact() === ''">Unchanged</option>
+            @for (r of ratings; track r) {
+              <option [value]="r" [selected]="residualImpact() === r">{{ ratingLabel[r] }}</option>
+            }
+          </select>
+        </div>
+      </div>
+    </fieldset>
+
+    <div class="rr-preview" aria-live="polite">
+      <span class="rr-pill" [class]="'rr-pill risk-' + preview()">{{ ratingLabel[preview()] }}</span>
+      <span>risk now</span>
+      <span aria-hidden="true">&rarr;</span>
+      <span class="rr-pill" [class]="'rr-pill risk-' + previewResidual()">{{ ratingLabel[previewResidual()] }}</span>
+      <span>after treatment</span>
+    </div>
+
+    <div class="rr-actions">
+      <button type="button" class="rr-btn rr-btn-primary" [disabled]="!canAdd()" (click)="addRisk()">Add risk</button>
+      <button type="button" class="rr-btn" (click)="loadExamples()">Load fictional examples</button>
+      @if (drafts().length) {
+        <button type="button" class="rr-btn" (click)="draftFromFindings()">
+          Draft {{ drafts().length }} {{ drafts().length === 1 ? 'risk' : 'risks' }} from your vulnerability findings
+        </button>
+      }
+    </div>
+    @if (risks().length >= maxRisks) {
+      <p class="rr-hint">The register is full at {{ maxRisks }} risks. Remove one to add another.</p>
+    }
+  </section>
+
+  <p class="rr-status" role="status">{{ notice() }}</p>
+
+  <section class="rr-panel" aria-labelledby="rr-map-h">
+    <h2 class="rr-panel-title" id="rr-map-h">// HEAT MAP</h2>
+    <div class="rr-toggle" role="group" aria-label="Which ratings to show">
+      <button type="button" class="rr-btn rr-btn-small" [attr.aria-pressed]="view() === 'current'" (click)="view.set('current')">Before treatment</button>
+      <button type="button" class="rr-btn rr-btn-small" [attr.aria-pressed]="view() === 'residual'" (click)="view.set('residual')">After treatment</button>
+    </div>
+    <div class="rr-map-wrap" tabindex="0" role="region" aria-label="Risk heat map">
+      <table class="rr-map">
+        <caption class="rr-sr">Number of risks in each likelihood and impact cell, {{ view() === 'current' ? 'before' : 'after' }} treatment</caption>
+        <thead>
+          <tr>
+            <td class="rr-corner"></td>
+            @for (i of ratings; track i) {
+              <th scope="col">{{ ratingLabel[i] }}<span class="rr-axis"> impact</span></th>
+            }
+          </tr>
+        </thead>
+        <tbody>
+          @for (l of rows; track l) {
+            <tr>
+              <th scope="row">{{ ratingLabel[l] }}<span class="rr-axis"> likelihood</span></th>
+              @for (i of ratings; track i) {
+                <td [class]="'rr-cell risk-' + cellLevel(l, i)" [class.has-risks]="count(l, i) > 0">
+                  <span class="rr-count">{{ count(l, i) || '' }}</span>
+                  <span class="rr-sr">{{ count(l, i) }} {{ count(l, i) === 1 ? 'risk' : 'risks' }}, {{ ratingLabel[cellLevel(l, i)].toLowerCase() }} rating</span>
+                </td>
+              }
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    @if (risks().length) {
+      <p class="rr-summary">
+        {{ elevated() }} of {{ risks().length }} {{ risks().length === 1 ? 'risk is' : 'risks are' }} rated high or very high
+        now; {{ elevatedAfter() }} after treatment.
+      </p>
+    }
+  </section>
+
+  <section class="rr-panel" aria-labelledby="rr-list-h">
+    <h2 class="rr-panel-title" id="rr-list-h">// THE REGISTER</h2>
+    @if (ranked().length === 0) {
+      <p class="rr-empty">No risks yet. Add one above, or load the fictional examples to see the heat map fill in.</p>
+    } @else {
+      <div class="rr-table-wrap" tabindex="0" role="region" aria-label="Risk register table">
+        <table class="rr-table">
+          <thead>
+            <tr>
+              <th scope="col">Risk</th>
+              <th scope="col">Now</th>
+              <th scope="col">After treatment</th>
+              <th scope="col">Treatment</th>
+              <th scope="col">Control</th>
+              <th scope="col"><span class="rr-sr">Remove</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (r of ranked(); track r.id) {
+              <tr>
+                <td><strong>{{ r.id }}</strong><span class="rr-sub">{{ r.title }}</span></td>
+                <td><span class="rr-pill" [class]="'rr-pill risk-' + level(r)">{{ ratingLabel[level(r)] }}</span></td>
+                <td><span class="rr-pill" [class]="'rr-pill risk-' + residual(r)">{{ ratingLabel[residual(r)] }}</span></td>
+                <td>{{ treatmentName(r.treatment) }}</td>
+                <td class="rr-mono">{{ r.controlId ?? '–' }}</td>
+                <td><button type="button" class="rr-remove" [attr.aria-label]="'Remove ' + r.id" (click)="remove(r.id)">Remove</button></td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <div class="rr-actions">
+        <app-export-button label="Download worksheet (CSV)" accent="var(--rr-accent)" (pressed)="downloadCsv()" />
+        @if (inEngagement()) {
+          <span class="rr-done">In your engagement</span>
+          <a routerLink="/report" class="rr-btn">View Engagement Report &rarr;</a>
+        } @else {
+          <button type="button" class="rr-btn rr-btn-primary" (click)="sendToEngagement()">Add to Engagement Report</button>
+        }
+        <button type="button" class="rr-btn rr-btn-quiet" (click)="clear()">Clear register</button>
+      </div>
+    }
+  </section>
+
+  <section class="rr-panel" aria-labelledby="rr-how-h">
+    <h2 class="rr-panel-title" id="rr-how-h">// HOW IT WORKS</h2>
+    <p class="rr-how">
+      Likelihood and impact each use five levels, from very low to very high. The risk rating comes from a matrix like the
+      qualitative one in NIST SP 800-30 Rev. 1 (Appendix I): a risk that is very likely but would barely matter, or that
+      would matter greatly but is very unlikely, rates lower than one that is both. Treatment follows the response options
+      in that guide: mitigate, accept, transfer or avoid. The ratings are your judgment, so the page shows what each level
+      means beside the choice, and the register stores only your inputs. The rating is always worked out from them.
+    </p>
+    <p class="rr-how">
+      If you have prioritized vulnerabilities, the draft button turns the P1 and P2 findings into risk statements. Exploited
+      or public flaws on internet-facing systems become more likely, and flaws on business-critical systems become higher
+      impact. Treat the drafts as a starting point, not a verdict. A risk register belongs to the organization, so owners and
+      due dates are left blank in the worksheet for you to complete.
+    </p>
+  </section>
+</div>

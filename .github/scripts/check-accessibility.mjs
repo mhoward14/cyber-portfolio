@@ -32,7 +32,7 @@ if (!dir) {
 const root = resolve(dir);
 // Matches "baseHref" in angular.json: the app is served under this path.
 const BASE_PATH = '/cyber-portfolio/';
-const ROUTES = ['', 'attack-path', 'cloud-security', 'incident-response', 'zero-trust', 'rmf-tracker', 'crosswalk', 'transaction-security', 'devops-pipeline', 'packet-lab', 'report', 'role-guide', 'site-security'];
+const ROUTES = ['', 'attack-path', 'cloud-security', 'incident-response', 'zero-trust', 'rmf-tracker', 'crosswalk', 'transaction-security', 'devops-pipeline', 'packet-lab', 'report', 'role-guide', 'site-security', 'notes'];
 const THEMES = ['dark', 'light'];
 const VIEWPORTS = { desktop: { width: 1280, height: 900 }, phone: { width: 390, height: 844 } };
 const TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa', 'best-practice'];

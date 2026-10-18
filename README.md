@@ -19,7 +19,7 @@ For a short recruiter or hiring-manager review, take the **[90-second guided tou
 3. **[Incident Response Playbook Simulator](https://mhoward14.github.io/cyber-portfolio/#/incident-response)** — work through a security incident and receive decision-by-decision feedback.
 4. Use the remaining tools to go deeper into **Zero Trust architecture, RMF control management, and framework mapping**.
 
-Hiring for a specific role? **[Find a tool by role](https://mhoward14.github.io/cyber-portfolio/#/role-guide)** lists which tools show ISSO/GRC, SOC, cloud and Zero Trust, DevSecOps, and payments-compliance work. Want to see how the site itself is secured? **[How this site is secured](https://mhoward14.github.io/cyber-portfolio/#/site-security)** links every control to the file or workflow that implements it.
+Hiring for a specific role? **[Find a tool by role](https://mhoward14.github.io/cyber-portfolio/#/role-guide)** lists which tools show ISSO/GRC, SOC, cloud and Zero Trust, DevSecOps, and payments-compliance work. Want to see how the site itself is secured? **[How this site is secured](https://mhoward14.github.io/cyber-portfolio/#/site-security)** links every control to the file or workflow that implements it. The **[Engineering notes](https://mhoward14.github.io/cyber-portfolio/#/notes)** page covers real problems hit while running it, such as dependency updates that broke the build, a CodeQL alert and the limits of a meta-tag CSP.
 
 ## Interactive security tools
 

@@ -66,5 +66,10 @@ export const routes: Routes = [
     title: 'How This Site Is Secured | Matthew Howard',
     loadComponent: () => import('./site-security/site-security').then((m) => m.SiteSecurity),
   },
+  {
+    path: 'notes',
+    title: 'Engineering Notes | Matthew Howard',
+    loadComponent: () => import('./notes/notes').then((m) => m.Notes),
+  },
   { path: '**', redirectTo: '' },
 ];

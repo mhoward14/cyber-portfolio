@@ -1,0 +1,35 @@
+<div class="container notes-page">
+  <a routerLink="/" class="back-link">
+    <svg class="back-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <polyline points="15 18 9 12 15 6"></polyline>
+    </svg>
+    Back to Portfolio
+  </a>
+
+  <header class="notes-header">
+    <h1 class="notes-title">Engineering notes</h1>
+    <p class="notes-intro">
+      Problems I hit while running this site, what caused them and what I changed. Each note links to the commit or file
+      behind it.
+    </p>
+  </header>
+
+  @for (note of notes; track note.id) {
+    <article class="note" [id]="note.id" [attr.aria-labelledby]="'note-h-' + note.id">
+      <h2 class="note-title" [id]="'note-h-' + note.id">{{ note.title }}</h2>
+      <p class="note-summary">{{ note.summary }}</p>
+      @for (s of note.sections; track s.heading) {
+        <h3 class="note-heading">{{ s.heading }}</h3>
+        @for (p of s.body; track $index) {
+          <p class="note-body">{{ p }}</p>
+        }
+      }
+      <p class="note-label">Check it</p>
+      <ul class="note-links">
+        @for (l of note.links; track l.label) {
+          <li><a [href]="href(l)" target="_blank" rel="noopener">{{ l.label }}</a></li>
+        }
+      </ul>
+    </article>
+  }
+</div>

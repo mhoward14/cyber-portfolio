@@ -43,6 +43,13 @@ describe('EngagementReport', () => {
     expect(el.querySelector('#er-poam-h')).toBeNull();
   });
 
+  it('shows prioritized vulnerabilities when the engagement has them', async () => {
+    TestBed.inject(EngagementService).loadSample();
+    const { el } = await render();
+    expect(el.querySelector('#er-vuln-h')).toBeTruthy();
+    expect(el.querySelectorAll('#er-vuln-h ~ .er-table-wrap tbody tr, .er-section:has(#er-vuln-h) tbody tr').length).toBe(3);
+  });
+
   it('asks for confirmation before ending the engagement', async () => {
     TestBed.inject(EngagementService).loadSample();
     const { fixture } = await render();
@@ -57,7 +64,7 @@ describe('engagementToCsv', () => {
   it('writes a header plus one row per record', () => {
     const s = buildSampleEngagement();
     const lines = engagementToCsv(s).split('\r\n');
-    const records = s.techniques.length + s.evidence.length + s.decisions.length + s.controls.length + s.poams.length;
+    const records = s.techniques.length + s.evidence.length + s.decisions.length + s.controls.length + s.poams.length + (s.findings?.length ?? 0);
     expect(lines.length).toBe(records + 1);
     expect(lines[0]).toContain('"Section"');
   });

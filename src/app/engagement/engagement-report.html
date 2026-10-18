@@ -39,7 +39,7 @@
     </header>
 
     @if (s.isSample) {
-      <p class="er-note">This is a fictional sample (Contoso Financial) showing a fully populated engagement. Its evidence, decisions, controls, and POA&amp;M items are illustrative. Building your own chain in the Attack Path Builder replaces it.</p>
+      <p class="er-note">This is a fictional sample (Contoso Financial) showing a fully populated engagement. Its evidence, decisions, controls, POA&amp;M items, and vulnerabilities are illustrative. Building your own chain in the Attack Path Builder replaces it.</p>
     }
 
     <div class="er-kpis">
@@ -50,6 +50,9 @@
       </div>
       <div class="er-kpi"><span class="er-kpi-value">{{ s.controls.length ? implementedCount() + ' / ' + s.controls.length : '–' }}</span><span class="er-kpi-label">Controls implemented</span></div>
       <div class="er-kpi"><span class="er-kpi-value">{{ s.poams.length || '–' }}</span><span class="er-kpi-label">Open POA&amp;M items</span></div>
+      @if (s.findings?.length) {
+        <div class="er-kpi"><span class="er-kpi-value">{{ urgentFindings() }}<small> of {{ s.findings!.length }}</small></span><span class="er-kpi-label">Vulnerabilities at P1 or P2</span></div>
+      }
     </div>
 
     <section class="er-section" aria-labelledby="er-chain-h">
@@ -60,7 +63,7 @@
       @if (s.techniques.length === 0) {
         <div class="er-slot-empty">No attack chain yet. <a routerLink="/attack-path">Build one in the Attack Path Builder</a> and add it to this engagement.</div>
       } @else {
-        <div class="er-table-wrap">
+        <div class="er-table-wrap" tabindex="0" role="region" aria-label="Attack chain table">
           <table class="er-table">
             <thead><tr><th scope="col">Stage</th><th scope="col">Technique</th><th scope="col">Stealth</th><th scope="col">Where it gets caught</th></tr></thead>
             <tbody>
@@ -81,7 +84,7 @@
     @if (s.evidence.length) {
       <section class="er-section" aria-labelledby="er-evidence-h">
         <div class="section-label"><h2 class="section-label-text" id="er-evidence-h">// EVIDENCE</h2><span class="section-label-sub">Network and host indicators</span></div>
-        <div class="er-table-wrap">
+        <div class="er-table-wrap" tabindex="0" role="region" aria-label="Evidence table">
           <table class="er-table">
             <thead><tr><th scope="col">Type</th><th scope="col">Indicator</th><th scope="col">Detail</th><th scope="col">Technique</th></tr></thead>
             <tbody>
@@ -111,7 +114,7 @@
     @if (s.controls.length) {
       <section class="er-section" aria-labelledby="er-controls-h">
         <div class="section-label"><h2 class="section-label-text" id="er-controls-h">// CONTROLS &amp; FRAMEWORK MAPPING</h2><span class="section-label-sub">NIST SP 800-53 Rev. 5 with CIS v8 and ISO/IEC 27001:2022 equivalents</span></div>
-        <div class="er-table-wrap">
+        <div class="er-table-wrap" tabindex="0" role="region" aria-label="Controls table">
           <table class="er-table">
             <thead><tr><th scope="col">Control</th><th scope="col">Status</th><th scope="col">Configured in</th><th scope="col">CIS v8</th><th scope="col">ISO 27001</th><th scope="col">Counters</th></tr></thead>
             <tbody>
@@ -142,6 +145,28 @@
               <p><strong>Milestone:</strong> {{ p.milestone }}</p>
             </div>
           }
+        </div>
+      </section>
+    }
+
+    @if (s.findings?.length) {
+      <section class="er-section" aria-labelledby="er-vuln-h">
+        <div class="section-label"><h2 class="section-label-text" id="er-vuln-h">// PRIORITIZED VULNERABILITIES</h2><span class="section-label-sub">From the Vulnerability Prioritizer; tracked under NIST SP 800-53 RA-5 and SI-2</span></div>
+        <div class="er-table-wrap" tabindex="0" role="region" aria-label="Vulnerabilities table">
+          <table class="er-table">
+            <thead><tr><th scope="col">Finding</th><th scope="col">Priority</th><th scope="col">CVSS v3.1</th><th scope="col">Context</th><th scope="col">Target</th></tr></thead>
+            <tbody>
+              @for (f of s.findings; track f.id) {
+                <tr>
+                  <td><strong>{{ f.id }}</strong><span class="er-sub">{{ f.title }}</span><span class="er-basis">{{ f.asset }}</span></td>
+                  <td><span class="er-pill" [class]="'er-pill prio-' + f.priority">{{ f.priority }}</span></td>
+                  <td class="er-mono">{{ f.score.toFixed(1) }} {{ f.severity }}</td>
+                  <td class="er-muted">{{ exploitationLabel(f.exploitation) }}; {{ f.exposure === 'internet' ? 'internet-facing' : 'internal' }}; {{ f.criticality }} importance</td>
+                  <td class="er-mono">{{ f.targetDays }} days</td>
+                </tr>
+              }
+            </tbody>
+          </table>
         </div>
       </section>
     }

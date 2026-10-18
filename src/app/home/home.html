@@ -74,6 +74,8 @@
         <a routerLink="/role-guide">Hiring for a specific role? Find the right tool</a>
         <span aria-hidden="true">&middot;</span>
         <a routerLink="/site-security">How this site is secured</a>
+        <span aria-hidden="true">&middot;</span>
+        <a routerLink="/notes">Engineering notes</a>
       </p>
 
       <div class="tool-grid">
@@ -106,6 +108,9 @@
                     }
                     @case ('packet') {
                       <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                    }
+                    @case ('vuln') {
+                      <line x1="4" y1="6" x2="20" y2="6"></line><line x1="4" y1="12" x2="15" y2="12"></line><line x1="4" y1="18" x2="10" y2="18"></line>
                     }
                     @case ('devops') {
                       <circle cx="5" cy="6" r="3"></circle><circle cx="5" cy="18" r="3"></circle><circle cx="19" cy="12" r="3"></circle><path d="M5 9v6"></path><path d="M8 6h5a3 3 0 0 1 3 3v0"></path><path d="M8 18h5a3 3 0 0 0 3-3v0"></path>

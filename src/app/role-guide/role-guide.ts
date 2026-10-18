@@ -1,6 +1,6 @@
 /* ============================================================
    ROLE-GUIDE.TS — FIND A TOOL BY ROLE
-   A reviewer hiring for one kind of role shouldn't have to open nine
+   A reviewer hiring for one kind of role shouldn't have to open ten
    tools to find the relevant one. Each role lists the tools that show
    that work and what the visitor will see in each. A unit test checks
    that every linked route exists.
@@ -34,6 +34,11 @@ export const ROLES: Role[] = [
         sees: 'Track roughly 140 controls across all 20 NIST SP 800-53 families and draft POA&M text for the open ones.',
       },
       {
+        name: 'Vulnerability Prioritizer',
+        route: '/vuln-priority',
+        sees: 'Score findings with CVSS v3.1, add exploitation and exposure, and see the fix order change. Results flow into the Engagement Report under RA-5 and SI-2.',
+      },
+      {
         name: 'Security Framework Crosswalk',
         route: '/crosswalk',
         sees: 'Translate a control topic between NIST SP 800-53, CIS Controls v8 and ISO/IEC 27001.',
@@ -59,6 +64,11 @@ export const ROLES: Role[] = [
         name: 'Attack Path Builder',
         route: '/attack-path',
         sees: 'Chain MITRE ATT&CK techniques and watch the detection-likelihood assessment change.',
+      },
+      {
+        name: 'Vulnerability Prioritizer',
+        route: '/vuln-priority',
+        sees: 'Score findings with CVSS v3.1, add exploitation and exposure, and see the fix order change. Results flow into the Engagement Report under RA-5 and SI-2.',
       },
       {
         name: 'Incident Response Playbook Simulator',

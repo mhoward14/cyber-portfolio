@@ -1,5 +1,9 @@
 import { STEALTH_DETECTION_WEIGHT, TACTIC_STAGES } from '../attack-path/attack-path-data';
 import { Engagement, EngagementTechnique } from './engagement.model';
+import { parseVector } from '../vuln-priority/cvss';
+import { buildFinding } from '../vuln-priority/finding';
+
+const metrics = (vector: string) => parseVector(vector)!;
 
 /* Fictional sample engagement ("Contoso Financial") used to show a fully
    populated report before a visitor has built their own. The attack chain
@@ -66,6 +70,11 @@ export function buildSampleEngagement(now = new Date()): Engagement {
     poams: [
       { id: 'POA&M-01', controlId: 'CM-7', weakness: 'Unsigned PowerShell ran on a finance workstation (T1059.001).', milestone: 'Enforce Constrained Language Mode and signed-script policy on the finance OU.', targetDays: 30 },
       { id: 'POA&M-02', controlId: 'CP-9', weakness: 'Network-reachable backups were exposed to encryption (T1486).', milestone: 'Move to immutable, offline backup copies and test a full restore.', targetDays: 60 },
+    ],
+    findings: [
+      buildFinding({ id: 'VULN-01', title: 'Remote code execution in the VPN appliance', asset: 'VPN gateway', metrics: metrics('CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H'), exploitation: 'active', exposure: 'internet', criticality: 'high' }),
+      buildFinding({ id: 'VULN-02', title: 'Local privilege escalation on the file server', asset: 'FS-02', metrics: metrics('CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H'), exploitation: 'public', exposure: 'internal', criticality: 'high' }),
+      buildFinding({ id: 'VULN-03', title: 'Reflected cross-site scripting in the intranet portal', asset: 'Intranet portal', metrics: metrics('CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N'), exploitation: 'none', exposure: 'internal', criticality: 'low' }),
     ],
   };
 }

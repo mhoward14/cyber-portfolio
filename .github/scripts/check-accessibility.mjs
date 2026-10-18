@@ -32,7 +32,11 @@ if (!dir) {
 const root = resolve(dir);
 // Matches "baseHref" in angular.json: the app is served under this path.
 const BASE_PATH = '/cyber-portfolio/';
-const ROUTES = ['', 'attack-path', 'cloud-security', 'incident-response', 'zero-trust', 'rmf-tracker', 'crosswalk', 'transaction-security', 'devops-pipeline', 'packet-lab', 'report', 'role-guide', 'site-security', 'notes'];
+const ROUTES = ['', 'attack-path', 'cloud-security', 'incident-response', 'zero-trust', 'rmf-tracker', 'crosswalk', 'transaction-security', 'devops-pipeline', 'packet-lab', 'vuln-priority', 'report', 'role-guide', 'site-security', 'notes'];
+// Pages whose content only appears after an action, scanned in that state too.
+const STATES = [
+  { route: 'vuln-priority', name: 'with findings', setup: (page) => page.getByRole('button', { name: 'Load fictional examples' }).click() },
+];
 const THEMES = ['dark', 'light'];
 const VIEWPORTS = { desktop: { width: 1280, height: 900 }, phone: { width: 390, height: 844 } };
 const TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa', 'best-practice'];
@@ -91,6 +95,21 @@ for (const [viewportName, viewport] of Object.entries(VIEWPORTS)) {
       }
       console.log(`${violations.length ? 'FAIL' : 'ok  '} ${label}`);
     }
+    for (const state of STATES) {
+      const label = `${state.route} ${state.name} (${theme}, ${viewportName})`;
+      await page.goto(origin + `#/${state.route}`, { waitUntil: 'networkidle' });
+      await page.waitForSelector('main h1');
+      await state.setup(page);
+      await page.evaluate(axeSource);
+      const { violations } = await page.evaluate(
+        (tags) => axe.run(document, { runOnly: { type: 'tag', values: tags }, resultTypes: ['violations'] }),
+        TAGS,
+      );
+      for (const v of violations) {
+        problems.push(`${label}: ${v.id} (${v.impact}): ${v.help}\n    ${v.nodes.slice(0, 3).map((n) => n.target.join(' ')).join('\n    ')}`);
+      }
+      console.log(`${violations.length ? 'FAIL' : 'ok  '} ${label}`);
+    }
     await context.close();
   }
 }
@@ -103,4 +122,4 @@ if (problems.length) {
   for (const p of problems) console.error(`- ${p}`);
   process.exit(1);
 }
-console.log(`\nAccessibility check passed: ${ROUTES.length} pages, ${THEMES.length} themes, ${Object.keys(VIEWPORTS).length} widths.`);
+console.log(`\nAccessibility check passed: ${ROUTES.length} pages and ${STATES.length} interactive states, ${THEMES.length} themes, ${Object.keys(VIEWPORTS).length} widths.`);

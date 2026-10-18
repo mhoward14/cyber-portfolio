@@ -1,0 +1,182 @@
+<div class="container vp-page">
+  <a routerLink="/" class="back-link">
+    <svg class="back-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <polyline points="15 18 9 12 15 6"></polyline>
+    </svg>
+    Back to Portfolio
+  </a>
+
+  <header class="vp-header">
+    <h1 class="vp-title">Vulnerability Prioritizer</h1>
+    <p class="vp-intro">
+      A CVSS score says how bad a flaw could be in general. It does not say whether attackers are using it, whether the
+      system can be reached, or how much the system matters. Score a finding, add that context, and get a ranked order of
+      work.
+    </p>
+  </header>
+
+  <section class="vp-panel" aria-labelledby="vp-add-h">
+    <h2 class="vp-panel-title" id="vp-add-h">// ADD A FINDING</h2>
+
+    <div class="vp-row">
+      <div class="vp-field">
+        <label for="vp-title">Finding</label>
+        <input id="vp-title" type="text" [maxLength]="titleMax" autocomplete="off" placeholder="e.g. Remote code execution in the VPN appliance"
+               [value]="title()" (input)="title.set($any($event.target).value)" />
+      </div>
+      <div class="vp-field">
+        <label for="vp-asset">Affected system</label>
+        <input id="vp-asset" type="text" [maxLength]="assetMax" autocomplete="off" placeholder="e.g. VPN gateway"
+               [value]="asset()" (input)="asset.set($any($event.target).value)" />
+      </div>
+    </div>
+
+    <fieldset class="vp-fieldset">
+      <legend>CVSS v3.1 base metrics</legend>
+      <div class="vp-metrics">
+        @for (d of metricDefs; track d.key) {
+          <div class="vp-field">
+            <label [for]="'vp-m-' + d.key">{{ d.name }}</label>
+            <select [id]="'vp-m-' + d.key" [value]="metrics()[d.key]" (change)="setMetric(d.key, $any($event.target).value)">
+              @for (o of d.options; track o.value) {
+                <option [value]="o.value" [selected]="metrics()[d.key] === o.value">{{ o.label }}</option>
+              }
+            </select>
+          </div>
+        }
+      </div>
+      <div class="vp-field vp-vector-field">
+        <label for="vp-vector">Or paste a vector</label>
+        <input id="vp-vector" type="text" autocomplete="off" spellcheck="false" maxlength="80" placeholder="CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+               [value]="vectorText()" (input)="applyVector($any($event.target).value)"
+               [attr.aria-invalid]="vectorError() ? 'true' : null" aria-describedby="vp-vector-error" />
+        <p class="vp-error" id="vp-vector-error" role="alert">{{ vectorError() }}</p>
+      </div>
+    </fieldset>
+
+    <fieldset class="vp-fieldset">
+      <legend>Context CVSS leaves out</legend>
+      <div class="vp-metrics vp-context">
+        <div class="vp-field">
+          <label for="vp-exploit">Exploitation</label>
+          <select id="vp-exploit" (change)="exploitation.set($any($event.target).value)">
+            <option value="none" [selected]="exploitation() === 'none'">No known exploit</option>
+            <option value="public" [selected]="exploitation() === 'public'">Public exploit code exists</option>
+            <option value="active" [selected]="exploitation() === 'active'">Exploited in the wild</option>
+          </select>
+        </div>
+        <div class="vp-field">
+          <label for="vp-exposure">Exposure</label>
+          <select id="vp-exposure" (change)="exposure.set($any($event.target).value)">
+            <option value="internal" [selected]="exposure() === 'internal'">Internal only</option>
+            <option value="internet" [selected]="exposure() === 'internet'">Reachable from the internet</option>
+          </select>
+        </div>
+        <div class="vp-field">
+          <label for="vp-crit">System importance</label>
+          <select id="vp-crit" (change)="criticality.set($any($event.target).value)">
+            <option value="low" [selected]="criticality() === 'low'">Low</option>
+            <option value="moderate" [selected]="criticality() === 'moderate'">Moderate</option>
+            <option value="high" [selected]="criticality() === 'high'">Business-critical</option>
+          </select>
+        </div>
+      </div>
+    </fieldset>
+
+    <div class="vp-preview" aria-live="polite">
+      <div class="vp-score">
+        <span class="vp-score-value">{{ score().toFixed(1) }}</span>
+        <span class="vp-score-label">CVSS {{ severity() }}</span>
+      </div>
+      <div class="vp-preview-text">
+        <p class="vp-preview-priority">
+          <span class="vp-pill" [class]="'vp-pill prio-' + preview().priority">{{ preview().priority }}</span>
+          {{ priorityLabel[preview().priority] }}, target {{ targetDays[preview().priority] }} days
+        </p>
+        <p class="vp-vector">{{ vector() }}</p>
+        <ul class="vp-reasons">
+          @for (r of preview().reasons; track r) {
+            <li>{{ r }}</li>
+          }
+        </ul>
+      </div>
+    </div>
+
+    <div class="vp-actions">
+      <button type="button" class="vp-btn vp-btn-primary" [disabled]="!canAdd()" (click)="addFinding()">Add finding</button>
+      <button type="button" class="vp-btn" (click)="loadExamples()">Load fictional examples</button>
+    </div>
+    @if (findings().length >= maxFindings) {
+      <p class="vp-hint">The list is full at {{ maxFindings }} findings. Remove one to add another.</p>
+    }
+  </section>
+
+  <p class="vp-status" role="status">{{ notice() }}</p>
+
+  <section class="vp-panel" aria-labelledby="vp-list-h">
+    <h2 class="vp-panel-title" id="vp-list-h">// RANKED REMEDIATION ORDER</h2>
+    @if (ranked().length === 0) {
+      <p class="vp-empty">No findings yet. Add one above, or load the fictional examples to see how context reorders the list.</p>
+    } @else {
+      <div class="vp-table-wrap" tabindex="0" role="region" aria-label="Ranked findings table">
+        <table class="vp-table">
+          <thead>
+            <tr>
+              <th scope="col">Priority</th>
+              <th scope="col">Finding</th>
+              <th scope="col">CVSS</th>
+              <th scope="col">Why it ranks here</th>
+              <th scope="col">Target</th>
+              <th scope="col"><span class="vp-sr">Remove</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (f of ranked(); track f.id) {
+              <tr>
+                <td><span class="vp-pill" [class]="'vp-pill prio-' + f.priority">{{ f.priority }}</span></td>
+                <td><strong>{{ f.id }}</strong><span class="vp-sub">{{ f.title }}</span><span class="vp-asset">{{ f.asset }}</span></td>
+                <td class="vp-mono">{{ f.score.toFixed(1) }}<span class="vp-sub">{{ f.severity }}</span></td>
+                <td>
+                  <ul class="vp-reasons vp-reasons-tight">
+                    @for (r of reasonsFor(f); track r) {
+                      <li>{{ r }}</li>
+                    }
+                  </ul>
+                </td>
+                <td class="vp-mono">{{ f.targetDays }} days</td>
+                <td><button type="button" class="vp-remove" [attr.aria-label]="'Remove ' + f.id" (click)="remove(f.id)">Remove</button></td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <div class="vp-actions">
+        <app-export-button label="Download worksheet (CSV)" accent="var(--vp-accent)" (pressed)="downloadCsv()" />
+        @if (inEngagement()) {
+          <span class="vp-done">In your engagement</span>
+          <a routerLink="/report" class="vp-btn">View Engagement Report &rarr;</a>
+        } @else {
+          <button type="button" class="vp-btn vp-btn-primary" (click)="sendToEngagement()">Add to Engagement Report</button>
+        }
+        <button type="button" class="vp-btn vp-btn-quiet" (click)="clear()">Clear list</button>
+      </div>
+    }
+  </section>
+
+  <section class="vp-panel" aria-labelledby="vp-how-h">
+    <h2 class="vp-panel-title" id="vp-how-h">// HOW THE ORDER IS DECIDED</h2>
+    <p class="vp-how">
+      The CVSS rating gives 0 to 4 points (none, low, medium, high, critical). Exploitation in the wild adds 2 and public
+      exploit code adds 1. Internet exposure adds 1. A business-critical system adds 1 and a low-importance one takes away 1.
+      Seven or more points is P1, five or six is P2, three or four is P3 and anything lower is P4. A finding with no impact
+      is always P4. The target days (7, 30, 90 and 180) are examples; a real program sets them in policy.
+    </p>
+    <p class="vp-how">
+      This is a teaching rule, not an official standard, so every point is shown beside the result and you can disagree with
+      a specific one. CVSS scores follow the FIRST CVSS v3.1 specification, and the calculator is checked against its
+      published example scores. Findings are tracked under NIST SP 800-53 RA-5 (vulnerability monitoring and scanning) and
+      SI-2 (flaw remediation).
+    </p>
+  </section>
+</div>

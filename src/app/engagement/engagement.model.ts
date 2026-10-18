@@ -9,6 +9,7 @@
      decisions   IR Playbook Simulator
      controls    Zero Trust / Cloud Security / CI/CD Pipeline
      poams       RMF Control Tracker
+     findings    Vulnerability Prioritizer
 
    Slices a tool has not written yet stay empty, and the report only
    renders the slices that have data.
@@ -67,6 +68,25 @@ export interface EngagementPoam {
   targetDays: number;
 }
 
+export type FindingPriority = 'P1' | 'P2' | 'P3' | 'P4';
+
+/** A scored vulnerability, kept with the facts behind its priority so the
+ *  report can show why it ranks where it does. */
+export interface EngagementFinding {
+  id: string;
+  title: string;
+  asset: string;
+  /** CVSS v3.1 base vector and the score computed from it. */
+  vector: string;
+  score: number;
+  severity: string;
+  exploitation: 'none' | 'public' | 'active';
+  exposure: 'internal' | 'internet';
+  criticality: 'low' | 'moderate' | 'high';
+  priority: FindingPriority;
+  targetDays: number;
+}
+
 export interface Engagement {
   version: 1;
   scenario: string;
@@ -80,6 +100,30 @@ export interface Engagement {
   responseScenario?: string;
   controls: EngagementControl[];
   poams: EngagementPoam[];
+  /** Absent in records saved before the Vulnerability Prioritizer existed. */
+  findings?: EngagementFinding[];
+}
+
+export const MAX_FINDINGS = 50;
+
+/** Strict check for a finding read back from storage, which is untrusted input. */
+export function isFinding(x: unknown): x is EngagementFinding {
+  if (!x || typeof x !== 'object') return false;
+  const f = x as Record<string, unknown>;
+  const text = (v: unknown, max: number) => typeof v === 'string' && v.length > 0 && v.length <= max;
+  return (
+    text(f['id'], 20) &&
+    text(f['title'], 120) &&
+    text(f['asset'], 80) &&
+    text(f['vector'], 60) &&
+    typeof f['score'] === 'number' && f['score'] >= 0 && f['score'] <= 10 &&
+    text(f['severity'], 10) &&
+    ['none', 'public', 'active'].includes(f['exploitation'] as string) &&
+    ['internal', 'internet'].includes(f['exposure'] as string) &&
+    ['low', 'moderate', 'high'].includes(f['criticality'] as string) &&
+    ['P1', 'P2', 'P3', 'P4'].includes(f['priority'] as string) &&
+    typeof f['targetDays'] === 'number' && Number.isInteger(f['targetDays']) && f['targetDays'] > 0 && f['targetDays'] <= 3650
+  );
 }
 
 export const ENGAGEMENT_STORAGE_KEY = 'engagement-v1';

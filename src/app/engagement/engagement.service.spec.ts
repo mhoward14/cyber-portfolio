@@ -2,6 +2,8 @@ import { TestBed } from '@angular/core/testing';
 import { DEFAULT_SCENARIO, EngagementService } from './engagement.service';
 import { ENGAGEMENT_STORAGE_KEY, EngagementTechnique } from './engagement.model';
 import { buildSampleEngagement } from './engagement-sample';
+import { buildFinding } from '../vuln-priority/finding';
+import { parseVector } from '../vuln-priority/cvss';
 import { TACTIC_STAGES } from '../attack-path/attack-path-data';
 
 const technique: EngagementTechnique = {
@@ -31,6 +33,58 @@ describe('EngagementService', () => {
     expect(JSON.parse(localStorage.getItem(ENGAGEMENT_STORAGE_KEY)!).scenario).toBe('Test scenario');
     TestBed.resetTestingModule();
     expect(TestBed.inject(EngagementService).state()?.scenario).toBe('Test scenario');
+  });
+
+  describe('findings', () => {
+    const finding = () =>
+      buildFinding({
+        id: 'VULN-01', title: 'Test flaw', asset: 'Host', metrics: parseVector('CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H')!,
+        exploitation: 'active', exposure: 'internet', criticality: 'high',
+      });
+
+    it('stores findings, counts them and survives a reload', () => {
+      service().setFindings([finding()]);
+      expect(service().state()!.findings).toHaveLength(1);
+      expect(service().entryCount()).toBe(1);
+      TestBed.resetTestingModule();
+      expect(TestBed.inject(EngagementService).state()!.findings![0].priority).toBe('P1');
+    });
+
+    it('does not mix findings into the sample', () => {
+      service().loadSample();
+      service().setFindings([finding()]);
+      const s = service().state()!;
+      expect(s.isSample).toBe(false);
+      expect(s.findings).toHaveLength(1);
+    });
+
+    it('reads records saved before findings existed', () => {
+      localStorage.setItem(ENGAGEMENT_STORAGE_KEY, JSON.stringify({
+        version: 1, scenario: 'Old', startedAt: new Date().toISOString(), isSample: false,
+        techniques: [], detectionScore: null, evidence: [], decisions: [], controls: [], poams: [],
+      }));
+      expect(service().state()!.findings).toEqual([]);
+    });
+
+    it('drops stored findings that are malformed', () => {
+      const bad = { ...finding(), priority: 'P0', score: 99 };
+      const evil = { ...finding(), title: 'x'.repeat(500) };
+      localStorage.setItem(ENGAGEMENT_STORAGE_KEY, JSON.stringify({
+        version: 1, scenario: 'Tampered', startedAt: new Date().toISOString(), isSample: false,
+        techniques: [], detectionScore: null, evidence: [], decisions: [], controls: [], poams: [],
+        findings: [finding(), bad, evil, 'nope', null],
+      }));
+      expect(service().state()!.findings).toHaveLength(1);
+    });
+
+    it('ignores a findings value that is not a list', () => {
+      localStorage.setItem(ENGAGEMENT_STORAGE_KEY, JSON.stringify({
+        version: 1, scenario: 'Odd', startedAt: new Date().toISOString(), isSample: false,
+        techniques: [], detectionScore: null, evidence: [], decisions: [], controls: [], poams: [],
+        findings: { length: 9 },
+      }));
+      expect(service().state()!.findings).toEqual([]);
+    });
   });
 
   it('starts an engagement when techniques are set with none active', () => {

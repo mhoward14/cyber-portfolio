@@ -52,6 +52,11 @@ export const routes: Routes = [
     loadComponent: () => import('./packet-lab/packet-lab').then((m) => m.PacketLab),
   },
   {
+    path: 'vuln-priority',
+    title: 'Vulnerability Prioritizer | Matthew Howard',
+    loadComponent: () => import('./vuln-priority/vuln-priority').then((m) => m.VulnPriority),
+  },
+  {
     path: 'report',
     title: 'Engagement Report | Matthew Howard',
     loadComponent: () => import('./engagement/engagement-report').then((m) => m.EngagementReport),

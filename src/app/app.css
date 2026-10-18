@@ -381,6 +381,12 @@
   color: #d946ef;
 }
 
+.sidebar-link-vuln:hover,
+.sidebar-link-vuln.is-active {
+  background: rgba(249, 115, 22, 0.1);
+  border-left-color: #f97316;
+  color: #f97316;
+}
 .sidebar-link-packet:hover,
 .sidebar-link-packet.is-active {
   background: rgba(132, 204, 22, 0.1);
@@ -431,6 +437,11 @@
 :host-context(.light-mode) .sidebar-link-devops.is-active {
   border-left-color: #a21caf;
   color: #a21caf;
+}
+:host-context(.light-mode) .sidebar-link-vuln:hover,
+:host-context(.light-mode) .sidebar-link-vuln.is-active {
+  border-left-color: #b84a0a;
+  color: #b84a0a;
 }
 :host-context(.light-mode) .sidebar-link-packet:hover,
 :host-context(.light-mode) .sidebar-link-packet.is-active {

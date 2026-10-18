@@ -205,7 +205,10 @@
    catch (red), high stealth slips past defenders (green). */
 .grade-optimal, .status-implemented, .stealth-high { --pill: var(--color-success); }
 .grade-suboptimal, .status-planned, .stealth-medium { --pill: #f59e0b; }
-.grade-poor, .stealth-low { --pill: var(--color-danger); }
+.grade-poor, .stealth-low, .prio-P1 { --pill: var(--color-danger); }
+.prio-P2 { --pill: #f59e0b; }
+.prio-P3 { --pill: var(--color-focus); }
+.prio-P4 { --pill: var(--color-text-muted); }
 :host-context(.light-mode) .grade-optimal,
 :host-context(.light-mode) .status-implemented,
 :host-context(.light-mode) .stealth-high { --pill: #047857; }
@@ -213,7 +216,9 @@
 :host-context(.light-mode) .status-planned,
 :host-context(.light-mode) .stealth-medium { --pill: #905d06; }
 :host-context(.light-mode) .grade-poor,
-:host-context(.light-mode) .stealth-low { --pill: #b91c1c; }
+:host-context(.light-mode) .stealth-low,
+:host-context(.light-mode) .prio-P1 { --pill: #b91c1c; }
+:host-context(.light-mode) .prio-P2 { --pill: #905d06; }
 
 .er-decisions, .er-poams { display: grid; gap: 0.75rem; }
 .er-decision {
@@ -275,3 +280,5 @@
   .er-scenario { border: 0; padding: 0; margin: 0; }
   .er-table-wrap { overflow: visible; }
 }
+
+.er-table-wrap:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }

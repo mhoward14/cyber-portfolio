@@ -71,6 +71,9 @@ export class Home implements AfterViewInit {
     { name: 'Packet Analysis Lab', route: '/packet-lab', icon: 'packet', color: '#84cc16', startHere: 0,
       summary: 'Hunt C2 beacons, port scans, DNS tunnels, and cleartext passwords in captures, Wireshark-style.',
       standard: 'MITRE ATT&CK' },
+    { name: 'Vulnerability Prioritizer', route: '/vuln-priority', icon: 'vuln', color: '#f97316', startHere: 0,
+      summary: 'Score findings with CVSS v3.1, add exploitation and exposure, and get a ranked fix order.',
+      standard: 'CVSS v3.1 · RA-5' },
   ];
 
   // Interactive tools that demonstrate the same skills as each case study,

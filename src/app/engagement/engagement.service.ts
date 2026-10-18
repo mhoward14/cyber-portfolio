@@ -5,6 +5,9 @@ import {
   EngagementControl,
   EngagementDecision,
   EngagementEvidence,
+  EngagementFinding,
+  MAX_FINDINGS,
+  isFinding,
   EngagementPoam,
   EngagementTechnique,
 } from './engagement.model';
@@ -24,7 +27,7 @@ export class EngagementService {
   readonly entryCount = computed(() => {
     const s = this.state();
     if (!s) return 0;
-    return s.techniques.length + s.evidence.length + s.decisions.length + s.controls.length + s.poams.length;
+    return s.techniques.length + s.evidence.length + s.decisions.length + s.controls.length + s.poams.length + (s.findings?.length ?? 0);
   });
 
   start(scenario = DEFAULT_SCENARIO) {
@@ -81,6 +84,14 @@ export class EngagementService {
     this.commit({ ...s, poams: poams.map((p) => ({ ...p })) });
   }
 
+  /** Replace the prioritized vulnerabilities (from the Vulnerability
+   *  Prioritizer). Starts an engagement if none is active, and turns a
+   *  sample into the visitor's own record. */
+  setFindings(findings: EngagementFinding[]) {
+    const s = this.ownRecord();
+    this.commit({ ...s, findings: findings.slice(0, MAX_FINDINGS).map((f) => ({ ...f })) });
+  }
+
   /** The active engagement if it belongs to the visitor; otherwise a fresh
    *  one, so tool results never get mixed into the sample. */
   private ownRecord(): Engagement {
@@ -119,6 +130,7 @@ function emptyEngagement(scenario: string): Engagement {
     decisions: [],
     controls: [],
     poams: [],
+    findings: [],
   };
 }
 
@@ -140,6 +152,9 @@ function load(): Engagement | null {
     ) {
       return null;
     }
+    // Findings arrived after version 1 shipped, so older records lack them.
+    // Anything stored that is not a well-formed finding is dropped.
+    data.findings = Array.isArray(data.findings) ? data.findings.filter(isFinding).slice(0, MAX_FINDINGS) : [];
     return data as Engagement;
   } catch {
     return null;

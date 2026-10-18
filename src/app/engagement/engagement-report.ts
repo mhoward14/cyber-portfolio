@@ -39,8 +39,14 @@ export class EngagementReport {
 
   readonly hasLaterSlices = computed(() => {
     const s = this.state();
-    return !!s && (s.evidence.length + s.decisions.length + s.controls.length + s.poams.length) > 0;
+    return !!s && (s.evidence.length + s.decisions.length + s.controls.length + s.poams.length + (s.findings?.length ?? 0)) > 0;
   });
+
+  readonly urgentFindings = computed(() => this.state()?.findings?.filter((f) => f.priority === 'P1' || f.priority === 'P2').length ?? 0);
+
+  exploitationLabel(e: 'none' | 'public' | 'active'): string {
+    return e === 'active' ? 'exploited in the wild' : e === 'public' ? 'public exploit code' : 'no known exploit';
+  }
 
   loadSample() {
     this.confirmingEnd.set(false);
@@ -80,5 +86,8 @@ export function engagementToCsv(s: Engagement): string {
     rows.push(['Control', c.id, c.name, `source: ${c.sourceTool}${c.basis ? `; ${c.basis}` : ''}; CIS ${c.cis ?? '-'}; ISO ${c.iso ?? '-'}`, c.status, c.attackIds.join(' ')]);
   }
   for (const p of s.poams) rows.push(['POA&M', p.id, p.weakness, p.milestone, `${p.targetDays} days`, p.controlId]);
+  for (const f of s.findings ?? []) {
+    rows.push(['Vulnerability', f.id, `${f.title} (${f.asset})`, `${f.vector}; exploitation: ${f.exploitation}; ${f.exposure}; ${f.criticality} importance; target ${f.targetDays} days`, `${f.priority}; CVSS ${f.score.toFixed(1)} ${f.severity}`, 'RA-5 SI-2']);
+  }
   return toCsv(rows);
 }

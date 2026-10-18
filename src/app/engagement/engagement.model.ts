@@ -10,6 +10,7 @@
      controls    Zero Trust / Cloud Security / CI/CD Pipeline
      poams       RMF Control Tracker
      findings    Vulnerability Prioritizer
+     risks       Risk Register
 
    Slices a tool has not written yet stay empty, and the report only
    renders the slices that have data.
@@ -87,6 +88,29 @@ export interface EngagementFinding {
   targetDays: number;
 }
 
+export type RiskRating = 'very-low' | 'low' | 'moderate' | 'high' | 'very-high';
+export type RiskTreatment = 'mitigate' | 'accept' | 'transfer' | 'avoid';
+export type ThreatSource = 'adversarial' | 'accidental' | 'structural' | 'environmental';
+
+const RATINGS = ['very-low', 'low', 'moderate', 'high', 'very-high'];
+
+/** A risk statement rated on the NIST SP 800-30 likelihood and impact scales.
+ *  Only the inputs are stored; the risk level is worked out from them, so a
+ *  saved record can never disagree with the matrix. */
+export interface EngagementRisk {
+  id: string;
+  title: string;
+  threat: ThreatSource;
+  likelihood: RiskRating;
+  impact: RiskRating;
+  treatment: RiskTreatment;
+  /** NIST SP 800-53 control the treatment relies on, if any. */
+  controlId?: string;
+  /** Likelihood and impact expected once the treatment is in place. */
+  residualLikelihood: RiskRating;
+  residualImpact: RiskRating;
+}
+
 export interface Engagement {
   version: 1;
   scenario: string;
@@ -102,9 +126,12 @@ export interface Engagement {
   poams: EngagementPoam[];
   /** Absent in records saved before the Vulnerability Prioritizer existed. */
   findings?: EngagementFinding[];
+  /** Absent in records saved before the Risk Register existed. */
+  risks?: EngagementRisk[];
 }
 
 export const MAX_FINDINGS = 50;
+export const MAX_RISKS = 50;
 
 /** Strict check for a finding read back from storage, which is untrusted input. */
 export function isFinding(x: unknown): x is EngagementFinding {
@@ -123,6 +150,24 @@ export function isFinding(x: unknown): x is EngagementFinding {
     ['low', 'moderate', 'high'].includes(f['criticality'] as string) &&
     ['P1', 'P2', 'P3', 'P4'].includes(f['priority'] as string) &&
     typeof f['targetDays'] === 'number' && Number.isInteger(f['targetDays']) && f['targetDays'] > 0 && f['targetDays'] <= 3650
+  );
+}
+
+/** Strict check for a risk read back from storage, which is untrusted input. */
+export function isRisk(x: unknown): x is EngagementRisk {
+  if (!x || typeof x !== 'object') return false;
+  const r = x as Record<string, unknown>;
+  const text = (v: unknown, max: number) => typeof v === 'string' && v.length > 0 && v.length <= max;
+  return (
+    text(r['id'], 20) &&
+    text(r['title'], 160) &&
+    ['adversarial', 'accidental', 'structural', 'environmental'].includes(r['threat'] as string) &&
+    RATINGS.includes(r['likelihood'] as string) &&
+    RATINGS.includes(r['impact'] as string) &&
+    ['mitigate', 'accept', 'transfer', 'avoid'].includes(r['treatment'] as string) &&
+    (r['controlId'] === undefined || (typeof r['controlId'] === 'string' && /^[A-Z]{2}-\d{1,2}$/.test(r['controlId']))) &&
+    RATINGS.includes(r['residualLikelihood'] as string) &&
+    RATINGS.includes(r['residualImpact'] as string)
   );
 }
 

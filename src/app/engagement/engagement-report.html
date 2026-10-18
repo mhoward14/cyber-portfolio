@@ -39,7 +39,7 @@
     </header>
 
     @if (s.isSample) {
-      <p class="er-note">This is a fictional sample (Contoso Financial) showing a fully populated engagement. Its evidence, decisions, controls, POA&amp;M items, and vulnerabilities are illustrative. Building your own chain in the Attack Path Builder replaces it.</p>
+      <p class="er-note">This is a fictional sample (Contoso Financial) showing a fully populated engagement. Its evidence, decisions, controls, POA&amp;M items, vulnerabilities, and risks are illustrative. Building your own chain in the Attack Path Builder replaces it.</p>
     }
 
     <div class="er-kpis">
@@ -50,6 +50,9 @@
       </div>
       <div class="er-kpi"><span class="er-kpi-value">{{ s.controls.length ? implementedCount() + ' / ' + s.controls.length : '–' }}</span><span class="er-kpi-label">Controls implemented</span></div>
       <div class="er-kpi"><span class="er-kpi-value">{{ s.poams.length || '–' }}</span><span class="er-kpi-label">Open POA&amp;M items</span></div>
+      @if (s.risks?.length) {
+        <div class="er-kpi"><span class="er-kpi-value">{{ elevatedRisks() }}<small> of {{ s.risks!.length }}</small></span><span class="er-kpi-label">Risks rated high or very high</span></div>
+      }
       @if (s.findings?.length) {
         <div class="er-kpi"><span class="er-kpi-value">{{ urgentFindings() }}<small> of {{ s.findings!.length }}</small></span><span class="er-kpi-label">Vulnerabilities at P1 or P2</span></div>
       }
@@ -163,6 +166,28 @@
                   <td class="er-mono">{{ f.score.toFixed(1) }} {{ f.severity }}</td>
                   <td class="er-muted">{{ exploitationLabel(f.exploitation) }}; {{ f.exposure === 'internet' ? 'internet-facing' : 'internal' }}; {{ f.criticality }} importance</td>
                   <td class="er-mono">{{ f.targetDays }} days</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </section>
+    }
+
+    @if (s.risks?.length) {
+      <section class="er-section" aria-labelledby="er-risk-h">
+        <div class="section-label"><h2 class="section-label-text" id="er-risk-h">// RISK REGISTER</h2><span class="section-label-sub">From the Risk Register; likelihood and impact rated on NIST SP 800-30 scales</span></div>
+        <div class="er-table-wrap" tabindex="0" role="region" aria-label="Risk register table">
+          <table class="er-table">
+            <thead><tr><th scope="col">Risk</th><th scope="col">Rating</th><th scope="col">After treatment</th><th scope="col">Treatment</th><th scope="col">Control</th></tr></thead>
+            <tbody>
+              @for (r of rankedRisks(); track r.id) {
+                <tr>
+                  <td><strong>{{ r.id }}</strong><span class="er-sub">{{ r.title }}</span></td>
+                  <td><span class="er-pill" [class]="'er-pill risk-' + level(r)">{{ ratingLabel(level(r)) }}</span></td>
+                  <td><span class="er-pill" [class]="'er-pill risk-' + residual(r)">{{ ratingLabel(residual(r)) }}</span></td>
+                  <td class="er-muted">{{ treatmentName(r) }}</td>
+                  <td class="er-mono">{{ r.controlId ?? '–' }}</td>
                 </tr>
               }
             </tbody>

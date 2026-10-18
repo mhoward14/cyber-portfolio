@@ -76,5 +76,11 @@ export function buildSampleEngagement(now = new Date()): Engagement {
       buildFinding({ id: 'VULN-02', title: 'Local privilege escalation on the file server', asset: 'FS-02', metrics: metrics('CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H'), exploitation: 'public', exposure: 'internal', criticality: 'high' }),
       buildFinding({ id: 'VULN-03', title: 'Reflected cross-site scripting in the intranet portal', asset: 'Intranet portal', metrics: metrics('CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N'), exploitation: 'none', exposure: 'internal', criticality: 'low' }),
     ],
+    risks: [
+      { id: 'RISK-01', title: 'Ransomware encrypts the finance file-server shares', threat: 'adversarial', likelihood: 'high', impact: 'very-high', treatment: 'mitigate', controlId: 'CP-9', residualLikelihood: 'low', residualImpact: 'high' },
+      { id: 'RISK-02', title: 'A phishing email delivers malware to finance staff', threat: 'adversarial', likelihood: 'high', impact: 'high', treatment: 'mitigate', controlId: 'AT-2', residualLikelihood: 'moderate', residualImpact: 'moderate' },
+      { id: 'RISK-03', title: 'The unpatched VPN appliance is exploited from the internet', threat: 'adversarial', likelihood: 'very-high', impact: 'very-high', treatment: 'mitigate', controlId: 'SI-2', residualLikelihood: 'low', residualImpact: 'high' },
+      { id: 'RISK-04', title: 'The lab print server goes offline', threat: 'structural', likelihood: 'moderate', impact: 'very-low', treatment: 'accept', residualLikelihood: 'moderate', residualImpact: 'very-low' },
+    ],
   };
 }

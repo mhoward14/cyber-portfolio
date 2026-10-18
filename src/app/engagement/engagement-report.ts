@@ -1,8 +1,9 @@
 import { Component, ChangeDetectionStrategy, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { EngagementService } from './engagement.service';
-import { Engagement } from './engagement.model';
+import { Engagement, EngagementRisk, RiskRating } from './engagement.model';
 import { downloadText, fileSlug, toCsv } from '../share/export-file';
+import { RATING_LABEL, THREAT_LABEL, TREATMENT_LABEL, isElevated, ratingRank, riskLevel } from '../risk-register/risk-matrix';
 
 export type DetectionTier = 'stealthy' | 'moderate' | 'noisy';
 
@@ -39,10 +40,33 @@ export class EngagementReport {
 
   readonly hasLaterSlices = computed(() => {
     const s = this.state();
-    return !!s && (s.evidence.length + s.decisions.length + s.controls.length + s.poams.length + (s.findings?.length ?? 0)) > 0;
+    return !!s && (s.evidence.length + s.decisions.length + s.controls.length + s.poams.length + (s.findings?.length ?? 0) + (s.risks?.length ?? 0)) > 0;
   });
 
   readonly urgentFindings = computed(() => this.state()?.findings?.filter((f) => f.priority === 'P1' || f.priority === 'P2').length ?? 0);
+
+  readonly elevatedRisks = computed(() => this.state()?.risks?.filter((r) => isElevated(riskLevel(r.likelihood, r.impact))).length ?? 0);
+
+  /** Highest current risk first. */
+  readonly rankedRisks = computed(() =>
+    [...(this.state()?.risks ?? [])].sort((a, b) => ratingRank(riskLevel(b.likelihood, b.impact)) - ratingRank(riskLevel(a.likelihood, a.impact))),
+  );
+
+  level(r: EngagementRisk): RiskRating {
+    return riskLevel(r.likelihood, r.impact);
+  }
+
+  residual(r: EngagementRisk): RiskRating {
+    return riskLevel(r.residualLikelihood, r.residualImpact);
+  }
+
+  ratingLabel(r: RiskRating): string {
+    return RATING_LABEL[r];
+  }
+
+  treatmentName(r: EngagementRisk): string {
+    return TREATMENT_LABEL[r.treatment].split(':')[0];
+  }
 
   exploitationLabel(e: 'none' | 'public' | 'active'): string {
     return e === 'active' ? 'exploited in the wild' : e === 'public' ? 'public exploit code' : 'no known exploit';
@@ -88,6 +112,9 @@ export function engagementToCsv(s: Engagement): string {
   for (const p of s.poams) rows.push(['POA&M', p.id, p.weakness, p.milestone, `${p.targetDays} days`, p.controlId]);
   for (const f of s.findings ?? []) {
     rows.push(['Vulnerability', f.id, `${f.title} (${f.asset})`, `${f.vector}; exploitation: ${f.exploitation}; ${f.exposure}; ${f.criticality} importance; target ${f.targetDays} days`, `${f.priority}; CVSS ${f.score.toFixed(1)} ${f.severity}`, 'RA-5 SI-2']);
+  }
+  for (const r of s.risks ?? []) {
+    rows.push(['Risk', r.id, r.title, `${THREAT_LABEL[r.threat].split(':')[0]} threat; likelihood ${RATING_LABEL[r.likelihood]}, impact ${RATING_LABEL[r.impact]}; treatment: ${r.treatment}; residual ${RATING_LABEL[riskLevel(r.residualLikelihood, r.residualImpact)]}`, RATING_LABEL[riskLevel(r.likelihood, r.impact)], r.controlId ?? '']);
   }
   return toCsv(rows);
 }

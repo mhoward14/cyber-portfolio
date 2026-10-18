@@ -6,8 +6,11 @@ import {
   EngagementDecision,
   EngagementEvidence,
   EngagementFinding,
+  EngagementRisk,
   MAX_FINDINGS,
+  MAX_RISKS,
   isFinding,
+  isRisk,
   EngagementPoam,
   EngagementTechnique,
 } from './engagement.model';
@@ -27,7 +30,7 @@ export class EngagementService {
   readonly entryCount = computed(() => {
     const s = this.state();
     if (!s) return 0;
-    return s.techniques.length + s.evidence.length + s.decisions.length + s.controls.length + s.poams.length + (s.findings?.length ?? 0);
+    return s.techniques.length + s.evidence.length + s.decisions.length + s.controls.length + s.poams.length + (s.findings?.length ?? 0) + (s.risks?.length ?? 0);
   });
 
   start(scenario = DEFAULT_SCENARIO) {
@@ -92,6 +95,14 @@ export class EngagementService {
     this.commit({ ...s, findings: findings.slice(0, MAX_FINDINGS).map((f) => ({ ...f })) });
   }
 
+  /** Replace the risk register (from the Risk Register tool). Starts an
+   *  engagement if none is active, and turns a sample into the visitor's
+   *  own record. */
+  setRisks(risks: EngagementRisk[]) {
+    const s = this.ownRecord();
+    this.commit({ ...s, risks: risks.slice(0, MAX_RISKS).map((r) => ({ ...r })) });
+  }
+
   /** The active engagement if it belongs to the visitor; otherwise a fresh
    *  one, so tool results never get mixed into the sample. */
   private ownRecord(): Engagement {
@@ -131,6 +142,7 @@ function emptyEngagement(scenario: string): Engagement {
     controls: [],
     poams: [],
     findings: [],
+    risks: [],
   };
 }
 
@@ -155,6 +167,7 @@ function load(): Engagement | null {
     // Findings arrived after version 1 shipped, so older records lack them.
     // Anything stored that is not a well-formed finding is dropped.
     data.findings = Array.isArray(data.findings) ? data.findings.filter(isFinding).slice(0, MAX_FINDINGS) : [];
+    data.risks = Array.isArray(data.risks) ? data.risks.filter(isRisk).slice(0, MAX_RISKS) : [];
     return data as Engagement;
   } catch {
     return null;

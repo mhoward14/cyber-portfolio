@@ -9,8 +9,8 @@
 // This catches contrast, missing labels, heading and landmark
 // problems, and bad ARIA. It does not replace the manual keyboard
 // and screen-reader checks described in ACCESSIBILITY.md, and it
-// only sees each page as it loads, not the dialogs and results a
-// visitor opens afterward.
+// sees each page as it loads, plus the few states listed in STATES
+// below, not every dialog and result a visitor can open afterward.
 //
 // Usage: node .github/scripts/check-accessibility.mjs <build-dir>
 // Set A11Y_BROWSER to a Chromium executable to use it instead of
@@ -35,6 +35,7 @@ const BASE_PATH = '/cyber-portfolio/';
 const ROUTES = ['', 'attack-path', 'cloud-security', 'incident-response', 'zero-trust', 'rmf-tracker', 'crosswalk', 'transaction-security', 'devops-pipeline', 'packet-lab', 'vuln-priority', 'report', 'role-guide', 'site-security', 'notes'];
 // Pages whose content only appears after an action, scanned in that state too.
 const STATES = [
+  { route: 'report', name: 'sample engagement', setup: (page) => page.getByRole('button', { name: 'Load a sample engagement' }).click() },
   { route: 'vuln-priority', name: 'with findings', setup: (page) => page.getByRole('button', { name: 'Load fictional examples' }).click() },
 ];
 const THEMES = ['dark', 'light'];

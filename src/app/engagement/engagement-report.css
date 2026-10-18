@@ -73,11 +73,16 @@
   color: var(--color-accent);
   margin-bottom: 0.5rem;
 }
+.er-eyebrow-title {
+  margin: 0;
+  font: inherit;
+  letter-spacing: inherit;
+}
 .er-sample-pill {
   font-size: 0.62rem;
   padding: 0.2rem 0.55rem;
   border-radius: 999px;
-  color: #b45309;
+  color: #fbbf24;
   background: rgba(245, 158, 11, 0.14);
   border: 1px solid rgba(245, 158, 11, 0.4);
   letter-spacing: 0.06em;
@@ -211,7 +216,7 @@
 .prio-P4 { --pill: var(--color-text-muted); }
 :host-context(.light-mode) .grade-optimal,
 :host-context(.light-mode) .status-implemented,
-:host-context(.light-mode) .stealth-high { --pill: #047857; }
+:host-context(.light-mode) .stealth-high { --pill: #065f46; }
 :host-context(.light-mode) .grade-suboptimal,
 :host-context(.light-mode) .status-planned,
 :host-context(.light-mode) .stealth-medium { --pill: #905d06; }
@@ -282,3 +287,5 @@
 }
 
 .er-table-wrap:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+
+:host-context(.light-mode) .er-sample-pill { color: #7c3f06; }

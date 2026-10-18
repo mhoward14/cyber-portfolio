@@ -19,7 +19,7 @@ The portfolio aims to meet **WCAG 2.2 Level AA**, and every page and interactive
 
 ## How it's tested
 
-- **On every pull request.** CI builds the site and runs axe-core on all 15 pages in both themes at desktop and phone widths (`.github/scripts/check-accessibility.mjs`). A new violation fails the build before it can merge. It checks each page as it loads; the interactive states below are checked by hand when they change.
+- **On every pull request.** CI builds the site and runs axe-core on all 15 pages in both themes at desktop and phone widths (`.github/scripts/check-accessibility.mjs`). A new violation fails the build before it can merge. It checks each page as it loads, plus the Engagement Report with the sample loaded and the Vulnerability Prioritizer with findings listed; the other interactive states below are checked by hand when they change.
 - **Automated.** [axe-core](https://github.com/dequelabs/axe-core) runs against all 15 pages in the dark and light themes at desktop and phone widths, using the WCAG 2.0, 2.1, 2.2 A and AA rules plus axe's best-practice rules. It also runs against the interactive states: open dialogs, the guided tour, expanded case studies, a started Packet Lab hunt with a selected packet and an invalid filter, an incident-response scenario, an expanded RMF control, and a shared-link notice.
 - **Manual keyboard checks.** Tab order, the skip link, focus visibility, focus after navigation, dialog focus trapping and Escape, and Packet Lab arrow-key navigation.
 - **Unit tests** cover the dialog behavior and the focus-after-navigation logic.

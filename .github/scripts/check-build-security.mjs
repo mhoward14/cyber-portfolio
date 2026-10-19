@@ -46,6 +46,8 @@ if (!csp) {
     ['base-uri', "'self'"],
     ['form-action', "'none'"],
     ['frame-src', "'none'"],
+    // The demo video is a same-origin file. Nothing else may be loaded as media.
+    ['media-src', "'self'"],
     ['require-trusted-types-for', "'script'"],
   ]) {
     if (directives[name]?.join(' ') !== want) fail(`${name} should be ${want}, found ${directives[name]?.join(' ') ?? 'nothing'}`);

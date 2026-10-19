@@ -68,6 +68,19 @@ const server = createServer((req, res) => {
 await new Promise((done) => server.listen(0, '127.0.0.1', done));
 const origin = `http://127.0.0.1:${server.address().port}${BASE_PATH}`;
 
+// One line per failing element: where it is, plus the measured colors when axe reports them,
+// so a failure seen only in CI says what the browser actually saw.
+function describeNodes(violation) {
+  return violation.nodes
+    .slice(0, 3)
+    .map((node) => {
+      const data = node.any.map((check) => check.data).find((d) => d && d.contrastRatio);
+      const measured = data ? ` (text ${data.fgColor} on ${data.bgColor}, ratio ${data.contrastRatio}, needs ${data.expectedContrastRatio})` : '';
+      return node.target.join(' ') + measured;
+    })
+    .join('\n    ');
+}
+
 const browser = await chromium.launch(process.env.A11Y_BROWSER ? { executablePath: process.env.A11Y_BROWSER } : { channel: 'chrome' });
 const problems = [];
 
@@ -94,7 +107,7 @@ for (const [viewportName, viewport] of Object.entries(VIEWPORTS)) {
         TAGS,
       );
       for (const v of violations) {
-        problems.push(`${label}: ${v.id} (${v.impact}): ${v.help}\n    ${v.nodes.slice(0, 3).map((n) => n.target.join(' ')).join('\n    ')}`);
+        problems.push(`${label}: ${v.id} (${v.impact}): ${v.help}\n    ${describeNodes(v)}`);
       }
       console.log(`${violations.length ? 'FAIL' : 'ok  '} ${label}`);
     }
@@ -109,7 +122,7 @@ for (const [viewportName, viewport] of Object.entries(VIEWPORTS)) {
         TAGS,
       );
       for (const v of violations) {
-        problems.push(`${label}: ${v.id} (${v.impact}): ${v.help}\n    ${v.nodes.slice(0, 3).map((n) => n.target.join(' ')).join('\n    ')}`);
+        problems.push(`${label}: ${v.id} (${v.impact}): ${v.help}\n    ${describeNodes(v)}`);
       }
       console.log(`${violations.length ? 'FAIL' : 'ok  '} ${label}`);
     }

@@ -393,6 +393,12 @@
   border-left-color: #ec4899;
   color: #ec4899;
 }
+.sidebar-link-ssp:hover,
+.sidebar-link-ssp.is-active {
+  background: rgba(16, 185, 129, 0.1);
+  border-left-color: #10b981;
+  color: #10b981;
+}
 .sidebar-link-packet:hover,
 .sidebar-link-packet.is-active {
   background: rgba(132, 204, 22, 0.1);
@@ -453,6 +459,11 @@
 :host-context(.light-mode) .sidebar-link-risk.is-active {
   border-left-color: #be185d;
   color: #be185d;
+}
+:host-context(.light-mode) .sidebar-link-ssp:hover,
+:host-context(.light-mode) .sidebar-link-ssp.is-active {
+  border-left-color: #047857;
+  color: #047857;
 }
 :host-context(.light-mode) .sidebar-link-packet:hover,
 :host-context(.light-mode) .sidebar-link-packet.is-active {
@@ -606,4 +617,11 @@
 }
 @media (prefers-reduced-motion: no-preference) {
   .skip-link { transition: transform 0.15s var(--ease-out); }
+}
+
+/* The skip link is for keyboard users on screen; it has no place on paper. */
+@media print {
+  .skip-link {
+    display: none !important;
+  }
 }

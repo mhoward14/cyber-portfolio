@@ -1,6 +1,6 @@
 /* ============================================================
    ROLE-GUIDE.TS — FIND A TOOL BY ROLE
-   A reviewer hiring for one kind of role shouldn't have to open eleven
+   A reviewer hiring for one kind of role shouldn't have to open twelve
    tools to find the relevant one. Each role lists the tools that show
    that work and what the visitor will see in each. A unit test checks
    that every linked route exists.
@@ -42,6 +42,11 @@ export const ROLES: Role[] = [
         name: 'Risk Register',
         route: '/risk-register',
         sees: 'Rate risks by likelihood and impact on NIST SP 800-30 scales, choose a treatment and see a heat map before and after. It can draft risks from prioritized vulnerabilities.',
+      },
+      {
+        name: 'SSP Generator',
+        route: '/ssp',
+        sees: 'Describe a system and get a draft System Security Plan built from the RMF Tracker and the engagement, with bracketed blanks where only a person can answer. Print it or download Markdown.',
       },
       {
         name: 'Security Framework Crosswalk',

@@ -62,6 +62,11 @@ export const routes: Routes = [
     loadComponent: () => import('./risk-register/risk-register').then((m) => m.RiskRegister),
   },
   {
+    path: 'ssp',
+    title: 'SSP Generator | Matthew Howard',
+    loadComponent: () => import('./ssp/ssp').then((m) => m.Ssp),
+  },
+  {
     path: 'report',
     title: 'Engagement Report | Matthew Howard',
     loadComponent: () => import('./engagement/engagement-report').then((m) => m.EngagementReport),

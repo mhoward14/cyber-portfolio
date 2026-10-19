@@ -77,6 +77,9 @@ export class Home implements AfterViewInit {
     { name: 'Risk Register', route: '/risk-register', icon: 'risk', color: '#ec4899', startHere: 0,
       summary: 'Rate risks by likelihood and impact, choose a treatment, and see a heat map before and after.',
       standard: 'NIST SP 800-30' },
+    { name: 'SSP Generator', route: '/ssp', icon: 'ssp', color: '#10b981', startHere: 0,
+      summary: 'Describe a system and get a draft System Security Plan built from the RMF Tracker and the engagement.',
+      standard: 'NIST SP 800-18' },
   ];
 
   // Interactive tools that demonstrate the same skills as each case study,

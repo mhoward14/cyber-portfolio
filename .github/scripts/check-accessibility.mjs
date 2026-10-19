@@ -68,6 +68,20 @@ const server = createServer((req, res) => {
 await new Promise((done) => server.listen(0, '127.0.0.1', done));
 const origin = `http://127.0.0.1:${server.address().port}${BASE_PATH}`;
 
+// Wait until the page has finished changing. A state change (a button enabled, a panel opened)
+// can leave a style mid-transition for a frame or two, and the site's reduced-motion rule turns
+// every transition into a near-instant one rather than none, so measuring too early reads the
+// old style (a button just enabled still looks half faded). Two frames and finished animations.
+async function settle(page) {
+  await page.evaluate(async () => {
+    const frame = () => new Promise((done) => requestAnimationFrame(() => done()));
+    await frame();
+    await frame();
+    await Promise.all(document.getAnimations().map((a) => a.finished.catch(() => undefined)));
+    await frame();
+  });
+}
+
 // One line per failing element: where it is, plus the measured colors when axe reports them,
 // so a failure seen only in CI says what the browser actually saw.
 function describeNodes(violation) {
@@ -101,6 +115,7 @@ for (const [viewportName, viewport] of Object.entries(VIEWPORTS)) {
       const label = `${route || 'home'} (${theme}, ${viewportName})`;
       await page.goto(origin + (route ? `#/${route}` : ''), { waitUntil: 'networkidle' });
       await page.waitForSelector('main h1');
+      await settle(page);
       await page.evaluate(axeSource);
       const { violations } = await page.evaluate(
         (tags) => axe.run(document, { runOnly: { type: 'tag', values: tags }, resultTypes: ['violations'] }),
@@ -116,6 +131,7 @@ for (const [viewportName, viewport] of Object.entries(VIEWPORTS)) {
       await page.goto(origin + `#/${state.route}`, { waitUntil: 'networkidle' });
       await page.waitForSelector('main h1');
       await state.setup(page);
+      await settle(page);
       await page.evaluate(axeSource);
       const { violations } = await page.evaluate(
         (tags) => axe.run(document, { runOnly: { type: 'tag', values: tags }, resultTypes: ['violations'] }),

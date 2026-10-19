@@ -41,3 +41,5 @@ A custom domain behind a proxy that can add headers (for example, Cloudflare) wo
 ## Reporting a vulnerability
 
 Please report security issues privately through GitHub: open this repository's **Security** tab and choose **Report a vulnerability**. Please don't open a public issue.
+
+The same instructions are published for researchers and scanners as a [`security.txt`](https://mhoward14.github.io/.well-known/security.txt) file ([RFC 9116](https://www.rfc-editor.org/rfc/rfc9116)). It lives at the root of `mhoward14.github.io`, which this site shares, so it is kept in the [personal-site repository](https://github.com/mhoward14/mhoward14.github.io). It expires every six months, and that repository's CI warns 30 days before it does.

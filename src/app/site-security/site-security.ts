@@ -145,6 +145,15 @@ export const CONTROL_GROUPS: ControlGroup[] = [
         ],
       },
       {
+        name: 'Vulnerability disclosure',
+        what: 'A security.txt file (RFC 9116) at the root of this host and a SECURITY.md tell a researcher how to report a problem privately, through GitHub’s private reporting form. The file expires every six months, and the repository that holds it checks it in CI and warns 30 days ahead.',
+        stops: 'Reports with nowhere to go, or going public first',
+        evidence: [
+          { label: 'The disclosure policy', path: 'SECURITY.md' },
+          { label: 'The security.txt file', url: 'https://mhoward14.github.io/.well-known/security.txt' },
+        ],
+      },
+      {
         name: 'Independent scoring',
         what: 'OpenSSF Scorecard scores the repository’s supply-chain practices every week and publishes the result.',
         stops: 'Practices drifting without anyone noticing',

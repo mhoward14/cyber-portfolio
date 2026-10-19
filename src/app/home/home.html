@@ -78,6 +78,28 @@
         <a routerLink="/notes">Engineering notes</a>
       </p>
 
+      <figure class="demo">
+        <video class="demo-video" controls preload="none" playsinline muted width="1280" height="720"
+               poster="media/engagement-mode-poster.png" aria-describedby="demo-summary">
+          <source src="media/engagement-mode.webm" type="video/webm" />
+          Your browser can't play this video. <a href="media/engagement-mode.webm">Download it</a>, or read the description below.
+        </video>
+        <figcaption class="demo-caption">
+          <strong class="demo-title">Engagement Mode in 40 seconds</strong>
+          <span id="demo-summary">A silent screen recording: one scenario carried from an attack chain, through cloud controls and an RMF baseline, into a report and a draft System Security Plan. It plays only when you press play.</span>
+        </figcaption>
+        <details class="demo-text">
+          <summary>Read what the video shows</summary>
+          <ol>
+            <li>In the Attack Path Builder, six techniques are chosen, one per stage from initial access to impact. The detection score and the defense that would catch each step appear, and the chain is added to a new engagement.</li>
+            <li>In the Cloud Security Builder, three insecure settings are fixed. The posture score rises from 0 to 60 out of 100, and the resulting controls are added to the engagement.</li>
+            <li>In the RMF Control Tracker, the controls are imported against a Moderate baseline, and the open gaps become two draft POA&amp;M items that are added to the engagement.</li>
+            <li>The Engagement Report shows the attack chain, the controls and the POA&amp;M items in one place.</li>
+            <li>The SSP Generator loads a fictional system and drafts a System Security Plan, with its risk and control sections drawn from the same engagement.</li>
+          </ol>
+        </details>
+      </figure>
+
       <div class="tool-grid">
         @for (tool of tools; track tool.route) {
           <a class="tool-card" [routerLink]="tool.route" [style.--tool-color]="tool.color" [class.is-start]="tool.startHere > 0">

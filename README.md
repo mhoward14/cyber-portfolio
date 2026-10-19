@@ -8,6 +8,10 @@ An interactive cybersecurity portfolio spanning **GRC/RMF, cloud and Zero Trust 
 [![CodeQL](https://github.com/mhoward14/cyber-portfolio/actions/workflows/codeql.yml/badge.svg)](https://github.com/mhoward14/cyber-portfolio/actions/workflows/codeql.yml)
 [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/mhoward14/cyber-portfolio/badge)](https://scorecard.dev/viewer/?uri=github.com/mhoward14/cyber-portfolio)
 
+![Screen recording of Engagement Mode: an attack chain is built, cloud settings are fixed, the controls become an RMF baseline with POA&M items, and the results appear in one report and a draft System Security Plan.](docs/engagement-mode.gif)
+
+*Engagement Mode in about 40 seconds: one fictional scenario carried through five tools. The site has the same recording as a video you start yourself, with a text description.*
+
 > **Scope note:** The tools and case studies demonstrate applied analysis, design, and decision-making in academic and simulated environments. They are not presented as production deployments or operational outcomes. Professional Air Force/DoD experience is identified separately from portfolio work.
 
 ## Start here

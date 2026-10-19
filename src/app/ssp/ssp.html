@@ -1,0 +1,295 @@
+<div class="container ssp-page">
+  <a routerLink="/" class="back-link ssp-no-print">
+    <svg class="back-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <polyline points="15 18 9 12 15 6"></polyline>
+    </svg>
+    Back to Portfolio
+  </a>
+
+  <header class="ssp-header ssp-no-print">
+    <h1 class="ssp-title">SSP Generator</h1>
+    <p class="ssp-intro">
+      A System Security Plan is the document that describes a system, how it is categorized and how each required control
+      is implemented. Describe a system here and the page drafts one from your answers plus the RMF Tracker and Engagement
+      Mode, leaving a bracketed blank wherever only a person can answer.
+    </p>
+  </header>
+
+  <section class="ssp-panel ssp-no-print" aria-labelledby="ssp-sources-h">
+    <h2 class="ssp-panel-title" id="ssp-sources-h">// WHAT THIS DRAFT DRAWS ON</h2>
+    <ul class="ssp-sources">
+      <li>
+        <strong>RMF Tracker:</strong>
+        @if (sources().trackerTier) {
+          {{ impactLabel[sources().trackerTier!] }} baseline, {{ sources().controls }} controls
+          @if (sources().trackerSample) { (the tracker's <em>sample</em> assessment) }.
+          <a routerLink="/rmf-tracker">Open the tracker</a> to set statuses and notes.
+        } @else {
+          no baseline chosen yet. <a routerLink="/rmf-tracker">Open the tracker</a> to pick one.
+        }
+      </li>
+      <li>
+        <strong>Engagement:</strong>
+        @if (sources().engagement; as e) {
+          "{{ e.scenario }}"@if (e.isSample) { (fictional sample) }:
+          {{ sources().techniques }} techniques, {{ sources().controlsInEngagement }} controls, {{ sources().poams }} POA&amp;M items,
+          {{ sources().findings }} vulnerabilities, {{ sources().risks }} risks.
+        } @else {
+          none active. Build one in the <a routerLink="/attack-path">Attack Path Builder</a>, or load the sample in the
+          <a routerLink="/report">Engagement Report</a>, and the threat, risk and POA&amp;M sections fill in.
+        }
+      </li>
+    </ul>
+  </section>
+
+  <section class="ssp-panel ssp-no-print" aria-labelledby="ssp-form-h">
+    <h2 class="ssp-panel-title" id="ssp-form-h">// DESCRIBE THE SYSTEM</h2>
+
+    <div class="ssp-grid">
+      <div class="ssp-field ssp-wide">
+        <label for="ssp-name">System name</label>
+        <input id="ssp-name" type="text" [maxLength]="limits.name" autocomplete="off" [value]="input().name"
+               (input)="update('name', $any($event.target).value)" />
+      </div>
+      <div class="ssp-field">
+        <label for="ssp-abbr">Abbreviation</label>
+        <input id="ssp-abbr" type="text" [maxLength]="limits.abbreviation" autocomplete="off" [value]="input().abbreviation"
+               (input)="update('abbreviation', $any($event.target).value)" />
+      </div>
+    </div>
+
+    <div class="ssp-field">
+      <label for="ssp-desc">Purpose and description</label>
+      <textarea id="ssp-desc" rows="3" [maxLength]="limits.description" [value]="input().description"
+                (input)="update('description', $any($event.target).value)"></textarea>
+    </div>
+
+    <fieldset class="ssp-fieldset">
+      <legend>Security categorization (FIPS 199)</legend>
+      <div class="ssp-grid">
+        <div class="ssp-field">
+          <label for="ssp-c">Confidentiality</label>
+          <select id="ssp-c" (change)="update('confidentiality', $any($event.target).value)">
+            @for (i of impacts; track i) { <option [value]="i" [selected]="input().confidentiality === i">{{ impactLabel[i] }}</option> }
+          </select>
+        </div>
+        <div class="ssp-field">
+          <label for="ssp-i">Integrity</label>
+          <select id="ssp-i" (change)="update('integrity', $any($event.target).value)">
+            @for (i of impacts; track i) { <option [value]="i" [selected]="input().integrity === i">{{ impactLabel[i] }}</option> }
+          </select>
+        </div>
+        <div class="ssp-field">
+          <label for="ssp-a">Availability</label>
+          <select id="ssp-a" (change)="update('availability', $any($event.target).value)">
+            @for (i of impacts; track i) { <option [value]="i" [selected]="input().availability === i">{{ impactLabel[i] }}</option> }
+          </select>
+        </div>
+      </div>
+      <p class="ssp-help" aria-live="polite">Overall impact is the highest of the three: <strong>{{ impactLabel[overall()] }}</strong>, which sets the control baseline.</p>
+    </fieldset>
+
+    <div class="ssp-grid">
+      <div class="ssp-field">
+        <label for="ssp-status">Operational status</label>
+        <select id="ssp-status" (change)="update('status', $any($event.target).value)">
+          @for (s of statusOptions; track s[0]) { <option [value]="s[0]" [selected]="input().status === s[0]">{{ s[1] }}</option> }
+        </select>
+      </div>
+      <div class="ssp-field">
+        <label for="ssp-hosting">Hosting</label>
+        <select id="ssp-hosting" (change)="update('hosting', $any($event.target).value)">
+          @for (h of hostingOptions; track h[0]) { <option [value]="h[0]" [selected]="input().hosting === h[0]">{{ h[1] }}</option> }
+        </select>
+      </div>
+    </div>
+
+    <div class="ssp-field">
+      <label for="ssp-boundary">Authorization boundary</label>
+      <textarea id="ssp-boundary" rows="3" [maxLength]="limits.boundary" [value]="input().boundary"
+                (input)="update('boundary', $any($event.target).value)"></textarea>
+      <p class="ssp-help">What is inside the system and what is not. Saved in this browser only.</p>
+    </div>
+
+    <div class="ssp-actions">
+      <button type="button" class="ssp-btn" (click)="loadExample()">Load the Contoso example</button>
+      <button type="button" class="ssp-btn ssp-btn-quiet" [disabled]="!hasInput()" (click)="clear()">Clear</button>
+    </div>
+  </section>
+
+  <p class="ssp-status ssp-no-print" role="status">{{ notice() }}</p>
+
+  <section class="ssp-panel ssp-doc-panel" aria-labelledby="ssp-draft-h">
+    <div class="ssp-draft-head ssp-no-print">
+      <h2 class="ssp-panel-title" id="ssp-draft-h">// YOUR DRAFT</h2>
+      <div class="ssp-actions">
+        <button type="button" class="ssp-btn ssp-btn-primary" (click)="download()">Download Markdown</button>
+        <button type="button" class="ssp-btn" (click)="print()">Print or save as PDF</button>
+      </div>
+    </div>
+
+    @let m = model();
+    <article class="ssp-doc" aria-label="System Security Plan draft">
+      <h3 class="ssp-doc-title">{{ m.title }}</h3>
+      <p class="ssp-banner"><strong>Draft.</strong> Generated {{ m.generated }}. Review every statement before use. This is not an authorization document.</p>
+      @if (m.isSample) {
+        <p class="ssp-note">Sample data: {{ m.sampleReasons.join('; ') }}.</p>
+      }
+      @if (m.baselineWarning) {
+        <p class="ssp-warn" role="alert">{{ m.baselineWarning }}</p>
+      }
+
+      <h4 class="ssp-h">1. System identification</h4>
+      <div class="ssp-table-wrap" tabindex="0" role="region" aria-label="System identification table">
+        <table class="ssp-table">
+          <thead><tr><th scope="col">Field</th><th scope="col">Value</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">System name</th><td>{{ m.identification.name }}</td></tr>
+            <tr><th scope="row">Abbreviation</th><td>{{ m.identification.abbreviation || '[Abbreviation]' }}</td></tr>
+            <tr><th scope="row">Operational status</th><td>{{ m.identification.status }}</td></tr>
+            <tr><th scope="row">System owner</th><td>[Responsible role]</td></tr>
+            <tr><th scope="row">Information system security officer</th><td>[Responsible role]</td></tr>
+            <tr><th scope="row">Authorizing official</th><td>[Responsible role]</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="ssp-text">{{ m.identification.description }}</p>
+
+      <h4 class="ssp-h">2. Security categorization (FIPS 199)</h4>
+      <div class="ssp-table-wrap" tabindex="0" role="region" aria-label="Security categorization table">
+        <table class="ssp-table">
+          <thead><tr><th scope="col">Security objective</th><th scope="col">Impact</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Confidentiality</th><td>{{ impactLabel[m.categorization.confidentiality] }}</td></tr>
+            <tr><th scope="row">Integrity</th><td>{{ impactLabel[m.categorization.integrity] }}</td></tr>
+            <tr><th scope="row">Availability</th><td>{{ impactLabel[m.categorization.availability] }}</td></tr>
+            <tr><th scope="row">Overall (highest of the three)</th><td>{{ impactLabel[m.categorization.overall] }}</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="ssp-text">Control baseline used in this draft: <strong>{{ impactLabel[m.baseline] }}</strong> (NIST SP 800-53 Rev. 5, curated subset of {{ m.counts.total }} controls).</p>
+
+      <h4 class="ssp-h">3. System environment and boundary</h4>
+      <p class="ssp-text">Hosting: {{ m.identification.hosting }}.</p>
+      <p class="ssp-text">{{ m.identification.boundary }}</p>
+
+      <h4 class="ssp-h">4. Risk assessment summary</h4>
+      @if (!m.threats.length && !m.risks.length && !m.findings.length) {
+        <p class="ssp-text">[No risk assessment data was available. Complete this section by hand, or build an attack chain, prioritize vulnerabilities and add risks in the portfolio tools first.]</p>
+      }
+      @if (m.threats.length) {
+        <h5 class="ssp-h5">Modeled attack chain</h5>
+        <div class="ssp-table-wrap" tabindex="0" role="region" aria-label="Attack chain table">
+          <table class="ssp-table">
+            <thead><tr><th scope="col">ATT&amp;CK</th><th scope="col">Technique</th><th scope="col">Tactic</th><th scope="col">Mapped defense</th></tr></thead>
+            <tbody>
+              @for (t of m.threats; track t.attackId) {
+                <tr><td class="ssp-mono">{{ t.attackId }}</td><td>{{ t.name }}</td><td>{{ t.tactic }}</td><td>{{ t.defense.tool }}: {{ t.defense.note }}</td></tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+      @if (m.findings.length) {
+        <h5 class="ssp-h5">Prioritized vulnerabilities</h5>
+        <div class="ssp-table-wrap" tabindex="0" role="region" aria-label="Vulnerabilities table">
+          <table class="ssp-table">
+            <thead><tr><th scope="col">ID</th><th scope="col">Finding</th><th scope="col">System</th><th scope="col">CVSS v3.1</th><th scope="col">Priority</th></tr></thead>
+            <tbody>
+              @for (f of m.findings; track f.id) {
+                <tr><td class="ssp-mono">{{ f.id }}</td><td>{{ f.title }}</td><td>{{ f.asset }}</td><td class="ssp-mono">{{ f.score.toFixed(1) }} {{ f.severity }}</td><td class="ssp-mono">{{ f.priority }}</td></tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+      @if (m.risks.length) {
+        <h5 class="ssp-h5">Risk register</h5>
+        <div class="ssp-table-wrap" tabindex="0" role="region" aria-label="Risk register table">
+          <table class="ssp-table">
+            <thead><tr><th scope="col">ID</th><th scope="col">Risk</th><th scope="col">Rating</th><th scope="col">After treatment</th><th scope="col">Treatment</th><th scope="col">Control</th></tr></thead>
+            <tbody>
+              @for (r of m.risks; track r.id) {
+                <tr><td class="ssp-mono">{{ r.id }}</td><td>{{ r.title }}</td><td>{{ r.level }}</td><td>{{ r.residual }}</td><td>{{ r.treatment }}</td><td class="ssp-mono">{{ r.controlId ?? '–' }}</td></tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+
+      <h4 class="ssp-h">5. Security control implementation</h4>
+      <p class="ssp-text">
+        {{ m.counts.total }} controls in the {{ impactLabel[m.baseline] }} baseline: {{ m.counts.implemented }} implemented,
+        {{ m.counts.partial }} partial, {{ m.counts['not-implemented'] }} not implemented, {{ m.counts.na }} not applicable.
+      </p>
+      @for (f of m.families; track f.family) {
+        <h5 class="ssp-h5">{{ f.family }}</h5>
+        <div class="ssp-table-wrap" tabindex="0" role="region" [attr.aria-label]="f.family + ' controls table'">
+          <table class="ssp-table">
+            <thead><tr><th scope="col">Control</th><th scope="col">Status</th><th scope="col">Implementation statement</th><th scope="col">Responsible role</th></tr></thead>
+            <tbody>
+              @for (r of f.rows; track r.id) {
+                <tr>
+                  <td><strong>{{ r.id }}</strong><span class="ssp-sub">{{ r.title }}</span></td>
+                  <td class="ssp-nowrap">{{ r.statusLabel }}</td>
+                  <td>{{ r.statement }}</td>
+                  <td>[Responsible role]</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+
+      <h4 class="ssp-h">6. Plan of action and milestones</h4>
+      @if (m.openItems.length === 0) {
+        <p class="ssp-text">No open items: every control in the baseline is implemented or not applicable.</p>
+      } @else {
+        <div class="ssp-table-wrap" tabindex="0" role="region" aria-label="Plan of action and milestones table">
+          <table class="ssp-table">
+            <thead><tr><th scope="col">ID</th><th scope="col">Control</th><th scope="col">Weakness</th><th scope="col">Milestone</th><th scope="col">Target</th></tr></thead>
+            <tbody>
+              @for (o of m.openItems; track o.id) {
+                <tr>
+                  <td class="ssp-mono">{{ o.id }}</td>
+                  <td class="ssp-mono">{{ o.controlId }}</td>
+                  <td>{{ o.weakness }}</td>
+                  <td>{{ o.milestone }}</td>
+                  <td class="ssp-mono">{{ o.targetDays === null ? '[Set a target date]' : o.targetDays + ' days' }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+
+      <h4 class="ssp-h">7. Document control</h4>
+      <div class="ssp-table-wrap" tabindex="0" role="region" aria-label="Document control table">
+        <table class="ssp-table">
+          <thead><tr><th scope="col">Role</th><th scope="col">Name</th><th scope="col">Date</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Prepared by</th><td></td><td></td></tr>
+            <tr><th scope="row">Reviewed by</th><td></td><td></td></tr>
+            <tr><th scope="row">Approved by</th><td></td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </article>
+  </section>
+
+  <section class="ssp-panel ssp-no-print" aria-labelledby="ssp-how-h">
+    <h2 class="ssp-panel-title" id="ssp-how-h">// HOW IT WORKS</h2>
+    <p class="ssp-how">
+      The layout follows the sections of NIST SP 800-18 Rev. 1: system identification, categorization, environment and
+      boundary, risk, control implementation, and the plan of action. The control baseline comes from the highest of the
+      three FIPS 199 impact levels. If the RMF Tracker is set lower than that, the draft says so instead of quietly dropping
+      controls.
+    </p>
+    <p class="ssp-how">
+      Each implementation statement restates what the tracker records for the control and adds supporting configuration from
+      the engagement where there is any. Where the tracker holds no note, the statement keeps a bracketed prompt. Roles,
+      dates and target dates are never invented. A real SSP is written and approved by the people who run the system, so
+      treat this as a head start, not a finished plan.
+    </p>
+  </section>
+</div>

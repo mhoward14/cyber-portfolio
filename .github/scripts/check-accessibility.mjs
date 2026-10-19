@@ -32,9 +32,10 @@ if (!dir) {
 const root = resolve(dir);
 // Matches "baseHref" in angular.json: the app is served under this path.
 const BASE_PATH = '/cyber-portfolio/';
-const ROUTES = ['', 'attack-path', 'cloud-security', 'incident-response', 'zero-trust', 'rmf-tracker', 'crosswalk', 'transaction-security', 'devops-pipeline', 'packet-lab', 'vuln-priority', 'risk-register', 'report', 'role-guide', 'site-security', 'notes'];
+const ROUTES = ['', 'attack-path', 'cloud-security', 'incident-response', 'zero-trust', 'rmf-tracker', 'crosswalk', 'transaction-security', 'devops-pipeline', 'packet-lab', 'vuln-priority', 'risk-register', 'ssp', 'report', 'role-guide', 'site-security', 'notes'];
 // Pages whose content only appears after an action, scanned in that state too.
 const STATES = [
+  { route: 'ssp', name: 'with the example', setup: (page) => page.getByRole('button', { name: 'Load the Contoso example' }).click() },
   { route: 'risk-register', name: 'with risks', setup: (page) => page.getByRole('button', { name: 'Load fictional examples' }).click() },
   { route: 'report', name: 'sample engagement', setup: (page) => page.getByRole('button', { name: 'Load a sample engagement' }).click() },
   { route: 'vuln-priority', name: 'with findings', setup: (page) => page.getByRole('button', { name: 'Load fictional examples' }).click() },
@@ -67,6 +68,33 @@ const server = createServer((req, res) => {
 await new Promise((done) => server.listen(0, '127.0.0.1', done));
 const origin = `http://127.0.0.1:${server.address().port}${BASE_PATH}`;
 
+// Wait until the page has finished changing. A state change (a button enabled, a panel opened)
+// can leave a style mid-transition for a frame or two, and the site's reduced-motion rule turns
+// every transition into a near-instant one rather than none, so measuring too early reads the
+// old style (a button just enabled still looks half faded). Two frames and finished animations.
+async function settle(page) {
+  await page.evaluate(async () => {
+    const frame = () => new Promise((done) => requestAnimationFrame(() => done()));
+    await frame();
+    await frame();
+    await Promise.all(document.getAnimations().map((a) => a.finished.catch(() => undefined)));
+    await frame();
+  });
+}
+
+// One line per failing element: where it is, plus the measured colors when axe reports them,
+// so a failure seen only in CI says what the browser actually saw.
+function describeNodes(violation) {
+  return violation.nodes
+    .slice(0, 3)
+    .map((node) => {
+      const data = node.any.map((check) => check.data).find((d) => d && d.contrastRatio);
+      const measured = data ? ` (text ${data.fgColor} on ${data.bgColor}, ratio ${data.contrastRatio}, needs ${data.expectedContrastRatio})` : '';
+      return node.target.join(' ') + measured;
+    })
+    .join('\n    ');
+}
+
 const browser = await chromium.launch(process.env.A11Y_BROWSER ? { executablePath: process.env.A11Y_BROWSER } : { channel: 'chrome' });
 const problems = [];
 
@@ -87,13 +115,14 @@ for (const [viewportName, viewport] of Object.entries(VIEWPORTS)) {
       const label = `${route || 'home'} (${theme}, ${viewportName})`;
       await page.goto(origin + (route ? `#/${route}` : ''), { waitUntil: 'networkidle' });
       await page.waitForSelector('main h1');
+      await settle(page);
       await page.evaluate(axeSource);
       const { violations } = await page.evaluate(
         (tags) => axe.run(document, { runOnly: { type: 'tag', values: tags }, resultTypes: ['violations'] }),
         TAGS,
       );
       for (const v of violations) {
-        problems.push(`${label}: ${v.id} (${v.impact}): ${v.help}\n    ${v.nodes.slice(0, 3).map((n) => n.target.join(' ')).join('\n    ')}`);
+        problems.push(`${label}: ${v.id} (${v.impact}): ${v.help}\n    ${describeNodes(v)}`);
       }
       console.log(`${violations.length ? 'FAIL' : 'ok  '} ${label}`);
     }
@@ -102,13 +131,14 @@ for (const [viewportName, viewport] of Object.entries(VIEWPORTS)) {
       await page.goto(origin + `#/${state.route}`, { waitUntil: 'networkidle' });
       await page.waitForSelector('main h1');
       await state.setup(page);
+      await settle(page);
       await page.evaluate(axeSource);
       const { violations } = await page.evaluate(
         (tags) => axe.run(document, { runOnly: { type: 'tag', values: tags }, resultTypes: ['violations'] }),
         TAGS,
       );
       for (const v of violations) {
-        problems.push(`${label}: ${v.id} (${v.impact}): ${v.help}\n    ${v.nodes.slice(0, 3).map((n) => n.target.join(' ')).join('\n    ')}`);
+        problems.push(`${label}: ${v.id} (${v.impact}): ${v.help}\n    ${describeNodes(v)}`);
       }
       console.log(`${violations.length ? 'FAIL' : 'ok  '} ${label}`);
     }

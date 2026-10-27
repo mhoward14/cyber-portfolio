@@ -197,7 +197,7 @@ await pause(500);
 await tap(page.getByRole('button', { name: 'Load the Contoso example' }), { before: 500, after: 600 });
 await scrollTo(await page.evaluate(() => document.querySelector('.ssp-doc-panel').getBoundingClientRect().top + window.scrollY - 40), 800);
 await pause(700);
-await scrollTo(await page.evaluate(() => [...document.querySelectorAll('.ssp-h')].find((h) => h.textContent.includes('4.')).getBoundingClientRect().top + window.scrollY - 60), 1200);
+await scrollTo(await page.evaluate(() => [...document.querySelectorAll('.ssp-h')].find((h) => h.textContent.includes('5.')).getBoundingClientRect().top + window.scrollY - 60), 1200);
 await pause(1500);
 
 // End card

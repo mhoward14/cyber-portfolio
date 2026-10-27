@@ -1,6 +1,6 @@
 # Engagement Mode demo
 
-Scripts that regenerate the demo shown in the README (a GIF) and on the home page (a WebM video). Everything in it is fictional. They are maintainer tools: nothing here runs in CI or the site build.
+Scripts that regenerate the demo shown in the README (a GIF) and on the Security Tools page (a WebM video). Everything in it is fictional. They are maintainer tools: nothing here runs in CI or the site build.
 
 ## Regenerate
 
@@ -20,4 +20,4 @@ cp /tmp/demo/poster.png public/media/engagement-mode-poster.png
 
 After a redesign of a tool the demo visits (Attack Path Builder, Cloud Security, RMF Tracker, Engagement Report, SSP Generator). If the script's selectors stop matching, it fails loudly rather than recording the wrong thing. A unit test keeps the files inside a size budget.
 
-Update the text description under the video on the home page if the shots change.
+Update the text description under the video on the Security Tools page if the shots change.

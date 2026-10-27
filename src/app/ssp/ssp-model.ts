@@ -14,6 +14,10 @@ import { baseControlId } from '../rmf-tracker/rmf-engagement';
 import { CONTROLS, ControlStatus, STATUS_LABEL, Tier, TIER_ORDER } from '../rmf-tracker/rmf-data';
 import { TrackerState } from '../rmf-tracker/rmf-saved';
 import { RATING_LABEL, riskLevel, ratingRank } from '../risk-register/risk-matrix';
+import {
+  EMPTY_RACI, EXAMPLE_RACI, RACI_ACTIVITIES, RACI_ROLES, Raci, RaciActivity, RaciProblem, RaciRole, ActivityId,
+  CODE_SHOWN, checkRaci, codeOf, hasAssignments, ownerText, problemSummary, responsibleText, roleSummary,
+} from './raci';
 
 export type Impact = 'low' | 'moderate' | 'high';
 export type OperationalStatus = 'operational' | 'development' | 'modification';
@@ -45,6 +49,8 @@ export interface SspInput {
   status: OperationalStatus;
   hosting: Hosting;
   boundary: string;
+  /** Who does what, by role. Empty until the visitor fills it in. */
+  raci: Raci;
 }
 
 export const EMPTY_INPUT: SspInput = {
@@ -57,6 +63,7 @@ export const EMPTY_INPUT: SspInput = {
   status: 'operational',
   hosting: 'cloud',
   boundary: '',
+  raci: EMPTY_RACI,
 };
 
 /** A fictional system, so a visitor can see a finished draft without typing. */
@@ -72,6 +79,7 @@ export const CONTOSO_INPUT: SspInput = {
   hosting: 'cloud',
   boundary:
     'The boundary covers the portal web tier, the payments API, its managed database and the identity provider integration. The corporate network, the card processor and the customer devices are outside it.',
+  raci: EXAMPLE_RACI,
 };
 
 export const PLACEHOLDER = {
@@ -94,6 +102,8 @@ export interface ControlRow {
   statusLabel: string;
   statement: string;
   support: string[];
+  /** Roles from the RACI's "Implement controls" row, or a bracketed blank. */
+  responsible: string;
 }
 
 export interface FamilySection {
@@ -109,6 +119,13 @@ export interface OpenItem {
   /** Null when no target has been set, so the draft never invents a date. */
   targetDays: number | null;
   source: 'engagement' | 'tracker';
+  /** Roles from the RACI's POA&M row, or a bracketed blank. */
+  owner: string;
+}
+
+export interface RaciRowModel {
+  activity: RaciActivity;
+  cells: { role: RaciRole; code: string; shown: string }[];
 }
 
 export interface SspModel {
@@ -123,6 +140,10 @@ export interface SspModel {
     status: string;
     hosting: string;
     boundary: string;
+    /** One line per role the identification table names, from the RACI or a bracketed blank. */
+    owner: string;
+    isso: string;
+    ao: string;
   };
   categorization: { confidentiality: Impact; integrity: Impact; availability: Impact; overall: Impact };
   baseline: Tier;
@@ -136,6 +157,7 @@ export interface SspModel {
   risks: (EngagementRisk & { level: string; residual: string })[];
   openItems: OpenItem[];
   scenario: string | null;
+  raci: { roles: RaciRole[]; rows: RaciRowModel[]; filled: boolean; problems: RaciProblem[]; summary: string | null };
 }
 
 /** A sentence for the "how is this control implemented" field. It restates
@@ -191,6 +213,9 @@ export function buildSsp(
     byBase.set(id, [...(byBase.get(id) ?? []), c]);
   }
 
+  const raci = input.raci;
+  const implementers = responsibleText(raci, 'implement', PLACEHOLDER.role);
+  const owners = ownerText(raci, 'poam', PLACEHOLDER.role);
   const counts = { implemented: 0, partial: 0, 'not-implemented': 0, na: 0, total: 0 };
   const families: FamilySection[] = [];
   const inBaseline = CONTROLS.filter((c) => TIER_ORDER[c.baseline] <= TIER_ORDER[baseline]);
@@ -205,6 +230,7 @@ export function buildSsp(
       statusLabel: STATUS_LABEL[status],
       statement: implementationStatement(status, control.title, notes[control.id] ?? '', supporting),
       support: supporting.map((c) => c.sourceTool),
+      responsible: implementers,
     };
     counts[status]++;
     counts.total++;
@@ -223,6 +249,7 @@ export function buildSsp(
     milestone: p.milestone,
     targetDays: p.targetDays,
     source: 'engagement',
+    owner: owners,
   }));
   const covered = new Set(open.map((o) => o.controlId));
   let n = poams.length;
@@ -237,6 +264,7 @@ export function buildSsp(
           milestone: '[Define the milestones that close this gap.]',
           targetDays: null,
           source: 'tracker',
+          owner: owners,
         });
       }
     }
@@ -267,6 +295,9 @@ export function buildSsp(
       status: STATUS_OPTIONS[input.status],
       hosting: HOSTING_OPTIONS[input.hosting],
       boundary: input.boundary.trim() || PLACEHOLDER.boundary,
+      owner: roleSummary(raci, 'so', PLACEHOLDER.role),
+      isso: roleSummary(raci, 'isso', PLACEHOLDER.role),
+      ao: roleSummary(raci, 'ao', PLACEHOLDER.role),
     },
     categorization: {
       confidentiality: input.confidentiality,
@@ -284,5 +315,18 @@ export function buildSsp(
     risks,
     openItems: open,
     scenario: engagement?.scenario ?? null,
+    raci: {
+      roles: RACI_ROLES,
+      rows: RACI_ACTIVITIES.map((activity) => ({
+        activity,
+        cells: RACI_ROLES.map((role) => {
+          const code = codeOf(raci, activity.id as ActivityId, role.id);
+          return { role, code, shown: code === '' ? '' : CODE_SHOWN[code] };
+        }),
+      })),
+      filled: hasAssignments(raci),
+      problems: checkRaci(raci),
+      summary: problemSummary(raci),
+    },
   };
 }

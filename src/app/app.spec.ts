@@ -1,6 +1,10 @@
 import { TestBed } from '@angular/core/testing';
-import { provideRouter } from '@angular/router';
+import { Component } from '@angular/core';
+import { Router, provideRouter } from '@angular/router';
 import { App } from './app';
+
+@Component({ template: '' })
+class Blank {}
 
 describe('App', () => {
   beforeEach(async () => {
@@ -49,5 +53,43 @@ describe('App', () => {
     await fixture.whenStable();
     const navs = Array.from((fixture.nativeElement as HTMLElement).querySelectorAll('nav'));
     expect(navs.map((n) => n.getAttribute('aria-label')).sort()).toEqual(['Profile links', 'Site navigation']);
+  });
+
+  it('keeps the individual tools folded away until asked, and toggles them from a labelled button', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+    fixture.detectChanges();
+    const root = fixture.nativeElement as HTMLElement;
+    const list = root.querySelector('#sidebar-tools-list') as HTMLElement;
+    const toggle = root.querySelector('.sidebar-group-toggle') as HTMLButtonElement;
+    expect(list.hidden).toBe(true);
+    expect(toggle.getAttribute('aria-expanded')).toBe('false');
+    expect(toggle.getAttribute('aria-label')).toBe('Show the individual tools');
+    toggle.click();
+    fixture.detectChanges();
+    expect(list.hidden).toBe(false);
+    expect(toggle.getAttribute('aria-expanded')).toBe('true');
+    expect(toggle.getAttribute('aria-label')).toBe('Hide the individual tools');
+    expect(root.querySelector('.sidebar-link-tools')?.getAttribute('href')).toBe('/security-tools');
+  });
+
+  it('opens the tools list when the visitor is inside a tool', async () => {
+    TestBed.resetTestingModule();
+    await TestBed.configureTestingModule({
+      imports: [App],
+      providers: [provideRouter([{ path: 'attack-path', component: Blank }, { path: '', component: Blank }])],
+    }).compileComponents();
+    const fixture = TestBed.createComponent(App);
+    await TestBed.inject(Router).navigateByUrl('/attack-path?s=x');
+    await fixture.whenStable();
+    expect(fixture.componentInstance.toolsOpen()).toBe(true);
+  });
+
+  it('links the Engagement Report from inside the tools list', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+    fixture.detectChanges();
+    const link = (fixture.nativeElement as HTMLElement).querySelector('#sidebar-tools-list a[href="/report"]');
+    expect(link).toBeTruthy();
   });
 });

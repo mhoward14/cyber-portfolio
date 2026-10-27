@@ -1,0 +1,254 @@
+/* ============================================================
+   SECURITY-TOOLS.CSS — THE SECURITY TOOLS PAGE
+   Site tokens only. Each tool card takes its tool's identity color
+   through --tool-color, darkened in the light theme for contrast.
+   ============================================================ */
+
+.st-page {
+  padding-top: 5rem;
+  padding-bottom: 3rem;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-bottom: 2rem;
+  color: var(--color-text-dim);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: color 0.2s, gap 0.25s var(--ease-spring);
+}
+.back-link:hover {
+  color: var(--color-accent);
+  gap: 0.55rem;
+}
+.back-chevron {
+  width: 14px;
+  height: 14px;
+}
+
+.st-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+.st-title {
+  color: var(--color-accent);
+  font-size: clamp(1.6rem, 4vw, 2.5rem);
+  font-weight: 900;
+  letter-spacing: 0.02em;
+}
+.st-intro {
+  max-width: 46rem;
+  margin: 0.9rem auto 0;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+.st-scope {
+  max-width: 52rem;
+  margin: 0 auto 2rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--color-border-2);
+  border-left: 3px solid #f59e0b;
+  border-radius: var(--radius-md);
+  color: var(--color-text-muted);
+  font-size: 0.88rem;
+  line-height: 1.55;
+}
+.st-scope strong {
+  color: var(--color-text);
+}
+
+.st-group {
+  margin-bottom: 2rem;
+}
+.st-group-title {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  color: var(--color-text);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.st-group-title::before {
+  content: '';
+  flex: none;
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 3px;
+  background: var(--group-color, var(--color-accent));
+}
+.st-group-blurb {
+  margin: 0.3rem 0 0.9rem;
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+}
+.st-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr));
+  gap: 0.9rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.st-grid li {
+  display: flex;
+}
+
+.tool-card {
+  --tool-color: var(--color-accent);
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding: 1rem 1.1rem;
+  border: 1px solid var(--color-border);
+  border-top: 3px solid var(--tool-color);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: inherit;
+  text-decoration: none;
+  transition: transform 0.2s var(--ease-spring), border-color 0.2s, box-shadow 0.2s;
+}
+.tool-card:hover {
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--tool-color) 55%, var(--color-border));
+  border-top-color: var(--tool-color);
+  box-shadow: 0 14px 30px -14px color-mix(in srgb, var(--tool-color) 45%, transparent);
+}
+.tool-card:focus-visible {
+  outline: 2px solid var(--tool-color);
+  outline-offset: 2px;
+}
+.tool-name {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 0.98rem;
+  font-weight: 800;
+  line-height: 1.3;
+}
+.tool-start {
+  align-self: flex-start;
+  padding: 0.12rem 0.55rem;
+  border: 1px solid color-mix(in srgb, var(--tool-color) 45%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--tool-color) 18%, transparent);
+  color: var(--color-text);
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+.tool-summary {
+  flex: 1;
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  line-height: 1.55;
+}
+.tool-standard {
+  color: var(--color-text-dim);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+:host-context(.light-mode) .tool-card:hover {
+  box-shadow: 0 14px 28px -14px color-mix(in srgb, var(--tool-color) 40%, transparent);
+}
+@media (prefers-reduced-motion: reduce) {
+  .tool-card,
+  .tool-card:hover {
+    transition: none;
+    transform: none;
+  }
+}
+
+.st-foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 0.9rem;
+  justify-content: center;
+  margin-top: 2rem;
+  color: var(--color-text-dim);
+  font-size: 0.85rem;
+}
+.st-foot a {
+  padding: 0.3rem 0;
+  color: var(--color-focus);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* The Engagement Mode demo: a video the visitor starts, with a text alternative. */
+.demo {
+  max-width: 56rem;
+  margin: 0 auto 1.75rem;
+}
+.demo-video {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: #000;
+}
+.demo-caption {
+  display: grid;
+  gap: 0.2rem;
+  margin-top: 0.6rem;
+  color: var(--color-text-muted);
+  font-size: 0.88rem;
+  line-height: 1.55;
+}
+.demo-title {
+  color: var(--color-text);
+  font-size: 0.95rem;
+}
+.demo-caption a,
+.demo-video a,
+.demo-text a {
+  color: var(--color-focus);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.demo-text {
+  margin-top: 0.5rem;
+  color: var(--color-text-muted);
+  font-size: 0.88rem;
+  line-height: 1.6;
+}
+.demo-text summary {
+  display: inline-block;
+  padding: 0.3rem 0;
+  color: var(--color-focus);
+  font-weight: 600;
+  cursor: pointer;
+}
+.demo-text summary:focus-visible,
+.demo-video:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+.demo-link {
+  margin: 0.4rem 0 0;
+  color: var(--color-text-muted);
+  font-size: 0.88rem;
+}
+.demo-link a {
+  color: var(--color-focus);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.demo-text ol {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0.4rem 0 0;
+  padding-left: 1.3rem;
+}

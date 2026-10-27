@@ -2,7 +2,7 @@ import { existsSync, readFileSync, statSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
-import { Home } from './home';
+import { SecurityTools } from '../security-tools/security-tools';
 
 const file = (p: string) => resolve(process.cwd(), p);
 const head = (p: string, n: number) => readFileSync(file(p)).subarray(0, n);
@@ -24,10 +24,10 @@ describe('Engagement Mode demo media', () => {
   });
 });
 
-describe('Home demo video', () => {
+describe('Security Tools demo video', () => {
   const render = async () => {
-    await TestBed.configureTestingModule({ imports: [Home], providers: [provideRouter([])] }).compileComponents();
-    const fixture = TestBed.createComponent(Home);
+    await TestBed.configureTestingModule({ imports: [SecurityTools], providers: [provideRouter([])] }).compileComponents();
+    const fixture = TestBed.createComponent(SecurityTools);
     fixture.detectChanges();
     await fixture.whenStable();
     return fixture.nativeElement as HTMLElement;

@@ -6,7 +6,6 @@
    ============================================================ */
 
 import { IMPACT_LABEL, SspModel } from './ssp-model';
-import { PLACEHOLDER } from './ssp-model';
 import { THREAT_LABEL } from '../risk-register/risk-matrix';
 
 export function cell(text: string | number | null | undefined): string {
@@ -38,9 +37,9 @@ export function sspMarkdown(m: SspModel): string {
       ['System name', m.identification.name],
       ['Abbreviation', m.identification.abbreviation || '[Abbreviation]'],
       ['Operational status', m.identification.status],
-      ['System owner', PLACEHOLDER.role],
-      ['Information system security officer', PLACEHOLDER.role],
-      ['Authorizing official', PLACEHOLDER.role],
+      ['System owner', m.identification.owner],
+      ['Information system security officer', m.identification.isso],
+      ['Authorizing official', m.identification.ao],
     ]),
     '',
     m.identification.description,
@@ -64,7 +63,19 @@ export function sspMarkdown(m: SspModel): string {
   out.push('## 3. System environment and boundary', '');
   out.push(`Hosting: ${m.identification.hosting}.`, '', m.identification.boundary, '');
 
-  out.push('## 4. Risk assessment summary', '');
+  out.push('## 4. Roles and responsibilities', '');
+  if (!m.raci.filled) {
+    out.push('[No responsibilities were assigned. Fill in the RACI matrix in the SSP Generator, or complete this section by hand.]', '');
+  } else {
+    out.push('R = Responsible, A = Accountable, A/R = both, C = Consulted, I = Informed.', '');
+    out.push(
+      table(['Activity', ...m.raci.roles.map((r) => r.name)], m.raci.rows.map((r) => [r.activity.label, ...r.cells.map((c) => c.shown)])),
+      '',
+    );
+    if (m.raci.summary) out.push(`> Warning: ${m.raci.summary}`, '');
+  }
+
+  out.push('## 5. Risk assessment summary', '');
   if (!m.threats.length && !m.risks.length && !m.findings.length) {
     out.push('[No risk assessment data was available. Complete this section by hand, or build an attack chain, prioritize vulnerabilities and add risks in the portfolio tools first.]', '');
   } else {
@@ -94,29 +105,29 @@ export function sspMarkdown(m: SspModel): string {
     }
   }
 
-  out.push('## 5. Security control implementation', '');
+  out.push('## 6. Security control implementation', '');
   out.push(
     `${m.counts.total} controls in the ${IMPACT_LABEL[m.baseline]} baseline: ${m.counts.implemented} implemented, ${m.counts.partial} partial, ${m.counts['not-implemented']} not implemented, ${m.counts.na} not applicable.`,
     '',
   );
   for (const f of m.families) {
     out.push(`### ${f.family}`, '');
-    out.push(table(['Control', 'Status', 'Implementation statement', 'Responsible role'], f.rows.map((r) => [`${r.id} ${r.title}`, r.statusLabel, r.statement, PLACEHOLDER.role])), '');
+    out.push(table(['Control', 'Status', 'Implementation statement', 'Responsible role'], f.rows.map((r) => [`${r.id} ${r.title}`, r.statusLabel, r.statement, r.responsible])), '');
   }
 
-  out.push('## 6. Plan of action and milestones', '');
+  out.push('## 7. Plan of action and milestones', '');
   if (m.openItems.length === 0) {
     out.push('No open items: every control in the baseline is implemented or not applicable.', '');
   } else {
     out.push(
-      table(['ID', 'Control', 'Weakness', 'Milestone', 'Target'], m.openItems.map((o) => [
-        o.id, o.controlId, o.weakness, o.milestone, o.targetDays === null ? '[Set a target date]' : `${o.targetDays} days`,
+      table(['ID', 'Control', 'Weakness', 'Milestone', 'Owner', 'Target'], m.openItems.map((o) => [
+        o.id, o.controlId, o.weakness, o.milestone, o.owner, o.targetDays === null ? '[Set a target date]' : `${o.targetDays} days`,
       ])),
       '',
     );
   }
 
-  out.push('## 7. Document control', '');
+  out.push('## 8. Document control', '');
   out.push(table(['Role', 'Name', 'Date'], [['Prepared by', '', ''], ['Reviewed by', '', ''], ['Approved by', '', '']]), '');
   return out.join('\n');
 }

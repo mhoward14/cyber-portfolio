@@ -95,11 +95,38 @@ describe('buildSsp', () => {
   });
 });
 
+describe('RACI in the draft', () => {
+  it('leaves bracketed blanks when nothing is assigned', () => {
+    const m = buildSsp(EMPTY_INPUT, tracker(), null, NOW);
+    expect(m.raci.filled).toBe(false);
+    expect(m.identification.owner).toBe('[Responsible role]');
+    expect(m.families[0].rows[0].responsible).toBe('[Responsible role]');
+    expect(sspMarkdown(m)).toContain('[No responsibilities were assigned.');
+  });
+
+  it('fills roles, control rows and POA&M owners from the matrix', () => {
+    const m = buildSsp(CONTOSO_INPUT, tracker({ statuses: { 'AC-2': 'partial' } }), null, NOW);
+    expect(m.raci.summary).toBeNull();
+    expect(m.identification.ao).toContain('Authorizing official: Accountable');
+    expect(m.families[0].rows[0].responsible).toBe('SA (R); SO (A); ISSO (C)');
+    expect(m.openItems.find((o) => o.controlId === 'AC-2')!.owner).toBe('ISSO, SA');
+    const md = sspMarkdown(m);
+    expect(md).toContain('| Write and maintain the SSP |');
+    expect(md).toContain('| ID | Control | Weakness | Milestone | Owner | Target |');
+  });
+
+  it('warns in the draft when a row is unsound', () => {
+    const m = buildSsp({ ...CONTOSO_INPUT, raci: { 'assess|sca': 'R' } }, tracker(), null, NOW);
+    expect(m.raci.summary).toContain('“Assess controls” has no one Accountable');
+    expect(sspMarkdown(m)).toContain('> Warning: ');
+  });
+});
+
 describe('sspMarkdown', () => {
   it('has the numbered sections, the draft banner and a table row per control', () => {
     const m = buildSsp(CONTOSO_INPUT, seedSampleState(), buildSampleEngagement(NOW), NOW);
     const md = sspMarkdown(m);
-    for (const h of ['## 1. System identification', '## 2. Security categorization (FIPS 199)', '## 3. System environment and boundary', '## 4. Risk assessment summary', '## 5. Security control implementation', '## 6. Plan of action and milestones', '## 7. Document control']) {
+    for (const h of ['## 1. System identification', '## 2. Security categorization (FIPS 199)', '## 3. System environment and boundary', '## 4. Roles and responsibilities', '## 5. Risk assessment summary', '## 6. Security control implementation', '## 7. Plan of action and milestones', '## 8. Document control']) {
       expect(md).toContain(h);
     }
     expect(md).toContain('**DRAFT.** Generated 2026-10-19');
@@ -117,7 +144,7 @@ describe('sspMarkdown', () => {
 
   it('keeps the risk section and says when there is no risk data', () => {
     const md = sspMarkdown(buildSsp(CONTOSO_INPUT, tracker(), null, NOW));
-    expect(md).toContain('## 4. Risk assessment summary');
+    expect(md).toContain('## 5. Risk assessment summary');
     expect(md).toContain('No risk assessment data was available');
   });
 });

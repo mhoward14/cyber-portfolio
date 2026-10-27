@@ -8,8 +8,12 @@ import { TourOverlay } from './tour/tour-overlay';
 import { EmailLink } from './security/email-link';
 import { TourService } from './tour/tour.service';
 import { focusPageHeading, pagePath } from './a11y/route-focus';
+import { TOOLS } from './tools-data';
 
 const SIDEBAR_STORAGE_KEY = 'sidebar-collapsed';
+
+/** Pages that belong to the Security Tools group: each tool, and the Engagement Report they feed. */
+const TOOL_PATHS = new Set([...TOOLS.map((tool) => tool.route), '/report']);
 
 @Component({
   selector: 'app-root',
@@ -21,6 +25,8 @@ const SIDEBAR_STORAGE_KEY = 'sidebar-collapsed';
 })
 export class App {
   sidebarCollapsed = signal(localStorage.getItem(SIDEBAR_STORAGE_KEY) === 'true');
+  /** The individual tool links stay folded away on the portfolio pages and open once you are in a tool. */
+  toolsOpen = signal(false);
 
   private readonly tour = inject(TourService);
   private lastPath: string | null = null;
@@ -38,6 +44,7 @@ export class App {
         const path = pagePath(e.urlAfterRedirects);
         const isPageChange = this.lastPath !== null && path !== this.lastPath;
         this.lastPath = path;
+        if (TOOL_PATHS.has(path)) this.toolsOpen.set(true);
         if (isPageChange && !this.tour.active()) focusPageHeading();
       });
   }
@@ -48,6 +55,10 @@ export class App {
     event.preventDefault();
     // focus() also scrolls the target into view
     document.getElementById('main-content')?.focus();
+  }
+
+  toggleTools() {
+    this.toolsOpen.set(!this.toolsOpen());
   }
 
   toggleSidebar() {

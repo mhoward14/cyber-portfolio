@@ -1,0 +1,69 @@
+<div class="container st-page">
+  <a routerLink="/" class="back-link">
+    <svg class="back-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <polyline points="15 18 9 12 15 6"></polyline>
+    </svg>
+    Back to Portfolio
+  </a>
+
+  <header class="st-header">
+    <h1 class="st-title">Security Tools</h1>
+    <p class="st-intro">
+      {{ count }} interactive security tools that run in your browser, built alongside the coursework. Pick one by the kind
+      of work it shows.
+    </p>
+  </header>
+
+  <p class="st-scope"><strong>Scope note.</strong> These tools demonstrate applied analysis and design in academic and simulated
+    settings. They are not production deployments, and every example is fictional.</p>
+
+  <figure class="demo">
+    <video class="demo-video" controls preload="none" playsinline muted width="1280" height="720"
+           poster="media/engagement-mode-poster.png" aria-describedby="demo-summary">
+      <source src="media/engagement-mode.webm" type="video/webm" />
+      Your browser can't play this video. <a href="media/engagement-mode.webm">Download it</a>, or read the description below.
+    </video>
+    <figcaption class="demo-caption">
+      <strong class="demo-title">Engagement Mode in 40 seconds</strong>
+      <span id="demo-summary">A silent screen recording: one scenario carried from an attack chain, through cloud controls and an RMF baseline, into a report and a draft System Security Plan. It plays only when you press play.</span>
+    </figcaption>
+    <details class="demo-text">
+      <summary>Read what the video shows</summary>
+      <ol>
+        <li>In the Attack Path Builder, six techniques are chosen, one per stage from initial access to impact. The detection score and the defense that would catch each step appear, and the chain is added to a new engagement.</li>
+        <li>In the Cloud Security Builder, three insecure settings are fixed. The posture score rises from 0 to 60 out of 100, and the resulting controls are added to the engagement.</li>
+        <li>In the RMF Control Tracker, the controls are imported against a Moderate baseline, and the open gaps become two draft POA&amp;M items that are added to the engagement.</li>
+        <li>The Engagement Report shows the attack chain, the controls and the POA&amp;M items in one place.</li>
+        <li>The SSP Generator loads a fictional system and shows an example RACI matrix of who is responsible for what, and drafts a System Security Plan, with its risk and control sections drawn from the same engagement.</li>
+      </ol>
+    </details>
+    <p class="demo-link"><a routerLink="/report">Open the Engagement Report</a>, where the tools' results come together.</p>
+  </figure>
+
+  @for (group of groups; track group.id) {
+    <section class="st-group" [attr.aria-labelledby]="'st-' + group.id" [style.--group-color]="group.color">
+      <h2 class="st-group-title" [id]="'st-' + group.id">{{ group.title }}</h2>
+      <p class="st-group-blurb">{{ group.blurb }}</p>
+      <ul class="st-grid">
+        @for (tool of group.tools; track tool.route) {
+          <li>
+            <a class="tool-card" [class.is-start]="tool.startHere > 0" [routerLink]="tool.route" [style.--tool-color]="tool.color">
+              <h3 class="tool-name">{{ tool.name }}</h3>
+              @if (tool.startHere > 0) {
+                <span class="tool-start">Start here · {{ tool.startHere }}</span>
+              }
+              <p class="tool-summary">{{ tool.summary }}</p>
+              <span class="tool-standard">{{ tool.standard }}</span>
+            </a>
+          </li>
+        }
+      </ul>
+    </section>
+  }
+
+  <p class="st-foot">
+    <a routerLink="/site-security">How this site is secured</a>
+    <span aria-hidden="true">&middot;</span>
+    <a routerLink="/notes">Engineering notes</a>
+  </p>
+</div>

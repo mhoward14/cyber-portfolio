@@ -111,6 +111,80 @@ describe('Ssp', () => {
   });
 });
 
+describe('Ssp RACI matrix', () => {
+  beforeEach(async () => {
+    localStorage.clear();
+    TestBed.resetTestingModule();
+    await TestBed.configureTestingModule({ imports: [Ssp], providers: [provideRouter([])] }).compileComponents();
+  });
+
+  const make = async () => {
+    const fixture = TestBed.createComponent(Ssp);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    return { fixture, c: fixture.componentInstance, el: fixture.nativeElement as HTMLElement };
+  };
+
+  const buttons = (el: HTMLElement) => Array.from(el.querySelectorAll<HTMLButtonElement>('.raci-btn'));
+
+  it('shows one button per activity and role, each named for its cell', async () => {
+    const { el, c } = await make();
+    expect(buttons(el).length).toBe(c.activities.length * c.roles.length);
+    expect(buttons(el)[0].getAttribute('aria-label')).toBe('Categorize the system (FIPS 199), SO: Not involved');
+    expect(el.querySelector('.raci-wrap')?.getAttribute('aria-label')).toBe('RACI matrix editor');
+  });
+
+  it('steps a cell through the letters, announces it and keeps it', async () => {
+    const { el, c } = await make();
+    const first = buttons(el)[0];
+    first.click();
+    expect(c.cellCode('categorize', 'so')).toBe('R');
+    expect(c.notice()).toBe('Categorize the system (FIPS 199), SO: Responsible.');
+    expect(JSON.parse(localStorage.getItem('ssp-input-v1')!).raci).toEqual({ 'categorize|so': 'R' });
+    expect(c.hasInput()).toBe(true);
+  });
+
+  it('flags unsound rows and passes the example', async () => {
+    const { c } = await make();
+    c.cycle('assess', 'sca');
+    expect(c.rowChecks().get('assess')).toEqual(['no one Accountable']);
+    expect(c.raciStatus()).toContain('“Assess controls” has no one Accountable');
+    c.loadRaciExample();
+    expect(c.raciSummary()).toBeNull();
+    expect(c.raciStatus()).toContain('one Accountable role');
+  });
+
+  it('loads the example with the Contoso system and clears it separately', async () => {
+    const { c } = await make();
+    c.loadExample();
+    expect(c.hasRaci()).toBe(true);
+    c.clearRaci();
+    expect(c.hasRaci()).toBe(false);
+    expect(c.input().name).toBe('Contoso Payments Portal');
+  });
+
+  it('restores a saved matrix and drops cells it does not recognize', () => {
+    localStorage.setItem('ssp-input-v1', JSON.stringify({ raci: { 'ssp|isso': 'R', 'ssp|ghost': 'A', 'nope|so': 'A', 'ssp|sa': 'Z' } }));
+    expect(loadInput().raci).toEqual({ 'ssp|isso': 'R' });
+  });
+
+  it('downloads the matrix as CSV', async () => {
+    const { c } = await make();
+    c.loadRaciExample();
+    const clicks: string[] = [];
+    const orig = HTMLAnchorElement.prototype.click;
+    HTMLAnchorElement.prototype.click = function (this: HTMLAnchorElement) { clicks.push(this.download); };
+    URL.createObjectURL = () => 'blob:test';
+    URL.revokeObjectURL = () => undefined;
+    try {
+      c.downloadRaci();
+    } finally {
+      HTMLAnchorElement.prototype.click = orig;
+    }
+    expect(clicks[0]).toMatch(/^raci-matrix-\d{4}-\d{2}-\d{2}\.csv$/);
+  });
+});
+
 describe('loadInput', () => {
   beforeEach(() => localStorage.clear());
 

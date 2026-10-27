@@ -10,32 +10,27 @@ describe('Home', () => {
     }).compileComponents();
   });
 
-  it('should render a card for each of the twelve tools', async () => {
+  it('shows the three quick-start tools in review order, and points to the Security Tools page', async () => {
     const fixture = TestBed.createComponent(Home);
     fixture.detectChanges();
     await fixture.whenStable();
-    const cards = (fixture.nativeElement as HTMLElement).querySelectorAll('.tool-card');
-    expect(cards.length).toBe(12);
+    const el = fixture.nativeElement as HTMLElement;
+    const chips = Array.from(el.querySelectorAll('.tools-band-chip')).map((c) => c.getAttribute('href'));
+    expect(chips).toEqual(['/attack-path', '/cloud-security', '/incident-response']);
+    expect(el.querySelector('.tools-band-cta')?.getAttribute('href')).toBe('/security-tools');
+    // The tools themselves live on their own page; the home page is the academic portfolio.
+    expect(el.querySelectorAll('.tool-card').length).toBe(0);
+    expect(el.querySelector('video')).toBeNull();
   });
 
-  it('should lead with the three "Start here" tools in review order', async () => {
+  it('puts the projects before the tools band', async () => {
     const fixture = TestBed.createComponent(Home);
     fixture.detectChanges();
     await fixture.whenStable();
-    const cards = Array.from((fixture.nativeElement as HTMLElement).querySelectorAll('.tool-card'));
-    const hrefs = cards.slice(0, 3).map((c) => c.getAttribute('href'));
-    expect(hrefs).toEqual(['/attack-path', '/cloud-security', '/incident-response']);
-    expect(cards.filter((c) => c.querySelector('.tool-start')).length).toBe(3);
-  });
-
-  it('should link every tool card to a distinct route', async () => {
-    const fixture = TestBed.createComponent(Home);
-    fixture.detectChanges();
-    await fixture.whenStable();
-    const hrefs = Array.from((fixture.nativeElement as HTMLElement).querySelectorAll('.tool-card')).map((c) =>
-      c.getAttribute('href'),
-    );
-    expect(new Set(hrefs).size).toBe(12);
+    const el = fixture.nativeElement as HTMLElement;
+    const grid = el.querySelector('.project-grid')!;
+    const band = el.querySelector('.tools-band')!;
+    expect(grid.compareDocumentPosition(band) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   });
 
   it('should map every case study to at least one existing tool', () => {

@@ -32,7 +32,7 @@ if (!dir) {
 const root = resolve(dir);
 // Matches "baseHref" in angular.json: the app is served under this path.
 const BASE_PATH = '/cyber-portfolio/';
-const ROUTES = ['', 'attack-path', 'cloud-security', 'incident-response', 'zero-trust', 'rmf-tracker', 'crosswalk', 'transaction-security', 'devops-pipeline', 'packet-lab', 'vuln-priority', 'risk-register', 'ssp', 'report', 'role-guide', 'site-security', 'notes'];
+const ROUTES = ['', 'attack-path', 'cloud-security', 'incident-response', 'zero-trust', 'rmf-tracker', 'crosswalk', 'transaction-security', 'devops-pipeline', 'packet-lab', 'vuln-priority', 'risk-register', 'ssp', 'report', 'security-tools', 'site-security', 'notes'];
 // Pages whose content only appears after an action, scanned in that state too.
 const STATES = [
   { route: 'ssp', name: 'with the example', setup: (page) => page.getByRole('button', { name: 'Load the Contoso example' }).click() },

@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { TourService } from '../tour/tour.service';
 import { EmailLink } from '../security/email-link';
+import { START_HERE, TOOLS } from '../tools-data';
 
 @Component({
   selector: 'app-home',
@@ -40,47 +41,9 @@ export class Home implements AfterViewInit {
     return this.expandedProject() === title;
   }
 
-  // Interactive tools, in the README's recommended review order. The first
-  // three (startHere) are the quickest way into the portfolio for a recruiter.
-  // Colors match each tool's sidebar identity color in app.css.
-  readonly tools = [
-    { name: 'Attack Path Builder', route: '/attack-path', icon: 'attack', color: '#0a84ff', startHere: 1,
-      summary: 'Chain MITRE ATT&CK techniques across six attack stages and see where defenses would catch them.',
-      standard: 'MITRE ATT&CK' },
-    { name: 'Cloud Security Configuration Builder', route: '/cloud-security', icon: 'cloud', color: '#f59e0b', startHere: 2,
-      summary: 'Configure Azure, AWS, or GCP resources and watch a live posture score react to each setting.',
-      standard: 'CIS Benchmarks' },
-    { name: 'Incident Response Playbook Simulator', route: '/incident-response', icon: 'ir', color: '#f43f5e', startHere: 3,
-      summary: 'Work a ransomware, phishing, insider, or DDoS incident with feedback on every decision.',
-      standard: 'NIST SP 800-61' },
-    { name: 'Zero Trust Architecture Explorer', route: '/zero-trust', icon: 'zt', color: '#06b6d4', startHere: 0,
-      summary: 'Trace an identity-to-data request and assess maturity across the seven DoD Zero Trust pillars.',
-      standard: 'NIST SP 800-207' },
-    { name: 'RMF Control Tracker', route: '/rmf-tracker', icon: 'rmf', color: '#a855f7', startHere: 0,
-      summary: 'Track about 140 controls across all 20 NIST 800-53 families and draft POA&M text for gaps.',
-      standard: 'NIST SP 800-53' },
-    { name: 'Security Framework Crosswalk', route: '/crosswalk', icon: 'crosswalk', color: '#6366f1', startHere: 0,
-      summary: 'Map common control topics across NIST 800-53, CIS Controls v8, and ISO/IEC 27001.',
-      standard: 'NIST · CIS · ISO' },
-    { name: 'Digital Transaction Security Explorer', route: '/transaction-security', icon: 'txn', color: '#14b8a6', startHere: 0,
-      summary: 'Follow a card or ACH payment from capture to settlement with the controls at each stage.',
-      standard: 'PCI DSS · NACHA' },
-    { name: 'Secure CI/CD Pipeline Builder', route: '/devops-pipeline', icon: 'devops', color: '#d946ef', startHere: 0,
-      summary: 'Add security gates stage by stage and track a shift-left maturity score as the pipeline hardens.',
-      standard: 'NIST SP 800-218' },
-    { name: 'Packet Analysis Lab', route: '/packet-lab', icon: 'packet', color: '#84cc16', startHere: 0,
-      summary: 'Hunt C2 beacons, port scans, DNS tunnels, and cleartext passwords in captures, Wireshark-style.',
-      standard: 'MITRE ATT&CK' },
-    { name: 'Vulnerability Prioritizer', route: '/vuln-priority', icon: 'vuln', color: '#f97316', startHere: 0,
-      summary: 'Score findings with CVSS v3.1, add exploitation and exposure, and get a ranked fix order.',
-      standard: 'CVSS v3.1 · RA-5' },
-    { name: 'Risk Register', route: '/risk-register', icon: 'risk', color: '#ec4899', startHere: 0,
-      summary: 'Rate risks by likelihood and impact, choose a treatment, and see a heat map before and after.',
-      standard: 'NIST SP 800-30' },
-    { name: 'SSP Generator', route: '/ssp', icon: 'ssp', color: '#10b981', startHere: 0,
-      summary: 'Describe a system and get a draft System Security Plan built from the RMF Tracker and the engagement.',
-      standard: 'NIST SP 800-18' },
-  ];
+  // The tools live in tools-data.ts; the home page shows the quick-start ones and links to the rest.
+  readonly tools = TOOLS;
+  readonly startHere = START_HERE;
 
   // Interactive tools that demonstrate the same skills as each case study,
   // keyed by case-study title. Routes must match an entry in `tools`.

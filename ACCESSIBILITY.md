@@ -15,7 +15,7 @@ The portfolio aims to meet **WCAG 2.2 Level AA**, and every page and interactive
 - **Announced changes.** Search results counts, filter errors and share-link notices are exposed as live regions.
 - **Target size.** Interactive targets meet the WCAG 2.5.8 minimum: 24 × 24 CSS pixels, or enough spacing around smaller ones.
 - **Motion.** Animation is disabled under `prefers-reduced-motion`.
-- **The demo video.** The Engagement Mode recording on the home page never plays by itself and never loops. It has the browser's own controls (so it can be paused and scrubbed with a keyboard), a poster image, a one-line summary and a step-by-step text description. It has no audio. The animated GIF of the same recording is only in the README, where GitHub controls the display.
+- **The demo video.** The Engagement Mode recording on the Security Tools page never plays by itself and never loops. It has the browser's own controls (so it can be paused and scrubbed with a keyboard), a poster image, a one-line summary and a step-by-step text description. It has no audio. The animated GIF of the same recording is only in the README, where GitHub controls the display.
 - **Zoom and reflow.** The layout reflows down to 320 px wide, with no horizontal scrolling.
 
 ## How it's tested

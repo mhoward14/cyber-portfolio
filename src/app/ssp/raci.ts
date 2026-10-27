@@ -67,7 +67,8 @@ const CODE_EXPORT: Record<RaciCode, string> = { '': '', R: 'R', A: 'A', AR: 'A/R
 /** Cells keyed "activity|role"; a missing key means not involved. */
 export type Raci = Record<string, RaciCode>;
 
-export const EMPTY_RACI: Raci = {};
+/** Shared by every default input, so frozen: a stray write would otherwise change the starting point for every visitor's session. */
+export const EMPTY_RACI: Raci = Object.freeze({});
 
 const key = (activity: ActivityId, role: RoleId) => `${activity}|${role}`;
 
@@ -89,7 +90,7 @@ export function cycleCell(raci: Raci, activity: ActivityId, role: RoleId): Raci 
 }
 
 /** A clean starting point: every activity has one Accountable role and someone doing the work. */
-export const EXAMPLE_RACI: Raci = {
+export const EXAMPLE_RACI: Raci = Object.freeze({
   'categorize|so': 'A', 'categorize|isso': 'R', 'categorize|issm': 'C', 'categorize|ao': 'I',
   'select|so': 'A', 'select|isso': 'R', 'select|issm': 'C', 'select|sa': 'C', 'select|sca': 'I',
   'implement|so': 'A', 'implement|isso': 'C', 'implement|sa': 'R', 'implement|sca': 'I',
@@ -99,13 +100,17 @@ export const EXAMPLE_RACI: Raci = {
   'authorize|so': 'C', 'authorize|isso': 'C', 'authorize|issm': 'C', 'authorize|sca': 'I', 'authorize|ao': 'AR',
   'monitor|so': 'C', 'monitor|isso': 'R', 'monitor|issm': 'A', 'monitor|sa': 'R', 'monitor|sca': 'C', 'monitor|ao': 'I',
   'risk|so': 'C', 'risk|isso': 'C', 'risk|issm': 'C', 'risk|ao': 'AR',
-};
+});
+
+const MAX_KEY = 32;
 
 /** Anything stored is untrusted: keep only known activities, roles and codes. */
 export function sanitizeRaci(value: unknown): Raci {
   const out: Raci = {};
   if (!value || typeof value !== 'object' || Array.isArray(value)) return out;
   for (const [k, v] of Object.entries(value as Record<string, unknown>)) {
+    // The longest real key is under 20 characters; skip anything else before splitting it.
+    if (k.length > MAX_KEY) continue;
     const [activity, role, extra] = k.split('|');
     if (extra !== undefined) continue;
     if (!RACI_ACTIVITIES.some((a) => a.id === activity) || !RACI_ROLES.some((r) => r.id === role)) continue;

@@ -351,3 +351,135 @@
     break-after: avoid;
   }
 }
+
+/* RACI matrix editor */
+.raci-wrap {
+  overflow-x: auto;
+  margin: 0.75rem 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+}
+.raci-wrap:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+.raci-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+.raci-table th,
+.raci-table td {
+  padding: 0.4rem 0.5rem;
+  border-bottom: 1px solid var(--color-border);
+  text-align: left;
+  vertical-align: middle;
+}
+.raci-table thead th {
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+.raci-table tbody th,
+.raci-table tfoot th {
+  color: var(--color-text);
+  font-weight: 500;
+  min-width: 11rem;
+}
+.raci-table abbr {
+  text-decoration: none;
+  cursor: help;
+}
+.raci-col,
+.raci-cell,
+.raci-load {
+  text-align: center !important;
+}
+.raci-load {
+  font-family: var(--font-mono);
+  color: var(--color-text-muted);
+}
+.raci-btn {
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  padding: 0;
+  border: 1px solid var(--color-border-2);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg);
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.raci-btn:hover {
+  border-color: var(--ssp-accent);
+}
+.raci-btn:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+/* The letter carries the meaning; the fill only reinforces it. */
+.raci-btn[data-code] {
+  color: var(--color-text);
+  border-color: var(--ssp-accent);
+  background: color-mix(in srgb, var(--ssp-accent) 14%, transparent);
+}
+.raci-btn[data-code='A'],
+.raci-btn[data-code='AR'] {
+  background: color-mix(in srgb, var(--ssp-accent) 32%, transparent);
+  border-width: 2px;
+}
+.raci-btn[data-code='I'],
+.raci-btn[data-code='C'] {
+  background: transparent;
+}
+.raci-check {
+  min-width: 9rem;
+}
+.raci-flag {
+  color: var(--color-text);
+  border-bottom: 2px solid var(--color-danger);
+}
+.raci-ok,
+.raci-muted {
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+}
+.raci-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1rem;
+}
+.raci-key b {
+  color: var(--color-text);
+  font-family: var(--font-mono);
+}
+.raci-banner {
+  margin: 0.5rem 0;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid var(--color-border-2);
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
+  font-size: 0.9rem;
+}
+.raci-banner-bad {
+  border-color: var(--color-danger);
+}
+
+/* Keep the activity names in view while the role columns scroll on a phone. */
+.raci-table tbody th,
+.raci-table tfoot th,
+.raci-table thead th:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: var(--color-surface);
+}
+@media (max-width: 600px) {
+  .raci-table tbody th,
+  .raci-table tfoot th {
+    min-width: 8rem;
+    font-size: 0.8rem;
+  }
+}

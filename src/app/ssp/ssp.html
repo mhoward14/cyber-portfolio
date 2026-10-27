@@ -117,6 +117,76 @@
     </div>
   </section>
 
+  <section class="ssp-panel ssp-no-print" aria-labelledby="ssp-raci-h">
+    <h2 class="ssp-panel-title" id="ssp-raci-h">// WHO DOES WHAT (RACI)</h2>
+    <p class="ssp-how">
+      A RACI matrix says, for each activity, which role is <strong>R</strong>esponsible (does the work),
+      <strong>A</strong>ccountable (answers for it; exactly one per activity), <strong>C</strong>onsulted or
+      <strong>I</strong>nformed. Press a cell to step it through the letters. Roles only, never names. The matrix feeds the
+      draft's identification table, a new roles section, each control's responsible role and the POA&amp;M owners.
+    </p>
+
+    <div class="raci-wrap" tabindex="0" role="region" aria-label="RACI matrix editor">
+      <table class="raci-table">
+        <thead>
+          <tr>
+            <th scope="col">Activity</th>
+            @for (r of roles; track r.id) { <th scope="col" class="raci-col"><abbr [attr.title]="r.name">{{ r.short }}</abbr></th> }
+            <th scope="col">Check</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (a of activities; track a.id) {
+            <tr>
+              <th scope="row">{{ a.label }}</th>
+              @for (r of roles; track r.id) {
+                <td class="raci-cell">
+                  <button type="button" class="raci-btn" [attr.data-code]="cellCode(a.id, r.id) || null"
+                          [attr.aria-label]="cellLabel(a.id, r.id)" (click)="cycle(a.id, r.id)">
+                    <span aria-hidden="true">{{ codeShown[cellCode(a.id, r.id)] }}</span>
+                  </button>
+                </td>
+              }
+              <td class="raci-check">
+                @if (!hasRaci()) { <span class="raci-muted">–</span> }
+                @else if (rowChecks().get(a.id)!.length) { <span class="raci-flag">Fix: {{ rowChecks().get(a.id)!.join('; ') }}</span> }
+                @else { <span class="raci-ok">OK</span> }
+              </td>
+            </tr>
+          }
+        </tbody>
+        <tfoot>
+          <tr>
+            <th scope="row">Load (A / R)</th>
+            @for (r of roles; track r.id) { <td class="raci-load">{{ raciLoads()[r.id].accountable }} / {{ raciLoads()[r.id].responsible }}</td> }
+            <td></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+    <p class="ssp-help raci-legend">
+      <span class="raci-key"><b>R</b> Responsible</span>
+      <span class="raci-key"><b>A</b> Accountable</span>
+      <span class="raci-key"><b>A/R</b> both</span>
+      <span class="raci-key"><b>C</b> Consulted</span>
+      <span class="raci-key"><b>I</b> Informed</span>
+      <span class="raci-key"><b>·</b> not involved</span>
+    </p>
+    <p class="raci-banner" [class.raci-banner-bad]="hasRaci() && raciSummary()" role="status" aria-live="polite">{{ raciStatus() }}</p>
+    <p class="ssp-help">
+      The starting example is an illustration of a common split, not an official table. Edit it to match the organization.
+      Roles: {{ roles.length }} (SO system owner, ISSO information system security officer, ISSM security manager, SA system
+      administrator, SCA security control assessor, AO authorizing official).
+    </p>
+
+    <div class="ssp-actions">
+      <button type="button" class="ssp-btn" (click)="loadRaciExample()">Start from the example</button>
+      <button type="button" class="ssp-btn" [disabled]="!hasRaci()" (click)="downloadRaci()">Download matrix (CSV)</button>
+      <button type="button" class="ssp-btn ssp-btn-quiet" [disabled]="!hasRaci()" (click)="clearRaci()">Clear matrix</button>
+    </div>
+  </section>
+
   <p class="ssp-status ssp-no-print" role="status">{{ notice() }}</p>
 
   <section class="ssp-panel ssp-doc-panel" aria-labelledby="ssp-draft-h">
@@ -147,9 +217,9 @@
             <tr><th scope="row">System name</th><td>{{ m.identification.name }}</td></tr>
             <tr><th scope="row">Abbreviation</th><td>{{ m.identification.abbreviation || '[Abbreviation]' }}</td></tr>
             <tr><th scope="row">Operational status</th><td>{{ m.identification.status }}</td></tr>
-            <tr><th scope="row">System owner</th><td>[Responsible role]</td></tr>
-            <tr><th scope="row">Information system security officer</th><td>[Responsible role]</td></tr>
-            <tr><th scope="row">Authorizing official</th><td>[Responsible role]</td></tr>
+            <tr><th scope="row">System owner</th><td>{{ m.identification.owner }}</td></tr>
+            <tr><th scope="row">Information system security officer</th><td>{{ m.identification.isso }}</td></tr>
+            <tr><th scope="row">Authorizing official</th><td>{{ m.identification.ao }}</td></tr>
           </tbody>
         </table>
       </div>
@@ -173,7 +243,25 @@
       <p class="ssp-text">Hosting: {{ m.identification.hosting }}.</p>
       <p class="ssp-text">{{ m.identification.boundary }}</p>
 
-      <h4 class="ssp-h">4. Risk assessment summary</h4>
+      <h4 class="ssp-h">4. Roles and responsibilities</h4>
+      @if (!m.raci.filled) {
+        <p class="ssp-text">[No responsibilities were assigned. Fill in the RACI matrix in the SSP Generator, or complete this section by hand.]</p>
+      } @else {
+        <p class="ssp-text">R = Responsible, A = Accountable, A/R = both, C = Consulted, I = Informed.</p>
+        <div class="ssp-table-wrap" tabindex="0" role="region" aria-label="Roles and responsibilities table">
+          <table class="ssp-table">
+            <thead><tr><th scope="col">Activity</th>@for (r of m.raci.roles; track r.id) { <th scope="col">{{ r.name }}</th> }</tr></thead>
+            <tbody>
+              @for (row of m.raci.rows; track row.activity.id) {
+                <tr><th scope="row">{{ row.activity.label }}</th>@for (c of row.cells; track c.role.id) { <td class="ssp-mono">{{ c.shown }}</td> }</tr>
+              }
+            </tbody>
+          </table>
+        </div>
+        @if (m.raci.summary) { <p class="ssp-warn" role="alert">{{ m.raci.summary }}</p> }
+      }
+
+      <h4 class="ssp-h">5. Risk assessment summary</h4>
       @if (!m.threats.length && !m.risks.length && !m.findings.length) {
         <p class="ssp-text">[No risk assessment data was available. Complete this section by hand, or build an attack chain, prioritize vulnerabilities and add risks in the portfolio tools first.]</p>
       }
@@ -217,7 +305,7 @@
         </div>
       }
 
-      <h4 class="ssp-h">5. Security control implementation</h4>
+      <h4 class="ssp-h">6. Security control implementation</h4>
       <p class="ssp-text">
         {{ m.counts.total }} controls in the {{ impactLabel[m.baseline] }} baseline: {{ m.counts.implemented }} implemented,
         {{ m.counts.partial }} partial, {{ m.counts['not-implemented'] }} not implemented, {{ m.counts.na }} not applicable.
@@ -233,7 +321,7 @@
                   <td><strong>{{ r.id }}</strong><span class="ssp-sub">{{ r.title }}</span></td>
                   <td class="ssp-nowrap">{{ r.statusLabel }}</td>
                   <td>{{ r.statement }}</td>
-                  <td>[Responsible role]</td>
+                  <td>{{ r.responsible }}</td>
                 </tr>
               }
             </tbody>
@@ -241,13 +329,13 @@
         </div>
       }
 
-      <h4 class="ssp-h">6. Plan of action and milestones</h4>
+      <h4 class="ssp-h">7. Plan of action and milestones</h4>
       @if (m.openItems.length === 0) {
         <p class="ssp-text">No open items: every control in the baseline is implemented or not applicable.</p>
       } @else {
         <div class="ssp-table-wrap" tabindex="0" role="region" aria-label="Plan of action and milestones table">
           <table class="ssp-table">
-            <thead><tr><th scope="col">ID</th><th scope="col">Control</th><th scope="col">Weakness</th><th scope="col">Milestone</th><th scope="col">Target</th></tr></thead>
+            <thead><tr><th scope="col">ID</th><th scope="col">Control</th><th scope="col">Weakness</th><th scope="col">Milestone</th><th scope="col">Owner</th><th scope="col">Target</th></tr></thead>
             <tbody>
               @for (o of m.openItems; track o.id) {
                 <tr>
@@ -255,6 +343,7 @@
                   <td class="ssp-mono">{{ o.controlId }}</td>
                   <td>{{ o.weakness }}</td>
                   <td>{{ o.milestone }}</td>
+                  <td>{{ o.owner }}</td>
                   <td class="ssp-mono">{{ o.targetDays === null ? '[Set a target date]' : o.targetDays + ' days' }}</td>
                 </tr>
               }
@@ -263,7 +352,7 @@
         </div>
       }
 
-      <h4 class="ssp-h">7. Document control</h4>
+      <h4 class="ssp-h">8. Document control</h4>
       <div class="ssp-table-wrap" tabindex="0" role="region" aria-label="Document control table">
         <table class="ssp-table">
           <thead><tr><th scope="col">Role</th><th scope="col">Name</th><th scope="col">Date</th></tr></thead>
@@ -281,7 +370,7 @@
     <h2 class="ssp-panel-title" id="ssp-how-h">// HOW IT WORKS</h2>
     <p class="ssp-how">
       The layout follows the sections of NIST SP 800-18 Rev. 1: system identification, categorization, environment and
-      boundary, risk, control implementation, and the plan of action. The control baseline comes from the highest of the
+      boundary, roles and responsibilities, risk, control implementation, and the plan of action. The control baseline comes from the highest of the
       three FIPS 199 impact levels. If the RMF Tracker is set lower than that, the draft says so instead of quietly dropping
       controls.
     </p>

@@ -1,5 +1,5 @@
 import {
-  EXAMPLE_RACI, RACI_ACTIVITIES, RACI_CYCLE, RACI_ROLES, Raci, checkActivity, checkRaci, codeOf, cycleCell, hasAssignments,
+  EMPTY_RACI, EXAMPLE_RACI, RACI_ACTIVITIES, RACI_CYCLE, RACI_ROLES, Raci, checkActivity, checkRaci, codeOf, cycleCell, hasAssignments,
   loads, nextCode, ownerText, problemSummary, raciCsv, responsibleText, roleSummary, sanitizeRaci,
 } from './raci';
 
@@ -97,6 +97,32 @@ describe('stored matrices', () => {
       'a|b|c': 'R',
     });
     expect(clean).toEqual({ 'categorize|so': 'A' });
+  });
+
+  it('cannot be used to reach the prototype or add unknown keys', () => {
+    const hostile = JSON.parse('{"__proto__|so":"A","__proto__":{"categorize|so":"A"},"constructor|so":"R","categorize|__proto__":"R","toString":"A"}');
+    expect(sanitizeRaci(hostile)).toEqual({});
+    expect(Object.keys(sanitizeRaci(JSON.parse('{"categorize|so":"A","__proto__":{"x":1}}')))).toEqual(['categorize|so']);
+    expect(({} as Record<string, unknown>)['categorize|so']).toBeUndefined();
+  });
+
+  it('skips oversized keys and copes with a very large stored object', () => {
+    const big: Record<string, string> = { ['categorize|so'.padEnd(5000, 'x')]: 'A', 'select|isso': 'R' };
+    for (let i = 0; i < 20000; i++) big[`k${i}|so`] = 'A';
+    const start = performance.now();
+    expect(sanitizeRaci(big)).toEqual({ 'select|isso': 'R' });
+    expect(performance.now() - start).toBeLessThan(500);
+  });
+
+  it('never changes the shared defaults, which are frozen', () => {
+    expect(Object.isFrozen(EXAMPLE_RACI)).toBe(true);
+    expect(Object.isFrozen(EMPTY_RACI)).toBe(true);
+    const before = JSON.stringify(EXAMPLE_RACI);
+    const next = cycleCell(EXAMPLE_RACI, 'categorize', 'so');
+    expect(next).not.toBe(EXAMPLE_RACI);
+    expect(JSON.stringify(EXAMPLE_RACI)).toBe(before);
+    expect(JSON.stringify(cycleCell(EMPTY_RACI, 'ssp', 'sa'))).toBe('{"ssp|sa":"R"}');
+    expect(EMPTY_RACI).toEqual({});
   });
 
   it('ignores a value that is not an object', () => {

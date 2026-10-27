@@ -72,10 +72,12 @@ export const routes: Routes = [
     loadComponent: () => import('./engagement/engagement-report').then((m) => m.EngagementReport),
   },
   {
-    path: 'role-guide',
-    title: 'Find a Tool by Role | Matthew Howard',
-    loadComponent: () => import('./role-guide/role-guide').then((m) => m.RoleGuide),
+    path: 'security-tools',
+    title: 'Security Tools | Matthew Howard',
+    loadComponent: () => import('./security-tools/security-tools').then((m) => m.SecurityTools),
   },
+  // The role guide became the grouped Security Tools page; keep old links working.
+  { path: 'role-guide', redirectTo: 'security-tools' },
   {
     path: 'site-security',
     title: 'How This Site Is Secured | Matthew Howard',

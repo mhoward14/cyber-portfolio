@@ -393,6 +393,12 @@
   border-left-color: #ec4899;
   color: #ec4899;
 }
+.sidebar-link-tools:hover,
+.sidebar-link-tools.is-active {
+  background: rgba(16, 185, 129, 0.1);
+  border-left-color: #10b981;
+  color: #10b981;
+}
 .sidebar-link-ssp:hover,
 .sidebar-link-ssp.is-active {
   background: rgba(16, 185, 129, 0.1);
@@ -459,6 +465,11 @@
 :host-context(.light-mode) .sidebar-link-risk.is-active {
   border-left-color: #be185d;
   color: #be185d;
+}
+:host-context(.light-mode) .sidebar-link-tools:hover,
+:host-context(.light-mode) .sidebar-link-tools.is-active {
+  border-left-color: #047857;
+  color: #047857;
 }
 :host-context(.light-mode) .sidebar-link-ssp:hover,
 :host-context(.light-mode) .sidebar-link-ssp.is-active {
@@ -547,8 +558,10 @@
 /* ============================================================
    RESPONSIVE
    Below 640px the sidebar is always shown collapsed (icon rail)
-   — a full labeled sidebar has no room on a phone screen, and
-   this keeps every tool one tap away without an off-canvas drawer.
+   — a full labeled sidebar has no room on a phone screen, so it
+   stays an icon rail without an off-canvas drawer. The tools sit one
+   tap away behind the Security Tools icon, and fold out in the rail
+   once you are inside a tool.
    ============================================================ */
 
 @media (max-width: 640px) {
@@ -565,6 +578,7 @@
   .sidebar-brand-full,
   .sidebar-link-label,
   .sidebar-section-label,
+  .sidebar-group-toggle,
   .sidebar-collapse-btn {
     display: none;
   }
@@ -623,5 +637,59 @@
 @media print {
   .skip-link {
     display: none !important;
+  }
+}
+
+/* The Security Tools group: a link to the overview with a button that folds the individual tools. */
+.sidebar-group-head {
+  display: flex;
+  align-items: center;
+  gap: 0.15rem;
+}
+.sidebar-group-head .sidebar-link {
+  flex: 1;
+  min-width: 0;
+}
+.sidebar-group-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--color-text-dim);
+  cursor: pointer;
+}
+.sidebar-group-toggle:hover {
+  color: var(--color-text);
+  background: var(--color-accent-dim);
+}
+.sidebar-group-toggle:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 1px;
+}
+.sidebar-group-chevron {
+  transition: transform 0.2s var(--ease-out);
+}
+.sidebar-group-chevron.is-open {
+  transform: rotate(180deg);
+}
+.sidebar-group {
+  margin: 0.1rem 0 0.2rem 0.6rem;
+  padding-left: 0.4rem;
+  border-left: 1px solid var(--color-border);
+}
+.sidebar-group[hidden] {
+  display: none;
+}
+.sidebar.is-collapsed .sidebar-group-toggle {
+  display: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .sidebar-group-chevron {
+    transition: none;
   }
 }

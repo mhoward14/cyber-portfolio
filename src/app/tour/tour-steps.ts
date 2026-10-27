@@ -26,10 +26,10 @@ export const TOUR_STEPS: TourStep[] = [
     accent: '#3b82f6',
   },
   {
-    route: '/',
-    targets: ['.tool-card.is-start'],
+    route: '/security-tools',
+    targets: ['.st-header'],
     title: 'Twelve hands-on tools',
-    body: 'Each one runs entirely in your browser. The three marked "Start here" are the quickest way in, and this tour visits them in order.',
+    body: 'The Security Tools page groups them by the kind of work they show. Each one runs entirely in your browser. The three marked "Start here" are the quickest way in, and this tour visits them in order.',
     accent: '#3b82f6',
   },
   {
